@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     fetch('/api/songs').then(r => r.json()).then(data => {
-      const genres = [...new Set(data.map((s: Song) => s.genre))].filter(Boolean).sort() as string[]
+      const genres = Array.from(new Set(data.map((s: Song) => s.genre))).filter(Boolean).sort() as string[]
       setAllGenres(genres)
     })
   }, [])

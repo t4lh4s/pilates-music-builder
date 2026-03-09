@@ -14,20 +14,22 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({ name: playlist_name || 'My Pilates Playlist', description: 'Created with Pilates Music Builder 🧘', public: false }),
     })
     const created = await createRes.json()
-
-    if (!createRes.ok) {
-      return NextResponse.json({ error: `Create error: ${JSON.stringify(created)}` }, { status: createRes.status })
-    }
+    if (!createRes.ok) return NextResponse.json({ error: `Create error: ${JSON.stringify(created)}` }, { status: createRes.status })
 
     const addRes = await fetch(`https://api.spotify.com/v1/playlists/${created.id}/tracks`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${access_token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uris: track_uris.slice(0, 1) }),
+      body: JSON.stringify({ uris: track_uris }),
     })
     const added = await addRes.json()
-
     if (!addRes.ok) {
-      return NextResponse.json({ error: `Add tracks error (uri: ${track_uris[0]}): ${JSON.stringify(added)}` }, { status: addRes.status })
+      // Return playlist URL even if adding tracks failed — user can add manually
+      return NextResponse.json({ 
+        partial: true,
+        playlist_url: created.external_urls?.spotify,
+        playlist_id: created.id,
+        error: `Created playlist but could not add tracks automatically. Open the playlist and add songs manually.`
+      }, { status: 200 })
     }
 
     return NextResponse.json({ success: true, playlist_id: created.id, playlist_url: created.external_urls?.spotify })

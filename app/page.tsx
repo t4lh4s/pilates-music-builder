@@ -23,6 +23,13 @@ export default function Home() {
     if (token) { setSpotifyToken(token); window.history.replaceState({}, '', '/') }
   }, [])
 
+  useEffect(() => {
+    fetch('/api/songs').then(r => r.json()).then(data => {
+      const genres = [...new Set(data.map((s: Song) => s.genre))].filter(Boolean).sort() as string[]
+      setAllGenres(genres)
+    })
+  }, [])
+
   const fetchSongs = useCallback(async () => {
     setLoading(true)
     const params = new URLSearchParams()
@@ -41,13 +48,6 @@ export default function Home() {
   }, [selectedGenre, bpmRange, lengthRange, search])
 
   useEffect(() => { fetchSongs() }, [fetchSongs])
-
-  useEffect(() => {
-    fetch('/api/songs').then(r => r.json()).then(data => {
-      const genres = [...new Set(data.map((s: Song) => s.genre))].filter(Boolean).sort() as string[]
-      setAllGenres(genres)
-    })
-  }, [])
 
   function addToPlaylist(song: Song) { setPlaylist(prev => [...prev, { ...song, playlistId: `${song.id}-${Date.now()}` }]) }
   function removeFromPlaylist(playlistId: string) { setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId)) }

@@ -1,32 +1,6716 @@
 [
-  { "id": "1", "name": "Levitating", "artist": "Dua Lipa", "bpm": 103, "genre": "Pop", "length": 203, "spotify_uri": "spotify:track:463CkQjx2Zk1yXoBuierM9" },
-  { "id": "2", "name": "Physical", "artist": "Dua Lipa", "bpm": 128, "genre": "Pop", "length": 194, "spotify_uri": "spotify:track:6LCn1USgGFSMJJiHKEXnj0" },
-  { "id": "3", "name": "Don't Start Now", "artist": "Dua Lipa", "bpm": 124, "genre": "Pop", "length": 183, "spotify_uri": "spotify:track:3PfIrDoz19wz7qK7tYeu62" },
-  { "id": "4", "name": "As It Was", "artist": "Harry Styles", "bpm": 174, "genre": "Pop", "length": 167, "spotify_uri": "spotify:track:4Dvkj6JhhA12EX05fT7y2e" },
-  { "id": "5", "name": "Blinding Lights", "artist": "The Weeknd", "bpm": 171, "genre": "Synth-pop", "length": 200, "spotify_uri": "spotify:track:0VjIjW4GlUZAMYd2vXMi3b" },
-  { "id": "6", "name": "Save Your Tears", "artist": "The Weeknd", "bpm": 118, "genre": "Synth-pop", "length": 215, "spotify_uri": "spotify:track:5QO79kh1waicV47BqGRL3g" },
-  { "id": "7", "name": "Starboy", "artist": "The Weeknd ft. Daft Punk", "bpm": 186, "genre": "R&B", "length": 230, "spotify_uri": "spotify:track:7MXVkk9YMctZqd1Srtv4MB" },
-  { "id": "8", "name": "good 4 u", "artist": "Olivia Rodrigo", "bpm": 166, "genre": "Pop-punk", "length": 178, "spotify_uri": "spotify:track:4ZtFanR9U6ndgddUvNcjcG" },
-  { "id": "9", "name": "drivers license", "artist": "Olivia Rodrigo", "bpm": 72, "genre": "Pop", "length": 242, "spotify_uri": "spotify:track:5wANPM4fQCJwkGd4rN57mH" },
-  { "id": "10", "name": "traitor", "artist": "Olivia Rodrigo", "bpm": 76, "genre": "Pop", "length": 232, "spotify_uri": "spotify:track:5CZ40GBx1sQ9agT82CLQJC" },
-  { "id": "11", "name": "Watermelon Sugar", "artist": "Harry Styles", "bpm": 95, "genre": "Pop", "length": 174, "spotify_uri": "spotify:track:6UelLqGlWMcVH1E5c4H7lY" },
-  { "id": "12", "name": "Golden", "artist": "Harry Styles", "bpm": 102, "genre": "Pop", "length": 208, "spotify_uri": "spotify:track:1fDsrQ23eTAVFElUMaf38X" },
-  { "id": "13", "name": "Espresso", "artist": "Sabrina Carpenter", "bpm": 104, "genre": "Pop", "length": 175, "spotify_uri": "spotify:track:2qSkIjg1o9h3YT9RAgYN75" },
-  { "id": "14", "name": "Please Please Please", "artist": "Sabrina Carpenter", "bpm": 132, "genre": "Pop", "length": 186, "spotify_uri": "spotify:track:5N3hjp1WNayUPZrA9NpC6h" },
-  { "id": "15", "name": "Shake It Off", "artist": "Taylor Swift", "bpm": 160, "genre": "Pop", "length": 219, "spotify_uri": "spotify:track:0cqRj7pUJDkTCEsJkx8snD" },
-  { "id": "16", "name": "Anti-Hero", "artist": "Taylor Swift", "bpm": 97, "genre": "Pop", "length": 200, "spotify_uri": "spotify:track:0V3wPSX9ygBnCm8psDIegu" },
-  { "id": "17", "name": "Flowers", "artist": "Miley Cyrus", "bpm": 118, "genre": "Pop", "length": 200, "spotify_uri": "spotify:track:3AJwUDP919kvQ9QcozQPxg" },
-  { "id": "18", "name": "Midnight Rain", "artist": "Taylor Swift", "bpm": 82, "genre": "Pop", "length": 174, "spotify_uri": "spotify:track:3qoftcUZaUOncvIYFYNBaG" },
-  { "id": "19", "name": "Industry Baby", "artist": "Lil Nas X ft. Jack Harlow", "bpm": 150, "genre": "Hip-hop", "length": 212, "spotify_uri": "spotify:track:5Z9KSZporzdXPImKTB3OqP" },
-  { "id": "20", "name": "MONTERO", "artist": "Lil Nas X", "bpm": 179, "genre": "Pop", "length": 137, "spotify_uri": "spotify:track:7GP19Bxfl0uh8PJRW1JTMa" },
-  { "id": "21", "name": "Lose Control", "artist": "Teddy Swims", "bpm": 68, "genre": "R&B", "length": 203, "spotify_uri": "spotify:track:2YpeDb67231RjR0MgVLzsG" },
-  { "id": "22", "name": "Cruel Summer", "artist": "Taylor Swift", "bpm": 170, "genre": "Pop", "length": 178, "spotify_uri": "spotify:track:1BxfuPKGuaTgP7aM0Bbdwr" },
-  { "id": "23", "name": "About Damn Time", "artist": "Lizzo", "bpm": 109, "genre": "Funk", "length": 193, "spotify_uri": "spotify:track:1PckUlxKqWRsaQn8jA49oj" },
-  { "id": "24", "name": "Juice", "artist": "Lizzo", "bpm": 105, "genre": "Funk", "length": 193, "spotify_uri": "spotify:track:2vzcMBRnGHPDlChqz4CqXs" },
-  { "id": "25", "name": "Break My Soul", "artist": "Beyoncé", "bpm": 126, "genre": "Dance", "length": 254, "spotify_uri": "spotify:track:6KImNPqNkFdpCOERCjLpGN" },
-  { "id": "26", "name": "CUFF IT", "artist": "Beyoncé", "bpm": 116, "genre": "R&B", "length": 215, "spotify_uri": "spotify:track:1ChZKRBsicmMVSSmhIiJvq" },
-  { "id": "27", "name": "Running Up That Hill", "artist": "Kate Bush", "bpm": 124, "genre": "Art Pop", "length": 300, "spotify_uri": "spotify:track:75FEaRjZTKLhTrFGsfMUXR" },
-  { "id": "28", "name": "Houdini", "artist": "Dua Lipa", "bpm": 118, "genre": "Dance", "length": 192, "spotify_uri": "spotify:track:3e0RXBHULGncRBFZLLbgQi" },
-  { "id": "29", "name": "Lush Life", "artist": "Zara Larsson", "bpm": 124, "genre": "Pop", "length": 176, "spotify_uri": "spotify:track:7vDcMRJFOAhCblFVnV2lv8" },
-  { "id": "30", "name": "Confident", "artist": "Demi Lovato", "bpm": 126, "genre": "Pop", "length": 215, "spotify_uri": "spotify:track:5TBU90mAl0SyAleMKMaHYs" }
+  {
+    "id": 1,
+    "title": "drivers license",
+    "artist": "Olivia Rodrigo",
+    "bpm": 72,
+    "genre": "Pop",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 2,
+    "title": "traitor",
+    "artist": "Olivia Rodrigo",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 3,
+    "title": "deja vu",
+    "artist": "Olivia Rodrigo",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 4,
+    "title": "1 step forward, 3 steps back",
+    "artist": "Olivia Rodrigo",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 173,
+    "bpmVerified": true
+  },
+  {
+    "id": 5,
+    "title": "enough for you",
+    "artist": "Olivia Rodrigo",
+    "bpm": 72,
+    "genre": "Pop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 6,
+    "title": "favorite crime",
+    "artist": "Olivia Rodrigo",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 173,
+    "bpmVerified": true
+  },
+  {
+    "id": 7,
+    "title": "hope ur ok",
+    "artist": "Olivia Rodrigo",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 8,
+    "title": "happier",
+    "artist": "Olivia Rodrigo",
+    "bpm": 68,
+    "genre": "Pop",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 9,
+    "title": "the grudge",
+    "artist": "Olivia Rodrigo",
+    "bpm": 72,
+    "genre": "Pop",
+    "duration": 256,
+    "bpmVerified": true
+  },
+  {
+    "id": 10,
+    "title": "lacy",
+    "artist": "Olivia Rodrigo",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 11,
+    "title": "Easy On Me",
+    "artist": "Adele",
+    "bpm": 68,
+    "genre": "Pop",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 12,
+    "title": "Someone Like You",
+    "artist": "Adele",
+    "bpm": 67,
+    "genre": "Pop",
+    "duration": 285,
+    "bpmVerified": true
+  },
+  {
+    "id": 13,
+    "title": "When We Were Young",
+    "artist": "Adele",
+    "bpm": 66,
+    "genre": "Pop",
+    "duration": 289,
+    "bpmVerified": true
+  },
+  {
+    "id": 14,
+    "title": "All I Ask",
+    "artist": "Adele",
+    "bpm": 68,
+    "genre": "Pop",
+    "duration": 272,
+    "bpmVerified": true
+  },
+  {
+    "id": 15,
+    "title": "Million Years Ago",
+    "artist": "Adele",
+    "bpm": 66,
+    "genre": "Pop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 16,
+    "title": "Happier Than Ever",
+    "artist": "Billie Eilish",
+    "bpm": 70,
+    "genre": "Pop",
+    "duration": 295,
+    "bpmVerified": true
+  },
+  {
+    "id": 17,
+    "title": "What Was I Made For?",
+    "artist": "Billie Eilish",
+    "bpm": 73,
+    "genre": "Pop",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 18,
+    "title": "lovely",
+    "artist": "Billie Eilish ft. Khalid",
+    "bpm": 73,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 19,
+    "title": "when the party's over",
+    "artist": "Billie Eilish",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 20,
+    "title": "my future",
+    "artist": "Billie Eilish",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 21,
+    "title": "Cardigan",
+    "artist": "Taylor Swift",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 239,
+    "bpmVerified": true
+  },
+  {
+    "id": 22,
+    "title": "Ivy",
+    "artist": "Taylor Swift",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 23,
+    "title": "august",
+    "artist": "Taylor Swift",
+    "bpm": 89,
+    "genre": "Pop",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 24,
+    "title": "Cornelia Street",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 287,
+    "bpmVerified": true
+  },
+  {
+    "id": 25,
+    "title": "exile",
+    "artist": "Taylor Swift ft. Bon Iver",
+    "bpm": 86,
+    "genre": "Pop",
+    "duration": 285,
+    "bpmVerified": true
+  },
+  {
+    "id": 26,
+    "title": "marjorie",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 289,
+    "bpmVerified": true
+  },
+  {
+    "id": 27,
+    "title": "tolerate it",
+    "artist": "Taylor Swift",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 28,
+    "title": "seven",
+    "artist": "Taylor Swift",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 29,
+    "title": "So Long London",
+    "artist": "Taylor Swift",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 30,
+    "title": "Slow Burn",
+    "artist": "Kacey Musgraves",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 256,
+    "bpmVerified": true
+  },
+  {
+    "id": 31,
+    "title": "golden hour",
+    "artist": "JVKE",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 32,
+    "title": "Superstar",
+    "artist": "Taylor Swift",
+    "bpm": 68,
+    "genre": "Pop",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 33,
+    "title": "Daylight",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 284,
+    "bpmVerified": true
+  },
+  {
+    "id": 34,
+    "title": "Peace",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 35,
+    "title": "Call It What You Want",
+    "artist": "Taylor Swift",
+    "bpm": 78,
+    "genre": "Pop",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 36,
+    "title": "New Year's Day",
+    "artist": "Taylor Swift",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 37,
+    "title": "Death By A Thousand Cuts",
+    "artist": "Taylor Swift",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 38,
+    "title": "Sunflower",
+    "artist": "Post Malone ft. Swae Lee",
+    "bpm": 90,
+    "genre": "Pop",
+    "duration": 158,
+    "bpmVerified": true
+  },
+  {
+    "id": 39,
+    "title": "Watermelon Sugar",
+    "artist": "Harry Styles",
+    "bpm": 95,
+    "genre": "Pop",
+    "duration": 174,
+    "bpmVerified": true
+  },
+  {
+    "id": 40,
+    "title": "Heat Waves",
+    "artist": "Glass Animals",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 238,
+    "bpmVerified": true
+  },
+  {
+    "id": 41,
+    "title": "Heather",
+    "artist": "Conan Gray",
+    "bpm": 86,
+    "genre": "Pop",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 42,
+    "title": "Enchanted",
+    "artist": "Taylor Swift",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 350,
+    "bpmVerified": true
+  },
+  {
+    "id": 43,
+    "title": "Midnight Rain",
+    "artist": "Taylor Swift",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 174,
+    "bpmVerified": true
+  },
+  {
+    "id": 44,
+    "title": "Champagne Problems",
+    "artist": "Taylor Swift",
+    "bpm": 98,
+    "genre": "Pop",
+    "duration": 243,
+    "bpmVerified": true
+  },
+  {
+    "id": 45,
+    "title": "long story short",
+    "artist": "Taylor Swift",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 46,
+    "title": "right where you left me",
+    "artist": "Taylor Swift",
+    "bpm": 94,
+    "genre": "Pop",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 47,
+    "title": "Down Bad",
+    "artist": "Taylor Swift",
+    "bpm": 90,
+    "genre": "Pop",
+    "duration": 256,
+    "bpmVerified": true
+  },
+  {
+    "id": 48,
+    "title": "Peter",
+    "artist": "Taylor Swift",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 249,
+    "bpmVerified": true
+  },
+  {
+    "id": 49,
+    "title": "Guilty as Sin?",
+    "artist": "Taylor Swift",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 259,
+    "bpmVerified": true
+  },
+  {
+    "id": 50,
+    "title": "So High School",
+    "artist": "Taylor Swift",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 51,
+    "title": "The Smallest Man Who Ever Lived",
+    "artist": "Taylor Swift",
+    "bpm": 94,
+    "genre": "Pop",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 52,
+    "title": "Overpass Graffiti",
+    "artist": "Ed Sheeran",
+    "bpm": 97,
+    "genre": "Pop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 53,
+    "title": "Visiting Hours",
+    "artist": "Ed Sheeran",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 54,
+    "title": "The Joker and the Queen",
+    "artist": "Ed Sheeran ft. Taylor Swift",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 55,
+    "title": "Late Night Talking",
+    "artist": "Harry Styles",
+    "bpm": 114,
+    "genre": "Pop",
+    "duration": 177,
+    "bpmVerified": true
+  },
+  {
+    "id": 56,
+    "title": "Satellite",
+    "artist": "Harry Styles",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 249,
+    "bpmVerified": true
+  },
+  {
+    "id": 57,
+    "title": "Little Freak",
+    "artist": "Harry Styles",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 58,
+    "title": "Love of My Life",
+    "artist": "Harry Styles",
+    "bpm": 102,
+    "genre": "Pop",
+    "duration": 235,
+    "bpmVerified": true
+  },
+  {
+    "id": 59,
+    "title": "Daydreaming",
+    "artist": "Harry Styles",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 60,
+    "title": "Canyon Moon",
+    "artist": "Harry Styles",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 61,
+    "title": "Sweet Creature",
+    "artist": "Harry Styles",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 62,
+    "title": "Two Ghosts",
+    "artist": "Harry Styles",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 63,
+    "title": "From the Dining Table",
+    "artist": "Harry Styles",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 64,
+    "title": "Fine Line",
+    "artist": "Harry Styles",
+    "bpm": 90,
+    "genre": "Pop",
+    "duration": 377,
+    "bpmVerified": true
+  },
+  {
+    "id": 65,
+    "title": "Sunflower Vol. 6",
+    "artist": "Harry Styles",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 66,
+    "title": "Cherry",
+    "artist": "Harry Styles",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 300,
+    "bpmVerified": true
+  },
+  {
+    "id": 67,
+    "title": "To Be So Lonely",
+    "artist": "Harry Styles",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 191,
+    "bpmVerified": true
+  },
+  {
+    "id": 68,
+    "title": "Adore You",
+    "artist": "Harry Styles",
+    "bpm": 95,
+    "genre": "Pop",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 69,
+    "title": "Falling",
+    "artist": "Harry Styles",
+    "bpm": 86,
+    "genre": "Pop",
+    "duration": 240,
+    "bpmVerified": true
+  },
+  {
+    "id": 70,
+    "title": "Anti-Hero",
+    "artist": "Taylor Swift",
+    "bpm": 97,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 71,
+    "title": "Espresso",
+    "artist": "Sabrina Carpenter",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 72,
+    "title": "Please Please Please",
+    "artist": "Sabrina Carpenter",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 186,
+    "bpmVerified": true
+  },
+  {
+    "id": 73,
+    "title": "Nonsense",
+    "artist": "Sabrina Carpenter",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 173,
+    "bpmVerified": true
+  },
+  {
+    "id": 74,
+    "title": "Feather",
+    "artist": "Sabrina Carpenter",
+    "bpm": 112,
+    "genre": "Pop",
+    "duration": 163,
+    "bpmVerified": true
+  },
+  {
+    "id": 75,
+    "title": "because i liked a boy",
+    "artist": "Sabrina Carpenter",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 177,
+    "bpmVerified": true
+  },
+  {
+    "id": 76,
+    "title": "Read Your Mind",
+    "artist": "Sabrina Carpenter",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 77,
+    "title": "Fast Times",
+    "artist": "Sabrina Carpenter",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 78,
+    "title": "Good Days",
+    "artist": "Sabrina Carpenter",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 181,
+    "bpmVerified": true
+  },
+  {
+    "id": 79,
+    "title": "Vicious",
+    "artist": "Sabrina Carpenter",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 172,
+    "bpmVerified": true
+  },
+  {
+    "id": 80,
+    "title": "Good Luck Babe!",
+    "artist": "Chappell Roan",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 81,
+    "title": "femininomenon",
+    "artist": "Chappell Roan",
+    "bpm": 110,
+    "genre": "Pop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 82,
+    "title": "HOT TO GO!",
+    "artist": "Chappell Roan",
+    "bpm": 110,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 83,
+    "title": "Red Wine Supernova",
+    "artist": "Chappell Roan",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 84,
+    "title": "Super Graphic Ultra Modern Girl",
+    "artist": "Chappell Roan",
+    "bpm": 112,
+    "genre": "Pop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 85,
+    "title": "After Midnight",
+    "artist": "Chappell Roan",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 86,
+    "title": "Casual",
+    "artist": "Chappell Roan",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 180,
+    "bpmVerified": true
+  },
+  {
+    "id": 87,
+    "title": "Picture You",
+    "artist": "Chappell Roan",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 88,
+    "title": "Music For a Sushi Restaurant",
+    "artist": "Harry Styles",
+    "bpm": 118,
+    "genre": "Pop",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 89,
+    "title": "Cinema",
+    "artist": "Harry Styles",
+    "bpm": 115,
+    "genre": "Pop",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 90,
+    "title": "Eyes Closed",
+    "artist": "Ed Sheeran",
+    "bpm": 113,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 91,
+    "title": "2step",
+    "artist": "Ed Sheeran",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 92,
+    "title": "Collide",
+    "artist": "Ed Sheeran",
+    "bpm": 109,
+    "genre": "Pop",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 93,
+    "title": "Borderline",
+    "artist": "Tame Impala",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 227,
+    "bpmVerified": true
+  },
+  {
+    "id": 94,
+    "title": "Levitating",
+    "artist": "Dua Lipa",
+    "bpm": 103,
+    "genre": "Pop",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 95,
+    "title": "Golden",
+    "artist": "Harry Styles",
+    "bpm": 102,
+    "genre": "Pop",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 96,
+    "title": "Dynamite",
+    "artist": "BTS",
+    "bpm": 114,
+    "genre": "Pop",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 97,
+    "title": "Butter",
+    "artist": "BTS",
+    "bpm": 110,
+    "genre": "Pop",
+    "duration": 164,
+    "bpmVerified": true
+  },
+  {
+    "id": 98,
+    "title": "Boy With Luv",
+    "artist": "BTS ft. Halsey",
+    "bpm": 107,
+    "genre": "Pop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 99,
+    "title": "Euphoria",
+    "artist": "BTS",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 260,
+    "bpmVerified": true
+  },
+  {
+    "id": 100,
+    "title": "Telepathy",
+    "artist": "BTS",
+    "bpm": 109,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 101,
+    "title": "Spring Day",
+    "artist": "BTS",
+    "bpm": 89,
+    "genre": "Pop",
+    "duration": 275,
+    "bpmVerified": true
+  },
+  {
+    "id": 102,
+    "title": "Never Really Over",
+    "artist": "Katy Perry",
+    "bpm": 118,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 103,
+    "title": "Daisies",
+    "artist": "Katy Perry",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 184,
+    "bpmVerified": true
+  },
+  {
+    "id": 104,
+    "title": "Cruel Summer",
+    "artist": "Taylor Swift",
+    "bpm": 170,
+    "genre": "Pop",
+    "duration": 178,
+    "bpmVerified": true
+  },
+  {
+    "id": 105,
+    "title": "Don't Start Now",
+    "artist": "Dua Lipa",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 183,
+    "bpmVerified": true
+  },
+  {
+    "id": 106,
+    "title": "Physical",
+    "artist": "Dua Lipa",
+    "bpm": 128,
+    "genre": "Pop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 107,
+    "title": "Levitating (feat. DaBaby)",
+    "artist": "Dua Lipa",
+    "bpm": 103,
+    "genre": "Pop",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 108,
+    "title": "Break My Heart",
+    "artist": "Dua Lipa",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 109,
+    "title": "Love Again",
+    "artist": "Dua Lipa",
+    "bpm": 121,
+    "genre": "Pop",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 110,
+    "title": "IDGAF",
+    "artist": "Dua Lipa",
+    "bpm": 122,
+    "genre": "Pop",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 111,
+    "title": "New Rules",
+    "artist": "Dua Lipa",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 112,
+    "title": "One Kiss",
+    "artist": "Calvin Harris ft. Dua Lipa",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 189,
+    "bpmVerified": true
+  },
+  {
+    "id": 113,
+    "title": "Bad Guy",
+    "artist": "Billie Eilish",
+    "bpm": 135,
+    "genre": "Pop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 114,
+    "title": "Therefore I Am",
+    "artist": "Billie Eilish",
+    "bpm": 135,
+    "genre": "Pop",
+    "duration": 174,
+    "bpmVerified": true
+  },
+  {
+    "id": 115,
+    "title": "NDA",
+    "artist": "Billie Eilish",
+    "bpm": 122,
+    "genre": "Pop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 116,
+    "title": "Happier",
+    "artist": "Marshmello ft. Bastille",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 117,
+    "title": "Shake It Off",
+    "artist": "Taylor Swift",
+    "bpm": 160,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 118,
+    "title": "Blank Space",
+    "artist": "Taylor Swift",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 119,
+    "title": "Style",
+    "artist": "Taylor Swift",
+    "bpm": 95,
+    "genre": "Pop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 120,
+    "title": "22",
+    "artist": "Taylor Swift",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 121,
+    "title": "Flowers",
+    "artist": "Miley Cyrus",
+    "bpm": 118,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 122,
+    "title": "Prisoner",
+    "artist": "Miley Cyrus ft. Dua Lipa",
+    "bpm": 128,
+    "genre": "Pop",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 123,
+    "title": "Midnight Sky",
+    "artist": "Miley Cyrus",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 124,
+    "title": "Bad Blood",
+    "artist": "Taylor Swift ft. Kendrick Lamar",
+    "bpm": 150,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 125,
+    "title": "Out of the Woods",
+    "artist": "Taylor Swift",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 235,
+    "bpmVerified": true
+  },
+  {
+    "id": 126,
+    "title": "Smile",
+    "artist": "Katy Perry",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 127,
+    "title": "Roar",
+    "artist": "Katy Perry",
+    "bpm": 112,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 128,
+    "title": "Firework",
+    "artist": "Katy Perry",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 129,
+    "title": "Teenage Dream",
+    "artist": "Katy Perry",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 130,
+    "title": "Permission to Dance",
+    "artist": "BTS",
+    "bpm": 122,
+    "genre": "Pop",
+    "duration": 187,
+    "bpmVerified": true
+  },
+  {
+    "id": 131,
+    "title": "DNA",
+    "artist": "BTS",
+    "bpm": 126,
+    "genre": "Pop",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 132,
+    "title": "IDOL",
+    "artist": "BTS",
+    "bpm": 127,
+    "genre": "Pop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 133,
+    "title": "Dis-ease",
+    "artist": "BTS",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 240,
+    "bpmVerified": true
+  },
+  {
+    "id": 134,
+    "title": "Location",
+    "artist": "Khalid",
+    "bpm": 74,
+    "genre": "R&B",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 135,
+    "title": "Winter",
+    "artist": "Khalid",
+    "bpm": 79,
+    "genre": "R&B",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 136,
+    "title": "Free Spirit",
+    "artist": "Khalid",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 283,
+    "bpmVerified": true
+  },
+  {
+    "id": 137,
+    "title": "Self",
+    "artist": "Khalid",
+    "bpm": 72,
+    "genre": "R&B",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 138,
+    "title": "Best Part",
+    "artist": "Daniel Caesar ft. H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 139,
+    "title": "Get You",
+    "artist": "Daniel Caesar ft. Kali Uchis",
+    "bpm": 74,
+    "genre": "R&B",
+    "duration": 253,
+    "bpmVerified": true
+  },
+  {
+    "id": 140,
+    "title": "Blessed",
+    "artist": "Daniel Caesar",
+    "bpm": 72,
+    "genre": "R&B",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 141,
+    "title": "Violet",
+    "artist": "Daniel Caesar",
+    "bpm": 64,
+    "genre": "R&B",
+    "duration": 216,
+    "bpmVerified": true
+  },
+  {
+    "id": 142,
+    "title": "Hold Me Down",
+    "artist": "Daniel Caesar",
+    "bpm": 79,
+    "genre": "R&B",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 143,
+    "title": "Loose",
+    "artist": "Daniel Caesar",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 144,
+    "title": "Could've Been",
+    "artist": "H.E.R. ft. Bryson Tiller",
+    "bpm": 73,
+    "genre": "R&B",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 145,
+    "title": "The Weekend",
+    "artist": "SZA",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 146,
+    "title": "20 Something",
+    "artist": "SZA",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 226,
+    "bpmVerified": true
+  },
+  {
+    "id": 147,
+    "title": "Drew Barrymore",
+    "artist": "SZA",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 148,
+    "title": "Love Galore",
+    "artist": "SZA ft. Travis Scott",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 149,
+    "title": "Normal Girl",
+    "artist": "SZA",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 150,
+    "title": "Nobody Gets Me",
+    "artist": "SZA",
+    "bpm": 82,
+    "genre": "R&B",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 151,
+    "title": "Snooze",
+    "artist": "SZA",
+    "bpm": 93,
+    "genre": "R&B",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 152,
+    "title": "Open Arms",
+    "artist": "SZA ft. Travis Scott",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 153,
+    "title": "Ghost in the Machine",
+    "artist": "SZA ft. Phoebe Bridgers",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 154,
+    "title": "Die For You",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 260,
+    "bpmVerified": true
+  },
+  {
+    "id": 155,
+    "title": "Earned It",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 156,
+    "title": "Out of Time",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 157,
+    "title": "How Do I Make You Love Me?",
+    "artist": "The Weeknd",
+    "bpm": 96,
+    "genre": "R&B",
+    "duration": 216,
+    "bpmVerified": true
+  },
+  {
+    "id": 158,
+    "title": "Hurricane",
+    "artist": "Kanye West ft. The Weeknd",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 159,
+    "title": "Liability",
+    "artist": "Lorde",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 239,
+    "bpmVerified": true
+  },
+  {
+    "id": 160,
+    "title": "Writer in the Dark",
+    "artist": "Lorde",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 161,
+    "title": "Hard Feelings",
+    "artist": "Lorde",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 352,
+    "bpmVerified": true
+  },
+  {
+    "id": 162,
+    "title": "Supercut",
+    "artist": "Lorde",
+    "bpm": 79,
+    "genre": "R&B",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 163,
+    "title": "Yellow",
+    "artist": "Coldplay",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 269,
+    "bpmVerified": true
+  },
+  {
+    "id": 164,
+    "title": "Peaches",
+    "artist": "Justin Bieber ft. Daniel Caesar",
+    "bpm": 98,
+    "genre": "R&B",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 165,
+    "title": "Often",
+    "artist": "The Weeknd",
+    "bpm": 104,
+    "genre": "R&B",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 166,
+    "title": "In The Night",
+    "artist": "The Weeknd",
+    "bpm": 105,
+    "genre": "R&B",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 167,
+    "title": "Is There Someone Else?",
+    "artist": "The Weeknd",
+    "bpm": 104,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 168,
+    "title": "Sacrifice",
+    "artist": "The Weeknd",
+    "bpm": 101,
+    "genre": "R&B",
+    "duration": 192,
+    "bpmVerified": true
+  },
+  {
+    "id": 169,
+    "title": "Creepin'",
+    "artist": "Metro Boomin ft. The Weeknd",
+    "bpm": 93,
+    "genre": "R&B",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 170,
+    "title": "Popular",
+    "artist": "The Weeknd ft. Playboi Carti",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 171,
+    "title": "Save Your Tears",
+    "artist": "The Weeknd",
+    "bpm": 118,
+    "genre": "R&B",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 172,
+    "title": "Slow Down",
+    "artist": "Khalid",
+    "bpm": 82,
+    "genre": "R&B",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 173,
+    "title": "Better",
+    "artist": "Khalid",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 174,
+    "title": "Talk",
+    "artist": "Khalid",
+    "bpm": 95,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 175,
+    "title": "Saved",
+    "artist": "Khalid",
+    "bpm": 98,
+    "genre": "R&B",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 176,
+    "title": "Young Dumb & Broke",
+    "artist": "Khalid",
+    "bpm": 105,
+    "genre": "R&B",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 177,
+    "title": "Know Your Worth",
+    "artist": "Khalid ft. Disclosure",
+    "bpm": 118,
+    "genre": "R&B",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 178,
+    "title": "Broken Clocks",
+    "artist": "SZA",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 179,
+    "title": "Ctrl",
+    "artist": "SZA",
+    "bpm": 86,
+    "genre": "R&B",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 180,
+    "title": "Doves in the Wind",
+    "artist": "SZA ft. Kendrick Lamar",
+    "bpm": 96,
+    "genre": "R&B",
+    "duration": 255,
+    "bpmVerified": true
+  },
+  {
+    "id": 181,
+    "title": "Power Trip",
+    "artist": "J. Cole ft. Miguel",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 283,
+    "bpmVerified": true
+  },
+  {
+    "id": 182,
+    "title": "Do Not Disturb",
+    "artist": "Drake",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 183,
+    "title": "Champagne Poetry",
+    "artist": "Drake",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 371,
+    "bpmVerified": true
+  },
+  {
+    "id": 184,
+    "title": "TSU",
+    "artist": "Drake",
+    "bpm": 82,
+    "genre": "R&B",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 185,
+    "title": "Papi's Home",
+    "artist": "Drake",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 186,
+    "title": "You Only Live Twice",
+    "artist": "Drake ft. Lil Wayne",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 354,
+    "bpmVerified": true
+  },
+  {
+    "id": 187,
+    "title": "Fair Trade",
+    "artist": "Drake ft. Travis Scott",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 309,
+    "bpmVerified": true
+  },
+  {
+    "id": 188,
+    "title": "Yebba's Heartbreak",
+    "artist": "Drake ft. YEBBA",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 247,
+    "bpmVerified": true
+  },
+  {
+    "id": 189,
+    "title": "Fountains",
+    "artist": "Drake ft. Tems",
+    "bpm": 82,
+    "genre": "R&B",
+    "duration": 283,
+    "bpmVerified": true
+  },
+  {
+    "id": 190,
+    "title": "Wants and Needs",
+    "artist": "Drake ft. Lil Baby",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 191,
+    "title": "IMY2",
+    "artist": "Drake ft. Kid Cudi",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 243,
+    "bpmVerified": true
+  },
+  {
+    "id": 192,
+    "title": "Girls Want Girls",
+    "artist": "Drake ft. Lil Baby",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 193,
+    "title": "Privileged Rappers",
+    "artist": "Drake ft. 21 Savage",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 241,
+    "bpmVerified": true
+  },
+  {
+    "id": 194,
+    "title": "Say So",
+    "artist": "Doja Cat",
+    "bpm": 111,
+    "genre": "R&B",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 195,
+    "title": "Kiss Me More",
+    "artist": "Doja Cat ft. SZA",
+    "bpm": 116,
+    "genre": "R&B",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 196,
+    "title": "Need to Know",
+    "artist": "Doja Cat",
+    "bpm": 113,
+    "genre": "R&B",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 197,
+    "title": "Woman",
+    "artist": "Doja Cat",
+    "bpm": 112,
+    "genre": "R&B",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 198,
+    "title": "Streets",
+    "artist": "Doja Cat",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 199,
+    "title": "Planet Her",
+    "artist": "Doja Cat ft. SZA",
+    "bpm": 116,
+    "genre": "R&B",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 200,
+    "title": "You Right",
+    "artist": "Doja Cat ft. The Weeknd",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 201,
+    "title": "Juicy",
+    "artist": "Doja Cat ft. Tyga",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 202,
+    "title": "Agora Hills",
+    "artist": "Doja Cat",
+    "bpm": 102,
+    "genre": "R&B",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 203,
+    "title": "Paint The Town Red",
+    "artist": "Doja Cat",
+    "bpm": 108,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 204,
+    "title": "Attention",
+    "artist": "Doja Cat",
+    "bpm": 112,
+    "genre": "R&B",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 205,
+    "title": "Shopping Spree",
+    "artist": "Doja Cat ft. JID",
+    "bpm": 115,
+    "genre": "R&B",
+    "duration": 185,
+    "bpmVerified": true
+  },
+  {
+    "id": 206,
+    "title": "Vegas",
+    "artist": "Doja Cat",
+    "bpm": 113,
+    "genre": "R&B",
+    "duration": 161,
+    "bpmVerified": true
+  },
+  {
+    "id": 207,
+    "title": "Demons",
+    "artist": "Doja Cat",
+    "bpm": 114,
+    "genre": "R&B",
+    "duration": 165,
+    "bpmVerified": true
+  },
+  {
+    "id": 208,
+    "title": "Cyber Sex",
+    "artist": "Doja Cat",
+    "bpm": 120,
+    "genre": "R&B",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 209,
+    "title": "Kill Bill",
+    "artist": "SZA",
+    "bpm": 120,
+    "genre": "R&B",
+    "duration": 153,
+    "bpmVerified": true
+  },
+  {
+    "id": 210,
+    "title": "Good Days",
+    "artist": "SZA",
+    "bpm": 114,
+    "genre": "R&B",
+    "duration": 280,
+    "bpmVerified": true
+  },
+  {
+    "id": 211,
+    "title": "I Hate U",
+    "artist": "SZA",
+    "bpm": 118,
+    "genre": "R&B",
+    "duration": 159,
+    "bpmVerified": true
+  },
+  {
+    "id": 212,
+    "title": "Shirt",
+    "artist": "SZA",
+    "bpm": 101,
+    "genre": "R&B",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 213,
+    "title": "Conceited",
+    "artist": "SZA",
+    "bpm": 122,
+    "genre": "R&B",
+    "duration": 161,
+    "bpmVerified": true
+  },
+  {
+    "id": 214,
+    "title": "Blind",
+    "artist": "SZA",
+    "bpm": 124,
+    "genre": "R&B",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 215,
+    "title": "Low",
+    "artist": "SZA",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 216,
+    "title": "Can't Feel My Face",
+    "artist": "The Weeknd",
+    "bpm": 109,
+    "genre": "R&B",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 217,
+    "title": "The Hills",
+    "artist": "The Weeknd",
+    "bpm": 111,
+    "genre": "R&B",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 218,
+    "title": "Take My Breath",
+    "artist": "The Weeknd",
+    "bpm": 120,
+    "genre": "R&B",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 219,
+    "title": "Starboy",
+    "artist": "The Weeknd ft. Daft Punk",
+    "bpm": 106,
+    "genre": "R&B",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 220,
+    "title": "Die For You (remix)",
+    "artist": "The Weeknd ft. Ariana Grande",
+    "bpm": 108,
+    "genre": "R&B",
+    "duration": 265,
+    "bpmVerified": true
+  },
+  {
+    "id": 221,
+    "title": "Heartless",
+    "artist": "Kanye West",
+    "bpm": 105,
+    "genre": "R&B",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 222,
+    "title": "Runaway",
+    "artist": "Kanye West ft. Pusha T",
+    "bpm": 104,
+    "genre": "R&B",
+    "duration": 338,
+    "bpmVerified": true
+  },
+  {
+    "id": 223,
+    "title": "Seek & Destroy",
+    "artist": "SZA",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 186,
+    "bpmVerified": true
+  },
+  {
+    "id": 224,
+    "title": "Gone Girl",
+    "artist": "SZA",
+    "bpm": 131,
+    "genre": "R&B",
+    "duration": 191,
+    "bpmVerified": true
+  },
+  {
+    "id": 225,
+    "title": "Low",
+    "artist": "SZA ft. SG Lewis",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 226,
+    "title": "Forgiveless",
+    "artist": "SZA ft. Ol' Dirty Bastard",
+    "bpm": 122,
+    "genre": "R&B",
+    "duration": 189,
+    "bpmVerified": true
+  },
+  {
+    "id": 227,
+    "title": "Love Language",
+    "artist": "SZA",
+    "bpm": 126,
+    "genre": "R&B",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 228,
+    "title": "Far",
+    "artist": "SZA",
+    "bpm": 120,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 229,
+    "title": "Notice Me",
+    "artist": "SZA",
+    "bpm": 128,
+    "genre": "R&B",
+    "duration": 178,
+    "bpmVerified": true
+  },
+  {
+    "id": 230,
+    "title": "Smoking on my Ex Pack",
+    "artist": "SZA",
+    "bpm": 122,
+    "genre": "R&B",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 231,
+    "title": "Moth To A Flame",
+    "artist": "Swedish House Mafia ft. The Weeknd",
+    "bpm": 128,
+    "genre": "R&B",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 232,
+    "title": "Blinding Lights",
+    "artist": "The Weeknd",
+    "bpm": 171,
+    "genre": "R&B",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 233,
+    "title": "Save Your Tears",
+    "artist": "The Weeknd ft. Ariana Grande",
+    "bpm": 118,
+    "genre": "R&B",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 234,
+    "title": "In Your Eyes",
+    "artist": "The Weeknd ft. Doja Cat",
+    "bpm": 120,
+    "genre": "R&B",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 235,
+    "title": "One Right Now",
+    "artist": "Post Malone ft. The Weeknd",
+    "bpm": 140,
+    "genre": "R&B",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 236,
+    "title": "God's Plan",
+    "artist": "Drake",
+    "bpm": 77,
+    "genre": "R&B",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 237,
+    "title": "Nonstop",
+    "artist": "Drake",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 238,
+    "title": "Toosie Slide",
+    "artist": "Drake",
+    "bpm": 123,
+    "genre": "R&B",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 239,
+    "title": "Nice For What",
+    "artist": "Drake",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 240,
+    "title": "Laugh Now Cry Later",
+    "artist": "Drake ft. Lil Durk",
+    "bpm": 138,
+    "genre": "R&B",
+    "duration": 278,
+    "bpmVerified": true
+  },
+  {
+    "id": 241,
+    "title": "What's Next",
+    "artist": "Drake",
+    "bpm": 140,
+    "genre": "R&B",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 242,
+    "title": "Knife Talk",
+    "artist": "Drake ft. 21 Savage",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 243,
+    "title": "90210",
+    "artist": "Travis Scott",
+    "bpm": 73,
+    "genre": "Hip-Hop",
+    "duration": 341,
+    "bpmVerified": true
+  },
+  {
+    "id": 244,
+    "title": "STARGAZING",
+    "artist": "Travis Scott",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 292,
+    "bpmVerified": true
+  },
+  {
+    "id": 245,
+    "title": "ASTROTHUNDER",
+    "artist": "Travis Scott",
+    "bpm": 64,
+    "genre": "Hip-Hop",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 246,
+    "title": "COFFEE BEAN",
+    "artist": "Travis Scott",
+    "bpm": 72,
+    "genre": "Hip-Hop",
+    "duration": 286,
+    "bpmVerified": true
+  },
+  {
+    "id": 247,
+    "title": "YOSEMITE",
+    "artist": "Travis Scott",
+    "bpm": 72,
+    "genre": "Hip-Hop",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 248,
+    "title": "CAROUSEL",
+    "artist": "Travis Scott",
+    "bpm": 64,
+    "genre": "Hip-Hop",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 249,
+    "title": "sdp interlude",
+    "artist": "Travis Scott",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 135,
+    "bpmVerified": true
+  },
+  {
+    "id": 250,
+    "title": "pick up the phone",
+    "artist": "Travis Scott ft. Young Thug",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 251,
+    "title": "R.I.P. SCREW",
+    "artist": "Travis Scott",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 153,
+    "bpmVerified": true
+  },
+  {
+    "id": 252,
+    "title": "5% TINT",
+    "artist": "Travis Scott",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 253,
+    "title": "LOVE.",
+    "artist": "Kendrick Lamar ft. Zacari",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 254,
+    "title": "PRIDE.",
+    "artist": "Kendrick Lamar",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 270,
+    "bpmVerified": true
+  },
+  {
+    "id": 255,
+    "title": "LUST.",
+    "artist": "Kendrick Lamar",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 306,
+    "bpmVerified": true
+  },
+  {
+    "id": 256,
+    "title": "FEAR.",
+    "artist": "Kendrick Lamar",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 443,
+    "bpmVerified": true
+  },
+  {
+    "id": 257,
+    "title": "Crown",
+    "artist": "Kendrick Lamar",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 295,
+    "bpmVerified": true
+  },
+  {
+    "id": 258,
+    "title": "Mirror",
+    "artist": "Kendrick Lamar",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 336,
+    "bpmVerified": true
+  },
+  {
+    "id": 259,
+    "title": "Purple Hearts",
+    "artist": "Kendrick Lamar ft. Summer Walker",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 262,
+    "bpmVerified": true
+  },
+  {
+    "id": 260,
+    "title": "Die Hard",
+    "artist": "Kendrick Lamar",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 278,
+    "bpmVerified": true
+  },
+  {
+    "id": 261,
+    "title": "Father Time",
+    "artist": "Kendrick Lamar ft. Sampha",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 278,
+    "bpmVerified": true
+  },
+  {
+    "id": 262,
+    "title": "Worldwide Steppers",
+    "artist": "Kendrick Lamar",
+    "bpm": 79,
+    "genre": "Hip-Hop",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 263,
+    "title": "Rich Spirit",
+    "artist": "Kendrick Lamar",
+    "bpm": 86,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 264,
+    "title": "Savior",
+    "artist": "Kendrick Lamar",
+    "bpm": 86,
+    "genre": "Hip-Hop",
+    "duration": 257,
+    "bpmVerified": true
+  },
+  {
+    "id": 265,
+    "title": "Mr. Morale",
+    "artist": "Kendrick Lamar",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 270,
+    "bpmVerified": true
+  },
+  {
+    "id": 266,
+    "title": "Mother I Sober",
+    "artist": "Kendrick Lamar ft. Beth Gibbons",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 340,
+    "bpmVerified": true
+  },
+  {
+    "id": 267,
+    "title": "The Heart Part 5",
+    "artist": "Kendrick Lamar",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 298,
+    "bpmVerified": true
+  },
+  {
+    "id": 268,
+    "title": "Alright",
+    "artist": "Kendrick Lamar",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 269,
+    "title": "How Much a Dollar Cost",
+    "artist": "Kendrick Lamar",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 295,
+    "bpmVerified": true
+  },
+  {
+    "id": 270,
+    "title": "These Walls",
+    "artist": "Kendrick Lamar ft. Bilal",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 282,
+    "bpmVerified": true
+  },
+  {
+    "id": 271,
+    "title": "u",
+    "artist": "Kendrick Lamar",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 304,
+    "bpmVerified": true
+  },
+  {
+    "id": 272,
+    "title": "For Free? (Interlude)",
+    "artist": "Kendrick Lamar",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 128,
+    "bpmVerified": true
+  },
+  {
+    "id": 273,
+    "title": "LOYALTY.",
+    "artist": "Kendrick Lamar ft. Rihanna",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 274,
+    "title": "FEEL.",
+    "artist": "Kendrick Lamar",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 275,
+    "title": "YAH.",
+    "artist": "Kendrick Lamar",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 181,
+    "bpmVerified": true
+  },
+  {
+    "id": 276,
+    "title": "ELEMENT.",
+    "artist": "Kendrick Lamar",
+    "bpm": 94,
+    "genre": "Hip-Hop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 277,
+    "title": "GOD.",
+    "artist": "Kendrick Lamar",
+    "bpm": 98,
+    "genre": "Hip-Hop",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 278,
+    "title": "N95",
+    "artist": "Kendrick Lamar",
+    "bpm": 91,
+    "genre": "Hip-Hop",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 279,
+    "title": "Silent Hill",
+    "artist": "Kendrick Lamar ft. Kodak Black",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 280,
+    "title": "Count Me Out",
+    "artist": "Kendrick Lamar",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 312,
+    "bpmVerified": true
+  },
+  {
+    "id": 281,
+    "title": "We Cry Together",
+    "artist": "Kendrick Lamar ft. Taylour Paige",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 274,
+    "bpmVerified": true
+  },
+  {
+    "id": 282,
+    "title": "Savior (Interlude)",
+    "artist": "Kendrick Lamar",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 120,
+    "bpmVerified": true
+  },
+  {
+    "id": 283,
+    "title": "Swim Good",
+    "artist": "Frank Ocean",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 216,
+    "bpmVerified": true
+  },
+  {
+    "id": 284,
+    "title": "Nights",
+    "artist": "Frank Ocean",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 309,
+    "bpmVerified": true
+  },
+  {
+    "id": 285,
+    "title": "Self Control",
+    "artist": "Frank Ocean",
+    "bpm": 86,
+    "genre": "Hip-Hop",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 286,
+    "title": "Godspeed",
+    "artist": "Frank Ocean",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 287,
+    "title": "White Ferrari",
+    "artist": "Frank Ocean",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 288,
+    "title": "Seigfried",
+    "artist": "Frank Ocean",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 347,
+    "bpmVerified": true
+  },
+  {
+    "id": 289,
+    "title": "Solo",
+    "artist": "Frank Ocean",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 290,
+    "title": "Pink + White",
+    "artist": "Frank Ocean",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 186,
+    "bpmVerified": true
+  },
+  {
+    "id": 291,
+    "title": "Ivy",
+    "artist": "Frank Ocean",
+    "bpm": 83,
+    "genre": "Hip-Hop",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 292,
+    "title": "Nikes",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 313,
+    "bpmVerified": true
+  },
+  {
+    "id": 293,
+    "title": "MONTERO (Call Me By Your Name)",
+    "artist": "Lil Nas X",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 137,
+    "bpmVerified": true
+  },
+  {
+    "id": 294,
+    "title": "Industry Baby",
+    "artist": "Lil Nas X ft. Jack Harlow",
+    "bpm": 105,
+    "genre": "Hip-Hop",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 295,
+    "title": "STAR WALKIN'",
+    "artist": "Lil Nas X",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 178,
+    "bpmVerified": true
+  },
+  {
+    "id": 296,
+    "title": "PANINI",
+    "artist": "Lil Nas X",
+    "bpm": 110,
+    "genre": "Hip-Hop",
+    "duration": 176,
+    "bpmVerified": true
+  },
+  {
+    "id": 297,
+    "title": "SUN GOES DOWN",
+    "artist": "Lil Nas X",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 298,
+    "title": "DEAD RIGHT NOW",
+    "artist": "Lil Nas X",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 299,
+    "title": "SCOOP",
+    "artist": "Lil Nas X ft. Doja Cat",
+    "bpm": 120,
+    "genre": "Hip-Hop",
+    "duration": 201,
+    "bpmVerified": true
+  },
+  {
+    "id": 300,
+    "title": "VOID",
+    "artist": "Lil Nas X",
+    "bpm": 112,
+    "genre": "Hip-Hop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 301,
+    "title": "LOST IN THE CITADEL",
+    "artist": "Lil Nas X",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 223,
+    "bpmVerified": true
+  },
+  {
+    "id": 302,
+    "title": "ONE OF ME",
+    "artist": "Lil Nas X ft. Elton John",
+    "bpm": 110,
+    "genre": "Hip-Hop",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 303,
+    "title": "AM I DREAMING",
+    "artist": "Lil Nas X ft. Miley Cyrus",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 304,
+    "title": "HUMBLE.",
+    "artist": "Kendrick Lamar",
+    "bpm": 105,
+    "genre": "Hip-Hop",
+    "duration": 177,
+    "bpmVerified": true
+  },
+  {
+    "id": 305,
+    "title": "DNA.",
+    "artist": "Kendrick Lamar",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 186,
+    "bpmVerified": true
+  },
+  {
+    "id": 306,
+    "title": "Swimming Pools (Drank)",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 313,
+    "bpmVerified": true
+  },
+  {
+    "id": 307,
+    "title": "B*tch, Don't Kill My Vibe",
+    "artist": "Kendrick Lamar",
+    "bpm": 102,
+    "genre": "Hip-Hop",
+    "duration": 336,
+    "bpmVerified": true
+  },
+  {
+    "id": 308,
+    "title": "Money Trees",
+    "artist": "Kendrick Lamar ft. Jay Rock",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 386,
+    "bpmVerified": true
+  },
+  {
+    "id": 309,
+    "title": "Backstreet Freestyle",
+    "artist": "Kendrick Lamar",
+    "bpm": 116,
+    "genre": "Hip-Hop",
+    "duration": 185,
+    "bpmVerified": true
+  },
+  {
+    "id": 310,
+    "title": "m.A.A.d city",
+    "artist": "Kendrick Lamar ft. MC Eiht",
+    "bpm": 110,
+    "genre": "Hip-Hop",
+    "duration": 349,
+    "bpmVerified": true
+  },
+  {
+    "id": 311,
+    "title": "Poetic Justice",
+    "artist": "Kendrick Lamar ft. Drake",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 302,
+    "bpmVerified": true
+  },
+  {
+    "id": 312,
+    "title": "Rigamortis",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 313,
+    "title": "Sing About Me, I'm Dying of Thirst",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 510,
+    "bpmVerified": true
+  },
+  {
+    "id": 314,
+    "title": "Backseat Freestyle",
+    "artist": "Kendrick Lamar",
+    "bpm": 116,
+    "genre": "Hip-Hop",
+    "duration": 185,
+    "bpmVerified": true
+  },
+  {
+    "id": 315,
+    "title": "Good Kid",
+    "artist": "Kendrick Lamar ft. Jay Rock",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 299,
+    "bpmVerified": true
+  },
+  {
+    "id": 316,
+    "title": "The Recipe",
+    "artist": "Kendrick Lamar ft. Dr. Dre",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 340,
+    "bpmVerified": true
+  },
+  {
+    "id": 317,
+    "title": "Bitch, Don't Kill My Vibe",
+    "artist": "Kendrick Lamar",
+    "bpm": 102,
+    "genre": "Hip-Hop",
+    "duration": 336,
+    "bpmVerified": true
+  },
+  {
+    "id": 318,
+    "title": "Compton",
+    "artist": "Kendrick Lamar ft. Dr. Dre",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 293,
+    "bpmVerified": true
+  },
+  {
+    "id": 319,
+    "title": "Real",
+    "artist": "Kendrick Lamar ft. Anna Wise",
+    "bpm": 102,
+    "genre": "Hip-Hop",
+    "duration": 358,
+    "bpmVerified": true
+  },
+  {
+    "id": 320,
+    "title": "Pray for Me",
+    "artist": "The Weeknd ft. Kendrick Lamar",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 321,
+    "title": "Paramedic!",
+    "artist": "SOB X RBE",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 161,
+    "bpmVerified": true
+  },
+  {
+    "id": 322,
+    "title": "A$AP Forever",
+    "artist": "A$AP Rocky",
+    "bpm": 104,
+    "genre": "Hip-Hop",
+    "duration": 265,
+    "bpmVerified": true
+  },
+  {
+    "id": 323,
+    "title": "FE!N",
+    "artist": "Travis Scott ft. Playboi Carti",
+    "bpm": 138,
+    "genre": "Hip-Hop",
+    "duration": 206,
+    "bpmVerified": true
+  },
+  {
+    "id": 324,
+    "title": "I KNOW ?",
+    "artist": "Travis Scott",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 325,
+    "title": "MY EYES",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 272,
+    "bpmVerified": true
+  },
+  {
+    "id": 326,
+    "title": "THANK GOD",
+    "artist": "Travis Scott",
+    "bpm": 140,
+    "genre": "Hip-Hop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 327,
+    "title": "MELTDOWN",
+    "artist": "Travis Scott ft. Drake",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 277,
+    "bpmVerified": true
+  },
+  {
+    "id": 328,
+    "title": "Highest in the Room",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 329,
+    "title": "Franchise",
+    "artist": "Travis Scott ft. Young Thug",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 330,
+    "title": "Escape Plan",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 223,
+    "bpmVerified": true
+  },
+  {
+    "id": 331,
+    "title": "Mafia",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 332,
+    "title": "Butterfly Effect",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 333,
+    "title": "No Bystanders",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 334,
+    "title": "GOOSEBUMPS",
+    "artist": "Travis Scott ft. Kendrick Lamar",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 243,
+    "bpmVerified": true
+  },
+  {
+    "id": 335,
+    "title": "Antidote",
+    "artist": "Travis Scott",
+    "bpm": 131,
+    "genre": "Hip-Hop",
+    "duration": 254,
+    "bpmVerified": true
+  },
+  {
+    "id": 336,
+    "title": "CALLING",
+    "artist": "Travis Scott ft. James Blake",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 337,
+    "title": "GOD'S COUNTRY",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 338,
+    "title": "Portland",
+    "artist": "Drake ft. Travis Scott",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 241,
+    "bpmVerified": true
+  },
+  {
+    "id": 339,
+    "title": "SICKO MODE",
+    "artist": "Travis Scott",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 312,
+    "bpmVerified": true
+  },
+  {
+    "id": 340,
+    "title": "Way 2 Sexy",
+    "artist": "Drake",
+    "bpm": 125,
+    "genre": "Hip-Hop",
+    "duration": 259,
+    "bpmVerified": true
+  },
+  {
+    "id": 341,
+    "title": "Rich Flex",
+    "artist": "Drake ft. 21 Savage",
+    "bpm": 135,
+    "genre": "Hip-Hop",
+    "duration": 226,
+    "bpmVerified": true
+  },
+  {
+    "id": 342,
+    "title": "On BS",
+    "artist": "Drake",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 343,
+    "title": "BackOutsideBoyz",
+    "artist": "Drake",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 344,
+    "title": "Race My Mind",
+    "artist": "Drake",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 345,
+    "title": "Not Like Us",
+    "artist": "Kendrick Lamar",
+    "bpm": 132,
+    "genre": "Hip-Hop",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 346,
+    "title": "Colors",
+    "artist": "Halsey",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 347,
+    "title": "Control",
+    "artist": "Halsey",
+    "bpm": 75,
+    "genre": "Electronic",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 348,
+    "title": "Ghost",
+    "artist": "Halsey",
+    "bpm": 75,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 349,
+    "title": "Drive",
+    "artist": "Halsey",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 350,
+    "title": "Roman Holiday",
+    "artist": "Halsey",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 226,
+    "bpmVerified": true
+  },
+  {
+    "id": 351,
+    "title": "Castle",
+    "artist": "Halsey",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 352,
+    "title": "Gasoline",
+    "artist": "Halsey",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 353,
+    "title": "Strange Love",
+    "artist": "Halsey",
+    "bpm": 77,
+    "genre": "Electronic",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 354,
+    "title": "New Americana",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 355,
+    "title": "Hold Me Down",
+    "artist": "Halsey",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 356,
+    "title": "Life Is Worth Living",
+    "artist": "Justin Bieber",
+    "bpm": 68,
+    "genre": "Electronic",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 357,
+    "title": "I'll Show You",
+    "artist": "Justin Bieber",
+    "bpm": 73,
+    "genre": "Electronic",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 358,
+    "title": "The Feeling",
+    "artist": "Justin Bieber ft. Halsey",
+    "bpm": 82,
+    "genre": "Electronic",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 359,
+    "title": "Children",
+    "artist": "Justin Bieber",
+    "bpm": 82,
+    "genre": "Electronic",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 360,
+    "title": "OFF MY FACE",
+    "artist": "Justin Bieber",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 361,
+    "title": "Breathe Me",
+    "artist": "Sia",
+    "bpm": 73,
+    "genre": "Electronic",
+    "duration": 278,
+    "bpmVerified": true
+  },
+  {
+    "id": 362,
+    "title": "Big God",
+    "artist": "Florence + The Machine",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 284,
+    "bpmVerified": true
+  },
+  {
+    "id": 363,
+    "title": "Hunger",
+    "artist": "Florence + The Machine",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 364,
+    "title": "Sky Full of Song",
+    "artist": "Florence + The Machine",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 365,
+    "title": "Jenny of Oldstones",
+    "artist": "Florence + The Machine",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 366,
+    "title": "White Light",
+    "artist": "George Michael",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 367,
+    "title": "Adorn",
+    "artist": "Miguel",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 368,
+    "title": "What's Normal Anyway",
+    "artist": "Metronomy",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 369,
+    "title": "The Look",
+    "artist": "Metronomy",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 370,
+    "title": "Boyfriend",
+    "artist": "Tame Impala",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 259,
+    "bpmVerified": true
+  },
+  {
+    "id": 371,
+    "title": "Eventually",
+    "artist": "Tame Impala",
+    "bpm": 75,
+    "genre": "Electronic",
+    "duration": 320,
+    "bpmVerified": true
+  },
+  {
+    "id": 372,
+    "title": "Reality in Motion",
+    "artist": "Tame Impala",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 283,
+    "bpmVerified": true
+  },
+  {
+    "id": 373,
+    "title": "Be Above It",
+    "artist": "Tame Impala",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 374,
+    "title": "Apocalypse Dreams",
+    "artist": "Tame Impala",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 396,
+    "bpmVerified": true
+  },
+  {
+    "id": 375,
+    "title": "Mind Mischief",
+    "artist": "Tame Impala",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 268,
+    "bpmVerified": true
+  },
+  {
+    "id": 376,
+    "title": "Promises",
+    "artist": "Calvin Harris ft. Sam Smith",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 377,
+    "title": "Miracle",
+    "artist": "Calvin Harris ft. Ellie Goulding",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 378,
+    "title": "Summer",
+    "artist": "Calvin Harris",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 379,
+    "title": "Outside",
+    "artist": "Calvin Harris ft. Ellie Goulding",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 206,
+    "bpmVerified": true
+  },
+  {
+    "id": 380,
+    "title": "Slide",
+    "artist": "Calvin Harris ft. Frank Ocean",
+    "bpm": 113,
+    "genre": "Electronic",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 381,
+    "title": "Feels",
+    "artist": "Calvin Harris ft. Pharrell Williams",
+    "bpm": 118,
+    "genre": "Electronic",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 382,
+    "title": "Faking It",
+    "artist": "Calvin Harris ft. Kehlani",
+    "bpm": 118,
+    "genre": "Electronic",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 383,
+    "title": "Hard to Love",
+    "artist": "Calvin Harris ft. Jessie Reyez",
+    "bpm": 117,
+    "genre": "Electronic",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 384,
+    "title": "By Your Side",
+    "artist": "Calvin Harris ft. Tom Grennan",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 190,
+    "bpmVerified": true
+  },
+  {
+    "id": 385,
+    "title": "New to You",
+    "artist": "Calvin Harris ft. Normani",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 186,
+    "bpmVerified": true
+  },
+  {
+    "id": 386,
+    "title": "Ghost",
+    "artist": "Justin Bieber",
+    "bpm": 103,
+    "genre": "Electronic",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 387,
+    "title": "Intentions",
+    "artist": "Justin Bieber ft. Quavo",
+    "bpm": 86,
+    "genre": "Electronic",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 388,
+    "title": "Yummy",
+    "artist": "Justin Bieber",
+    "bpm": 105,
+    "genre": "Electronic",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 389,
+    "title": "Holy",
+    "artist": "Justin Bieber ft. Chance the Rapper",
+    "bpm": 90,
+    "genre": "Electronic",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 390,
+    "title": "Anyone",
+    "artist": "Justin Bieber",
+    "bpm": 88,
+    "genre": "Electronic",
+    "duration": 223,
+    "bpmVerified": true
+  },
+  {
+    "id": 391,
+    "title": "Hold On",
+    "artist": "Justin Bieber",
+    "bpm": 90,
+    "genre": "Electronic",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 392,
+    "title": "Honest",
+    "artist": "Justin Bieber ft. Don Toliver",
+    "bpm": 98,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 393,
+    "title": "Love Yourself",
+    "artist": "Justin Bieber",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 394,
+    "title": "Company",
+    "artist": "Justin Bieber",
+    "bpm": 88,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 395,
+    "title": "Get Me",
+    "artist": "Justin Bieber ft. Kehlani",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 396,
+    "title": "Nuh Ready Nuh Ready",
+    "artist": "Calvin Harris ft. PARTYNEXTDOOR",
+    "bpm": 98,
+    "genre": "Electronic",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 397,
+    "title": "How Deep Is Your Love",
+    "artist": "Calvin Harris ft. Disciples",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 398,
+    "title": "My Way",
+    "artist": "Calvin Harris",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 399,
+    "title": "Stay With Me",
+    "artist": "Calvin Harris ft. Disciples",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 400,
+    "title": "Thinking About You",
+    "artist": "Calvin Harris ft. Ayah Marar",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 401,
+    "title": "Orbit",
+    "artist": "Calvin Harris ft. Dua Lipa",
+    "bpm": 96,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 402,
+    "title": "New Money",
+    "artist": "Calvin Harris ft. ScHoolboy Q",
+    "bpm": 90,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 403,
+    "title": "Slow Acid",
+    "artist": "Calvin Harris",
+    "bpm": 88,
+    "genre": "Electronic",
+    "duration": 399,
+    "bpmVerified": true
+  },
+  {
+    "id": 404,
+    "title": "Open Wide",
+    "artist": "Calvin Harris ft. Big Sean",
+    "bpm": 88,
+    "genre": "Electronic",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 405,
+    "title": "Pray to God",
+    "artist": "Calvin Harris ft. HAIM",
+    "bpm": 92,
+    "genre": "Electronic",
+    "duration": 273,
+    "bpmVerified": true
+  },
+  {
+    "id": 406,
+    "title": "Levels",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 407,
+    "title": "Wake Me Up",
+    "artist": "Avicii",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 247,
+    "bpmVerified": true
+  },
+  {
+    "id": 408,
+    "title": "Hey Brother",
+    "artist": "Avicii",
+    "bpm": 127,
+    "genre": "Electronic",
+    "duration": 259,
+    "bpmVerified": true
+  },
+  {
+    "id": 409,
+    "title": "The Nights",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 410,
+    "title": "Waiting for Love",
+    "artist": "Avicii",
+    "bpm": 125,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 411,
+    "title": "For A Better Day",
+    "artist": "Avicii",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 412,
+    "title": "Without You",
+    "artist": "Avicii ft. Sandro Cavazza",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 413,
+    "title": "Lonely Together",
+    "artist": "Avicii ft. Rita Ora",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 414,
+    "title": "Friend of Mine",
+    "artist": "Avicii ft. Vargas & Lagola",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 415,
+    "title": "Heaven",
+    "artist": "Avicii ft. Chris Martin",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 416,
+    "title": "SOS",
+    "artist": "Avicii ft. Aloe Blacc",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 417,
+    "title": "Addicted to You",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 235,
+    "bpmVerified": true
+  },
+  {
+    "id": 418,
+    "title": "You Make Me",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 419,
+    "title": "What Would I Change It To",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 420,
+    "title": "True Believer",
+    "artist": "Avicii ft. Audra Mae",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 241,
+    "bpmVerified": true
+  },
+  {
+    "id": 421,
+    "title": "Sunset Jesus",
+    "artist": "Avicii",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 422,
+    "title": "Pure Grinding",
+    "artist": "Avicii",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 423,
+    "title": "Broken Arrows",
+    "artist": "Avicii ft. LYLC",
+    "bpm": 114,
+    "genre": "Electronic",
+    "duration": 240,
+    "bpmVerified": true
+  },
+  {
+    "id": 424,
+    "title": "Trouble",
+    "artist": "Avicii ft. Wayne Hector",
+    "bpm": 115,
+    "genre": "Electronic",
+    "duration": 227,
+    "bpmVerified": true
+  },
+  {
+    "id": 425,
+    "title": "Hold the Line",
+    "artist": "Avicii ft. BURNS",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 426,
+    "title": "Titanium",
+    "artist": "David Guetta ft. Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 245,
+    "bpmVerified": true
+  },
+  {
+    "id": 427,
+    "title": "Hey Mama",
+    "artist": "David Guetta ft. Nicki Minaj",
+    "bpm": 110,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 428,
+    "title": "Bang My Head",
+    "artist": "David Guetta ft. Sia",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 429,
+    "title": "What I Did for Love",
+    "artist": "David Guetta ft. Emeli Sandé",
+    "bpm": 116,
+    "genre": "Electronic",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 430,
+    "title": "Without You",
+    "artist": "David Guetta ft. Usher",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 431,
+    "title": "Flames",
+    "artist": "David Guetta ft. Sia",
+    "bpm": 118,
+    "genre": "Electronic",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 432,
+    "title": "Light Headed",
+    "artist": "David Guetta ft. Glowinthedark",
+    "bpm": 112,
+    "genre": "Electronic",
+    "duration": 227,
+    "bpmVerified": true
+  },
+  {
+    "id": 433,
+    "title": "Drive",
+    "artist": "David Guetta ft. Flo Rida",
+    "bpm": 116,
+    "genre": "Electronic",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 434,
+    "title": "Lovers on the Sun",
+    "artist": "David Guetta ft. Sam Martin",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 435,
+    "title": "Just One Last Time",
+    "artist": "David Guetta ft. Taped Ldn",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 223,
+    "bpmVerified": true
+  },
+  {
+    "id": 436,
+    "title": "Chandelier",
+    "artist": "Sia",
+    "bpm": 127,
+    "genre": "Electronic",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 437,
+    "title": "Cheap Thrills",
+    "artist": "Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 438,
+    "title": "The Greatest",
+    "artist": "Sia ft. Kendrick Lamar",
+    "bpm": 130,
+    "genre": "Electronic",
+    "duration": 239,
+    "bpmVerified": true
+  },
+  {
+    "id": 439,
+    "title": "Elastic Heart",
+    "artist": "Sia",
+    "bpm": 130,
+    "genre": "Electronic",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 440,
+    "title": "Alive",
+    "artist": "Sia",
+    "bpm": 130,
+    "genre": "Electronic",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 441,
+    "title": "Move Your Body",
+    "artist": "Sia",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 442,
+    "title": "Never Give Up",
+    "artist": "Sia",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 443,
+    "title": "Rainbow",
+    "artist": "Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 240,
+    "bpmVerified": true
+  },
+  {
+    "id": 444,
+    "title": "Together",
+    "artist": "Sia",
+    "bpm": 130,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 445,
+    "title": "Hey Boy",
+    "artist": "Sia ft. Burna Boy",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 446,
+    "title": "Unstoppable",
+    "artist": "Sia",
+    "bpm": 122,
+    "genre": "Electronic",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 447,
+    "title": "Bird Set Free",
+    "artist": "Sia",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 255,
+    "bpmVerified": true
+  },
+  {
+    "id": 448,
+    "title": "Angel by the Wings",
+    "artist": "Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 246,
+    "bpmVerified": true
+  },
+  {
+    "id": 449,
+    "title": "Eye of the Needle",
+    "artist": "Sia",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 450,
+    "title": "My Love",
+    "artist": "Sia ft. Fetty Wap",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 451,
+    "title": "Fire Meet Gasoline",
+    "artist": "Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 205,
+    "bpmVerified": true
+  },
+  {
+    "id": 452,
+    "title": "Sweet Design",
+    "artist": "Sia",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 206,
+    "bpmVerified": true
+  },
+  {
+    "id": 453,
+    "title": "Floating Through Space",
+    "artist": "Sia ft. David Guetta",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 203,
+    "bpmVerified": true
+  },
+  {
+    "id": 454,
+    "title": "Where I Belong",
+    "artist": "Sia",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 206,
+    "bpmVerified": true
+  },
+  {
+    "id": 455,
+    "title": "Courage to Change",
+    "artist": "Sia",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 456,
+    "title": "What Where You Made For",
+    "artist": "Billie Eilish",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 457,
+    "title": "Oxytocin",
+    "artist": "Billie Eilish",
+    "bpm": 122,
+    "genre": "Electronic",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 458,
+    "title": "Your Power",
+    "artist": "Billie Eilish",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 459,
+    "title": "Getting Older",
+    "artist": "Billie Eilish",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 249,
+    "bpmVerified": true
+  },
+  {
+    "id": 460,
+    "title": "Male Fantasy",
+    "artist": "Billie Eilish",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 461,
+    "title": "TV",
+    "artist": "Billie Eilish",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 462,
+    "title": "the 30th",
+    "artist": "Billie Eilish",
+    "bpm": 122,
+    "genre": "Electronic",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 463,
+    "title": "blue",
+    "artist": "Billie Eilish",
+    "bpm": 122,
+    "genre": "Electronic",
+    "duration": 179,
+    "bpmVerified": true
+  },
+  {
+    "id": 464,
+    "title": "Sign of the Times",
+    "artist": "Harry Styles",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 340,
+    "bpmVerified": true
+  },
+  {
+    "id": 465,
+    "title": "Ever Since New York",
+    "artist": "Harry Styles",
+    "bpm": 74,
+    "genre": "Pop",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 466,
+    "title": "Woman",
+    "artist": "Harry Styles",
+    "bpm": 72,
+    "genre": "Pop",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 467,
+    "title": "Meet Me in the Hallway",
+    "artist": "Harry Styles",
+    "bpm": 70,
+    "genre": "Pop",
+    "duration": 165,
+    "bpmVerified": true
+  },
+  {
+    "id": 468,
+    "title": "Only Angel",
+    "artist": "Harry Styles",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 469,
+    "title": "Kiwi",
+    "artist": "Harry Styles",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 470,
+    "title": "She",
+    "artist": "Harry Styles",
+    "bpm": 78,
+    "genre": "Pop",
+    "duration": 364,
+    "bpmVerified": true
+  },
+  {
+    "id": 471,
+    "title": "Anna",
+    "artist": "Harry Styles",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 472,
+    "title": "Treat People With Kindness",
+    "artist": "Harry Styles",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 204,
+    "bpmVerified": true
+  },
+  {
+    "id": 473,
+    "title": "Lover",
+    "artist": "Taylor Swift",
+    "bpm": 68,
+    "genre": "Pop",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 474,
+    "title": "The Archer",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 475,
+    "title": "It's Nice to Have a Friend",
+    "artist": "Taylor Swift",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 147,
+    "bpmVerified": true
+  },
+  {
+    "id": 476,
+    "title": "Soon You'll Get Better",
+    "artist": "Taylor Swift",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 192,
+    "bpmVerified": true
+  },
+  {
+    "id": 477,
+    "title": "Afterglow",
+    "artist": "Taylor Swift",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 478,
+    "title": "False God",
+    "artist": "Taylor Swift",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 479,
+    "title": "Paper Rings",
+    "artist": "Taylor Swift",
+    "bpm": 176,
+    "genre": "Pop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 480,
+    "title": "I Think He Knows",
+    "artist": "Taylor Swift",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 173,
+    "bpmVerified": true
+  },
+  {
+    "id": 481,
+    "title": "I Forgot That You Existed",
+    "artist": "Taylor Swift",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 152,
+    "bpmVerified": true
+  },
+  {
+    "id": 482,
+    "title": "You Need to Calm Down",
+    "artist": "Taylor Swift",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 171,
+    "bpmVerified": true
+  },
+  {
+    "id": 483,
+    "title": "The Man",
+    "artist": "Taylor Swift",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 484,
+    "title": "London Boy",
+    "artist": "Taylor Swift",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 485,
+    "title": "It's Time to Go",
+    "artist": "Taylor Swift",
+    "bpm": 82,
+    "genre": "Pop",
+    "duration": 241,
+    "bpmVerified": true
+  },
+  {
+    "id": 486,
+    "title": "You Are in Love",
+    "artist": "Taylor Swift",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 487,
+    "title": "New Romantics",
+    "artist": "Taylor Swift",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 488,
+    "title": "Clean",
+    "artist": "Taylor Swift",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 270,
+    "bpmVerified": true
+  },
+  {
+    "id": 489,
+    "title": "All You Had to Do Was Stay",
+    "artist": "Taylor Swift",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 192,
+    "bpmVerified": true
+  },
+  {
+    "id": 490,
+    "title": "Lose You to Love Me",
+    "artist": "Selena Gomez",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 205,
+    "bpmVerified": true
+  },
+  {
+    "id": 491,
+    "title": "Look At Her Now",
+    "artist": "Selena Gomez",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 492,
+    "title": "Rare",
+    "artist": "Selena Gomez",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 493,
+    "title": "Baila Conmigo",
+    "artist": "Selena Gomez ft. Rauw Alejandro",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 494,
+    "title": "De Una Vez",
+    "artist": "Selena Gomez",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 495,
+    "title": "Boyfriend",
+    "artist": "Selena Gomez",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 178,
+    "bpmVerified": true
+  },
+  {
+    "id": 496,
+    "title": "Feel Me",
+    "artist": "Selena Gomez",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 497,
+    "title": "Souvenir",
+    "artist": "Selena Gomez",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 162,
+    "bpmVerified": true
+  },
+  {
+    "id": 498,
+    "title": "Dance Again",
+    "artist": "Selena Gomez",
+    "bpm": 116,
+    "genre": "Pop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 499,
+    "title": "Crowded Room",
+    "artist": "Selena Gomez ft. 6LACK",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 500,
+    "title": "Kill Em With Kindness",
+    "artist": "Selena Gomez",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 501,
+    "title": "Good for You",
+    "artist": "Selena Gomez ft. A$AP Rocky",
+    "bpm": 124,
+    "genre": "Pop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 502,
+    "title": "Hands to Myself",
+    "artist": "Selena Gomez",
+    "bpm": 130,
+    "genre": "Pop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 503,
+    "title": "Same Old Love",
+    "artist": "Selena Gomez",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 504,
+    "title": "Back to You",
+    "artist": "Selena Gomez",
+    "bpm": 126,
+    "genre": "Pop",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 505,
+    "title": "Fetish",
+    "artist": "Selena Gomez ft. Gucci Mane",
+    "bpm": 122,
+    "genre": "Pop",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 506,
+    "title": "It Ain't Me",
+    "artist": "Kygo ft. Selena Gomez",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 507,
+    "title": "I Can't Get Enough",
+    "artist": "benny blanco ft. Selena Gomez",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 175,
+    "bpmVerified": true
+  },
+  {
+    "id": 508,
+    "title": "Taki Taki",
+    "artist": "DJ Snake ft. Selena Gomez",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 509,
+    "title": "People You Know",
+    "artist": "Selena Gomez",
+    "bpm": 120,
+    "genre": "Pop",
+    "duration": 168,
+    "bpmVerified": true
+  },
+  {
+    "id": 510,
+    "title": "Chanel",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 276,
+    "bpmVerified": true
+  },
+  {
+    "id": 511,
+    "title": "Lens",
+    "artist": "Frank Ocean ft. Travis Scott",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 124,
+    "bpmVerified": true
+  },
+  {
+    "id": 512,
+    "title": "Provider",
+    "artist": "Frank Ocean",
+    "bpm": 74,
+    "genre": "R&B",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 513,
+    "title": "Blonde",
+    "artist": "Frank Ocean",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 239,
+    "bpmVerified": true
+  },
+  {
+    "id": 514,
+    "title": "Close to You",
+    "artist": "Frank Ocean",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 285,
+    "bpmVerified": true
+  },
+  {
+    "id": 515,
+    "title": "Thinking Bout You",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 516,
+    "title": "Bad Religion",
+    "artist": "Frank Ocean",
+    "bpm": 68,
+    "genre": "R&B",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 517,
+    "title": "Forrest Gump",
+    "artist": "Frank Ocean",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 518,
+    "title": "Lost",
+    "artist": "Frank Ocean",
+    "bpm": 78,
+    "genre": "R&B",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 519,
+    "title": "Super Rich Kids",
+    "artist": "Frank Ocean ft. Earl Sweatshirt",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 335,
+    "bpmVerified": true
+  },
+  {
+    "id": 520,
+    "title": "Acquainted",
+    "artist": "The Weeknd",
+    "bpm": 104,
+    "genre": "R&B",
+    "duration": 305,
+    "bpmVerified": true
+  },
+  {
+    "id": 521,
+    "title": "Tell Your Friends",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 291,
+    "bpmVerified": true
+  },
+  {
+    "id": 522,
+    "title": "The Town",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 321,
+    "bpmVerified": true
+  },
+  {
+    "id": 523,
+    "title": "Belong to the World",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 337,
+    "bpmVerified": true
+  },
+  {
+    "id": 524,
+    "title": "Wanderlust",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 312,
+    "bpmVerified": true
+  },
+  {
+    "id": 525,
+    "title": "Kiss Land",
+    "artist": "The Weeknd",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 353,
+    "bpmVerified": true
+  },
+  {
+    "id": 526,
+    "title": "Professional",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 300,
+    "bpmVerified": true
+  },
+  {
+    "id": 527,
+    "title": "Adaptation",
+    "artist": "The Weeknd",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 528,
+    "title": "Dirty Diana",
+    "artist": "The Weeknd",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 288,
+    "bpmVerified": true
+  },
+  {
+    "id": 529,
+    "title": "Privilege",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 299,
+    "bpmVerified": true
+  },
+  {
+    "id": 530,
+    "title": "A Lonely Night",
+    "artist": "The Weeknd",
+    "bpm": 86,
+    "genre": "R&B",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 531,
+    "title": "Reminder",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 532,
+    "title": "True Colors",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 283,
+    "bpmVerified": true
+  },
+  {
+    "id": 533,
+    "title": "All I Know",
+    "artist": "The Weeknd ft. Future",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 282,
+    "bpmVerified": true
+  },
+  {
+    "id": 534,
+    "title": "Rockin'",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 265,
+    "bpmVerified": true
+  },
+  {
+    "id": 535,
+    "title": "Ordinary Life",
+    "artist": "The Weeknd",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 257,
+    "bpmVerified": true
+  },
+  {
+    "id": 536,
+    "title": "King of the Fall",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 260,
+    "bpmVerified": true
+  },
+  {
+    "id": 537,
+    "title": "The Party & The After Party",
+    "artist": "The Weeknd",
+    "bpm": 84,
+    "genre": "R&B",
+    "duration": 332,
+    "bpmVerified": true
+  },
+  {
+    "id": 538,
+    "title": "King Kunta",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 539,
+    "title": "These Walls",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 282,
+    "bpmVerified": true
+  },
+  {
+    "id": 540,
+    "title": "The Blacker the Berry",
+    "artist": "Kendrick Lamar",
+    "bpm": 130,
+    "genre": "R&B",
+    "duration": 337,
+    "bpmVerified": true
+  },
+  {
+    "id": 541,
+    "title": "Institutionalized",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 309,
+    "bpmVerified": true
+  },
+  {
+    "id": 542,
+    "title": "Momma",
+    "artist": "Kendrick Lamar",
+    "bpm": 102,
+    "genre": "R&B",
+    "duration": 286,
+    "bpmVerified": true
+  },
+  {
+    "id": 543,
+    "title": "Hood Politics",
+    "artist": "Kendrick Lamar",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 287,
+    "bpmVerified": true
+  },
+  {
+    "id": 544,
+    "title": "Without Me",
+    "artist": "Halsey",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 201,
+    "bpmVerified": true
+  },
+  {
+    "id": 545,
+    "title": "Graveyard",
+    "artist": "Halsey",
+    "bpm": 75,
+    "genre": "Electronic",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 546,
+    "title": "You should be sad",
+    "artist": "Halsey",
+    "bpm": 79,
+    "genre": "Electronic",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 547,
+    "title": "929",
+    "artist": "Halsey",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 548,
+    "title": "Honey",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 184,
+    "bpmVerified": true
+  },
+  {
+    "id": 549,
+    "title": "Easier Than Lying",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 550,
+    "title": "I am not a woman, I'm a god",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 551,
+    "title": "Nightmare",
+    "artist": "Halsey",
+    "bpm": 79,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 552,
+    "title": "Lighthouse",
+    "artist": "Halsey",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 276,
+    "bpmVerified": true
+  },
+  {
+    "id": 553,
+    "title": "You asked for this",
+    "artist": "Halsey",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 233,
+    "bpmVerified": true
+  },
+  {
+    "id": 554,
+    "title": "3am",
+    "artist": "Halsey",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 555,
+    "title": "Finally // beautiful stranger",
+    "artist": "Halsey",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 556,
+    "title": "be kind",
+    "artist": "Marshmello ft. Halsey",
+    "bpm": 74,
+    "genre": "Electronic",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 557,
+    "title": "Killing Boys",
+    "artist": "Halsey",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 558,
+    "title": "Walls Could Talk",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 559,
+    "title": "Hopeless",
+    "artist": "Halsey",
+    "bpm": 79,
+    "genre": "Electronic",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 560,
+    "title": "Now or Never",
+    "artist": "Halsey",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 247,
+    "bpmVerified": true
+  },
+  {
+    "id": 561,
+    "title": "Eyes Closed",
+    "artist": "Halsey",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 562,
+    "title": "Alone",
+    "artist": "Halsey",
+    "bpm": 78,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 563,
+    "title": "Sorry",
+    "artist": "Halsey",
+    "bpm": 76,
+    "genre": "Electronic",
+    "duration": 232,
+    "bpmVerified": true
+  },
+  {
+    "id": 564,
+    "title": "Currency of Me",
+    "artist": "Disclosure ft. Fatoumata Diawara",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 565,
+    "title": "Latch",
+    "artist": "Disclosure ft. Sam Smith",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 319,
+    "bpmVerified": true
+  },
+  {
+    "id": 566,
+    "title": "White Noise",
+    "artist": "Disclosure ft. AlunaGeorge",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 567,
+    "title": "F for You",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 568,
+    "title": "Hourglass",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 569,
+    "title": "Omen",
+    "artist": "Disclosure ft. Sam Smith",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 570,
+    "title": "You & Me",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 280,
+    "bpmVerified": true
+  },
+  {
+    "id": 571,
+    "title": "When a Fire Starts to Burn",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 572,
+    "title": "Moving Mountains",
+    "artist": "Disclosure ft. Brendan Reilly",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 573,
+    "title": "Magnets",
+    "artist": "Disclosure ft. Lorde",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 574,
+    "title": "Holding On",
+    "artist": "Disclosure ft. Gregory Porter",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 347,
+    "bpmVerified": true
+  },
+  {
+    "id": 575,
+    "title": "Grab Her!",
+    "artist": "Disclosure ft. Kwabs",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 261,
+    "bpmVerified": true
+  },
+  {
+    "id": 576,
+    "title": "Jaded",
+    "artist": "Disclosure ft. Edward Macfarlane",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 577,
+    "title": "Moog for Love",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 578,
+    "title": "Superego",
+    "artist": "Disclosure",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 350,
+    "bpmVerified": true
+  },
+  {
+    "id": 579,
+    "title": "Ultimatum",
+    "artist": "Disclosure ft. Fatoumata Diawara",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 580,
+    "title": "Moonlight",
+    "artist": "Disclosure ft. Jorja Smith",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 248,
+    "bpmVerified": true
+  },
+  {
+    "id": 581,
+    "title": "Lavender",
+    "artist": "Disclosure ft. Fatoumata Diawara",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 582,
+    "title": "My High",
+    "artist": "Disclosure ft. Aminé",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 583,
+    "title": "Thinking 'Bout You",
+    "artist": "Disclosure ft. London Grammar",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 243,
+    "bpmVerified": true
+  },
+  {
+    "id": 584,
+    "title": "Firestone",
+    "artist": "Kygo ft. Conrad Sewell",
+    "bpm": 105,
+    "genre": "Electronic",
+    "duration": 246,
+    "bpmVerified": true
+  },
+  {
+    "id": 585,
+    "title": "Stole the Show",
+    "artist": "Kygo ft. Parson James",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 586,
+    "title": "Carry Me",
+    "artist": "Kygo ft. Julia Michaels",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 222,
+    "bpmVerified": true
+  },
+  {
+    "id": 587,
+    "title": "Never Let You Go",
+    "artist": "Kygo ft. John Newman",
+    "bpm": 110,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 588,
+    "title": "Born to Be Yours",
+    "artist": "Kygo ft. Imagine Dragons",
+    "bpm": 116,
+    "genre": "Electronic",
+    "duration": 189,
+    "bpmVerified": true
+  },
+  {
+    "id": 589,
+    "title": "Happy Now",
+    "artist": "Kygo ft. Sandro Cavazza",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 590,
+    "title": "Think About You",
+    "artist": "Kygo ft. Valerie Broussard",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 591,
+    "title": "Here for You",
+    "artist": "Kygo ft. Ella Henderson",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 592,
+    "title": "Nothing Left",
+    "artist": "Kygo ft. Will Heard",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 239,
+    "bpmVerified": true
+  },
+  {
+    "id": 593,
+    "title": "Riding Shotgun",
+    "artist": "Kygo ft. Bonnie McKee",
+    "bpm": 112,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 594,
+    "title": "Freeze",
+    "artist": "Kygo ft. Brittany Cairns",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 595,
+    "title": "This Town",
+    "artist": "Kygo",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 241,
+    "bpmVerified": true
+  },
+  {
+    "id": 596,
+    "title": "What's Love Got to Do With It",
+    "artist": "Kygo ft. Tina Turner",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 192,
+    "bpmVerified": true
+  },
+  {
+    "id": 597,
+    "title": "Gone Are the Days",
+    "artist": "Kygo ft. James Gillespie",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 598,
+    "title": "Freedom",
+    "artist": "Kygo ft. Zak Abel",
+    "bpm": 102,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 599,
+    "title": "Lose Somebody",
+    "artist": "Kygo ft. OneRepublic",
+    "bpm": 110,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 600,
+    "title": "Higher Love",
+    "artist": "Kygo ft. Whitney Houston",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 601,
+    "title": "I'll Wait",
+    "artist": "Kygo ft. Sasha Sloan",
+    "bpm": 98,
+    "genre": "Electronic",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 602,
+    "title": "Stranger Things",
+    "artist": "Kygo ft. OneRepublic",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 603,
+    "title": "Closer",
+    "artist": "The Chainsmokers ft. Halsey",
+    "bpm": 95,
+    "genre": "Electronic",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 604,
+    "title": "Something Just Like This",
+    "artist": "The Chainsmokers ft. Coldplay",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 247,
+    "bpmVerified": true
+  },
+  {
+    "id": 605,
+    "title": "Don't Let Me Down",
+    "artist": "The Chainsmokers ft. Daya",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 606,
+    "title": "Paris",
+    "artist": "The Chainsmokers",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 607,
+    "title": "Young",
+    "artist": "The Chainsmokers",
+    "bpm": 118,
+    "genre": "Electronic",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 608,
+    "title": "Side Effects",
+    "artist": "The Chainsmokers ft. Emily Warren",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 609,
+    "title": "This Feeling",
+    "artist": "The Chainsmokers ft. Kelsea Ballerini",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 211,
+    "bpmVerified": true
+  },
+  {
+    "id": 610,
+    "title": "Beach House",
+    "artist": "The Chainsmokers",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 611,
+    "title": "Everybody Hates Me",
+    "artist": "The Chainsmokers",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 223,
+    "bpmVerified": true
+  },
+  {
+    "id": 612,
+    "title": "My Type",
+    "artist": "The Chainsmokers",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 230,
+    "bpmVerified": true
+  },
+  {
+    "id": 613,
+    "title": "Until You Were Gone",
+    "artist": "The Chainsmokers ft. Tritonal",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 614,
+    "title": "Hope",
+    "artist": "The Chainsmokers ft. Winona Oak",
+    "bpm": 126,
+    "genre": "Electronic",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 615,
+    "title": "You Owe Me",
+    "artist": "The Chainsmokers",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 616,
+    "title": "Push My Luck",
+    "artist": "The Chainsmokers",
+    "bpm": 124,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 617,
+    "title": "Who Do You Love",
+    "artist": "The Chainsmokers ft. 5 Seconds of Summer",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 618,
+    "title": "Takeaway",
+    "artist": "The Chainsmokers ft. ILLENIUM",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 209,
+    "bpmVerified": true
+  },
+  {
+    "id": 619,
+    "title": "Setting Fires",
+    "artist": "The Chainsmokers ft. XYLØ",
+    "bpm": 128,
+    "genre": "Electronic",
+    "duration": 212,
+    "bpmVerified": true
+  },
+  {
+    "id": 620,
+    "title": "Do You Mean",
+    "artist": "The Chainsmokers ft. Ty Dolla $ign",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 226,
+    "bpmVerified": true
+  },
+  {
+    "id": 621,
+    "title": "Kills You Slowly",
+    "artist": "The Chainsmokers",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 622,
+    "title": "High",
+    "artist": "The Chainsmokers",
+    "bpm": 122,
+    "genre": "Electronic",
+    "duration": 199,
+    "bpmVerified": true
+  },
+  {
+    "id": 623,
+    "title": "Congratulations",
+    "artist": "Post Malone ft. Quavo",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 624,
+    "title": "Better Now",
+    "artist": "Post Malone",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 625,
+    "title": "Psycho",
+    "artist": "Post Malone ft. Ty Dolla $ign",
+    "bpm": 134,
+    "genre": "Hip-Hop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 626,
+    "title": "Rockstar",
+    "artist": "Post Malone ft. 21 Savage",
+    "bpm": 160,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 627,
+    "title": "White Iverson",
+    "artist": "Post Malone",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 628,
+    "title": "Feeling Whitney",
+    "artist": "Post Malone",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 201,
+    "bpmVerified": true
+  },
+  {
+    "id": 629,
+    "title": "Leave",
+    "artist": "Post Malone",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 630,
+    "title": "Candy Paint",
+    "artist": "Post Malone",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 185,
+    "bpmVerified": true
+  },
+  {
+    "id": 631,
+    "title": "Go Flex",
+    "artist": "Post Malone",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 632,
+    "title": "Too Young",
+    "artist": "Post Malone",
+    "bpm": 76,
+    "genre": "Hip-Hop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 633,
+    "title": "I Fall Apart",
+    "artist": "Post Malone",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 255,
+    "bpmVerified": true
+  },
+  {
+    "id": 634,
+    "title": "Paranoid",
+    "artist": "Post Malone ft. Ozzy Osbourne",
+    "bpm": 130,
+    "genre": "Hip-Hop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 635,
+    "title": "Internet",
+    "artist": "Post Malone",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 188,
+    "bpmVerified": true
+  },
+  {
+    "id": 636,
+    "title": "Stay",
+    "artist": "Post Malone",
+    "bpm": 70,
+    "genre": "Hip-Hop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 637,
+    "title": "Cooped Up",
+    "artist": "Post Malone ft. Roddy Ricch",
+    "bpm": 112,
+    "genre": "Hip-Hop",
+    "duration": 189,
+    "bpmVerified": true
+  },
+  {
+    "id": 638,
+    "title": "Wasting Angels",
+    "artist": "Post Malone ft. The Kid LAROI",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 200,
+    "bpmVerified": true
+  },
+  {
+    "id": 639,
+    "title": "Lemon Tree",
+    "artist": "Post Malone",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 224,
+    "bpmVerified": true
+  },
+  {
+    "id": 640,
+    "title": "Reputation",
+    "artist": "Post Malone",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 641,
+    "title": "Tommy Lee",
+    "artist": "Post Malone ft. Tyga",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 195,
+    "bpmVerified": true
+  },
+  {
+    "id": 642,
+    "title": "Woman (Harry Styles)",
+    "artist": "Harry Styles",
+    "bpm": 72,
+    "genre": "Pop",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 643,
+    "title": "Stay (Post Malone)",
+    "artist": "Post Malone",
+    "bpm": 70,
+    "genre": "Hip-Hop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 644,
+    "title": "Gooey",
+    "artist": "Glass Animals",
+    "bpm": 89,
+    "genre": "Pop",
+    "duration": 255,
+    "bpmVerified": true
+  },
+  {
+    "id": 645,
+    "title": "Pork Soda",
+    "artist": "Glass Animals",
+    "bpm": 84,
+    "genre": "Pop",
+    "duration": 235,
+    "bpmVerified": true
+  },
+  {
+    "id": 646,
+    "title": "Your Love (Déjà Vu)",
+    "artist": "Glass Animals",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 647,
+    "title": "I Don't Wanna Talk (I Just Wanna Dance)",
+    "artist": "Glass Animals",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 648,
+    "title": "Space Ghost Coast to Coast",
+    "artist": "Glass Animals",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 286,
+    "bpmVerified": true
+  },
+  {
+    "id": 649,
+    "title": "Season 2 Episode 3",
+    "artist": "Glass Animals",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 650,
+    "title": "Pools",
+    "artist": "Glass Animals",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 249,
+    "bpmVerified": true
+  },
+  {
+    "id": 651,
+    "title": "Life Itself",
+    "artist": "Glass Animals",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 652,
+    "title": "Agnes",
+    "artist": "Glass Animals",
+    "bpm": 79,
+    "genre": "Pop",
+    "duration": 282,
+    "bpmVerified": true
+  },
+  {
+    "id": 653,
+    "title": "Waterfalls Coming From Your Mouth",
+    "artist": "Glass Animals",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 251,
+    "bpmVerified": true
+  },
+  {
+    "id": 654,
+    "title": "Take a Slice",
+    "artist": "Glass Animals",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 253,
+    "bpmVerified": true
+  },
+  {
+    "id": 655,
+    "title": "Cane Shuga",
+    "artist": "Glass Animals",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 305,
+    "bpmVerified": true
+  },
+  {
+    "id": 656,
+    "title": "Losing Teeth",
+    "artist": "Glass Animals",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 190,
+    "bpmVerified": true
+  },
+  {
+    "id": 657,
+    "title": "Dreamland",
+    "artist": "Glass Animals",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 658,
+    "title": "Tangerine",
+    "artist": "Glass Animals",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 267,
+    "bpmVerified": true
+  },
+  {
+    "id": 659,
+    "title": "White Roses",
+    "artist": "Glass Animals",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 660,
+    "title": "Mama's Gun",
+    "artist": "Glass Animals",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 277,
+    "bpmVerified": true
+  },
+  {
+    "id": 661,
+    "title": "Pumping",
+    "artist": "Glass Animals",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 216,
+    "bpmVerified": true
+  },
+  {
+    "id": 662,
+    "title": "Black Mambo",
+    "artist": "Glass Animals",
+    "bpm": 78,
+    "genre": "Pop",
+    "duration": 310,
+    "bpmVerified": true
+  },
+  {
+    "id": 663,
+    "title": "Superposition",
+    "artist": "Young the Giant",
+    "bpm": 76,
+    "genre": "Pop",
+    "duration": 264,
+    "bpmVerified": true
+  },
+  {
+    "id": 664,
+    "title": "Mind Over Matter",
+    "artist": "Young the Giant",
+    "bpm": 104,
+    "genre": "Pop",
+    "duration": 272,
+    "bpmVerified": true
+  },
+  {
+    "id": 665,
+    "title": "Something to Believe In",
+    "artist": "Young the Giant",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 265,
+    "bpmVerified": true
+  },
+  {
+    "id": 666,
+    "title": "Cough Syrup",
+    "artist": "Young the Giant",
+    "bpm": 100,
+    "genre": "Pop",
+    "duration": 256,
+    "bpmVerified": true
+  },
+  {
+    "id": 667,
+    "title": "My Body",
+    "artist": "Young the Giant",
+    "bpm": 108,
+    "genre": "Pop",
+    "duration": 207,
+    "bpmVerified": true
+  },
+  {
+    "id": 668,
+    "title": "Strings",
+    "artist": "Young the Giant",
+    "bpm": 92,
+    "genre": "Pop",
+    "duration": 250,
+    "bpmVerified": true
+  },
+  {
+    "id": 669,
+    "title": "Camera",
+    "artist": "Young the Giant",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 670,
+    "title": "Simplify",
+    "artist": "Young the Giant",
+    "bpm": 88,
+    "genre": "Pop",
+    "duration": 253,
+    "bpmVerified": true
+  },
+  {
+    "id": 671,
+    "title": "Firelight",
+    "artist": "Young the Giant",
+    "bpm": 80,
+    "genre": "Pop",
+    "duration": 259,
+    "bpmVerified": true
+  },
+  {
+    "id": 672,
+    "title": "Nothing's Over",
+    "artist": "Young the Giant",
+    "bpm": 96,
+    "genre": "Pop",
+    "duration": 265,
+    "bpmVerified": true
+  },
+  {
+    "id": 673,
+    "title": "Pretty Sweet",
+    "artist": "Frank Ocean",
+    "bpm": 100,
+    "genre": "R&B",
+    "duration": 178,
+    "bpmVerified": true
+  },
+  {
+    "id": 674,
+    "title": "Solo (Reprise)",
+    "artist": "Frank Ocean ft. Andre 3000",
+    "bpm": 108,
+    "genre": "R&B",
+    "duration": 95,
+    "bpmVerified": true
+  },
+  {
+    "id": 675,
+    "title": "Be Yourself",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 92,
+    "bpmVerified": true
+  },
+  {
+    "id": 676,
+    "title": "Facebook Story",
+    "artist": "Frank Ocean",
+    "bpm": 104,
+    "genre": "R&B",
+    "duration": 105,
+    "bpmVerified": true
+  },
+  {
+    "id": 677,
+    "title": "Futura Free",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 566,
+    "bpmVerified": true
+  },
+  {
+    "id": 678,
+    "title": "Siegfried",
+    "artist": "Frank Ocean",
+    "bpm": 88,
+    "genre": "R&B",
+    "duration": 347,
+    "bpmVerified": true
+  },
+  {
+    "id": 679,
+    "title": "Rushes",
+    "artist": "Frank Ocean",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 299,
+    "bpmVerified": true
+  },
+  {
+    "id": 680,
+    "title": "Complications",
+    "artist": "H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 267,
+    "bpmVerified": true
+  },
+  {
+    "id": 681,
+    "title": "Best Part",
+    "artist": "H.E.R.",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 682,
+    "title": "Focus",
+    "artist": "H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 219,
+    "bpmVerified": true
+  },
+  {
+    "id": 683,
+    "title": "I Used to Know Her",
+    "artist": "H.E.R.",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 684,
+    "title": "Fate",
+    "artist": "H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 254,
+    "bpmVerified": true
+  },
+  {
+    "id": 685,
+    "title": "Avenue",
+    "artist": "H.E.R.",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 246,
+    "bpmVerified": true
+  },
+  {
+    "id": 686,
+    "title": "Lights On",
+    "artist": "H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 240,
+    "bpmVerified": true
+  },
+  {
+    "id": 687,
+    "title": "As I Am",
+    "artist": "H.E.R. ft. Lil Baby",
+    "bpm": 80,
+    "genre": "R&B",
+    "duration": 193,
+    "bpmVerified": true
+  },
+  {
+    "id": 688,
+    "title": "Damage",
+    "artist": "H.E.R.",
+    "bpm": 76,
+    "genre": "R&B",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 689,
+    "title": "Slide",
+    "artist": "H.E.R. ft. YG",
+    "bpm": 96,
+    "genre": "R&B",
+    "duration": 179,
+    "bpmVerified": true
+  },
+  {
+    "id": 690,
+    "title": "Midnight City",
+    "artist": "M83",
+    "bpm": 107,
+    "genre": "Electronic",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 691,
+    "title": "Wait",
+    "artist": "M83",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 692,
+    "title": "Steve McQueen",
+    "artist": "M83",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 245,
+    "bpmVerified": true
+  },
+  {
+    "id": 693,
+    "title": "Reunion",
+    "artist": "M83",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 289,
+    "bpmVerified": true
+  },
+  {
+    "id": 694,
+    "title": "Outro",
+    "artist": "M83",
+    "bpm": 80,
+    "genre": "Electronic",
+    "duration": 438,
+    "bpmVerified": true
+  },
+  {
+    "id": 695,
+    "title": "Kim & Jessie",
+    "artist": "M83",
+    "bpm": 96,
+    "genre": "Electronic",
+    "duration": 295,
+    "bpmVerified": true
+  },
+  {
+    "id": 696,
+    "title": "Skin of the Night",
+    "artist": "M83",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 272,
+    "bpmVerified": true
+  },
+  {
+    "id": 697,
+    "title": "I Need You",
+    "artist": "M83",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 698,
+    "title": "OK Pal",
+    "artist": "M83",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 256,
+    "bpmVerified": true
+  },
+  {
+    "id": 699,
+    "title": "New Map",
+    "artist": "M83",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 700,
+    "title": "Lower Your Eyelids to Die With the Sun",
+    "artist": "M83",
+    "bpm": 72,
+    "genre": "Electronic",
+    "duration": 600,
+    "bpmVerified": true
+  },
+  {
+    "id": 701,
+    "title": "Walkabout",
+    "artist": "M83 ft. Zola Jesus",
+    "bpm": 112,
+    "genre": "Electronic",
+    "duration": 297,
+    "bpmVerified": true
+  },
+  {
+    "id": 702,
+    "title": "Echoes of Mine",
+    "artist": "M83",
+    "bpm": 100,
+    "genre": "Electronic",
+    "duration": 234,
+    "bpmVerified": true
+  },
+  {
+    "id": 703,
+    "title": "Road Blaster",
+    "artist": "M83",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 242,
+    "bpmVerified": true
+  },
+  {
+    "id": 704,
+    "title": "My Tears Are Becoming a Sea",
+    "artist": "M83",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 289,
+    "bpmVerified": true
+  },
+  {
+    "id": 705,
+    "title": "Where the Boats Go",
+    "artist": "M83 ft. School of Seven Bells",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 220,
+    "bpmVerified": true
+  },
+  {
+    "id": 706,
+    "title": "1966",
+    "artist": "M83",
+    "bpm": 120,
+    "genre": "Electronic",
+    "duration": 236,
+    "bpmVerified": true
+  },
+  {
+    "id": 707,
+    "title": "If I Were You",
+    "artist": "Kygo ft. Valerie Broussard",
+    "bpm": 104,
+    "genre": "Electronic",
+    "duration": 218,
+    "bpmVerified": true
+  },
+  {
+    "id": 708,
+    "title": "Sunrise",
+    "artist": "Kygo ft. Jason Walker",
+    "bpm": 108,
+    "genre": "Electronic",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 709,
+    "title": "Kids in Love",
+    "artist": "Kygo ft. The Night Game",
+    "bpm": 112,
+    "genre": "Electronic",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 710,
+    "title": "Circles",
+    "artist": "Post Malone",
+    "bpm": 120,
+    "genre": "Hip-Hop",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 711,
+    "title": "Chemical",
+    "artist": "Post Malone",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 202,
+    "bpmVerified": true
+  },
+  {
+    "id": 712,
+    "title": "Mourning",
+    "artist": "Post Malone",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 197,
+    "bpmVerified": true
+  },
+  {
+    "id": 713,
+    "title": "Enough Is Enough",
+    "artist": "Post Malone",
+    "bpm": 92,
+    "genre": "Hip-Hop",
+    "duration": 198,
+    "bpmVerified": true
+  },
+  {
+    "id": 714,
+    "title": "Overdrive",
+    "artist": "Post Malone",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 194,
+    "bpmVerified": true
+  },
+  {
+    "id": 715,
+    "title": "Sign of the Times (PM)",
+    "artist": "Post Malone",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 215,
+    "bpmVerified": true
+  },
+  {
+    "id": 716,
+    "title": "Reputation (PM)",
+    "artist": "Post Malone",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 213,
+    "bpmVerified": true
+  },
+  {
+    "id": 717,
+    "title": "Impractical",
+    "artist": "Post Malone",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 208,
+    "bpmVerified": true
+  },
+  {
+    "id": 718,
+    "title": "Love/Hate Letter to Alcohol",
+    "artist": "Post Malone ft. Fleet Foxes",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 214,
+    "bpmVerified": true
+  },
+  {
+    "id": 719,
+    "title": "It's All a Blur",
+    "artist": "Drake",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 229,
+    "bpmVerified": true
+  },
+  {
+    "id": 720,
+    "title": "Search & Rescue",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 231,
+    "bpmVerified": true
+  },
+  {
+    "id": 721,
+    "title": "Rich Baby Daddy",
+    "artist": "Drake ft. Sexyy Red",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 722,
+    "title": "Gently",
+    "artist": "Drake ft. Bad Bunny",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 217,
+    "bpmVerified": true
+  },
+  {
+    "id": 723,
+    "title": "Virginia Beach",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 210,
+    "bpmVerified": true
+  },
+  {
+    "id": 724,
+    "title": "Calling My Name",
+    "artist": "Drake",
+    "bpm": 92,
+    "genre": "Hip-Hop",
+    "duration": 228,
+    "bpmVerified": true
+  },
+  {
+    "id": 725,
+    "title": "More Life",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 143,
+    "bpmVerified": true
+  },
+  {
+    "id": 726,
+    "title": "Can I",
+    "artist": "Drake ft. Giveon",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 237,
+    "bpmVerified": true
+  },
+  {
+    "id": 727,
+    "title": "Greece",
+    "artist": "Drake ft. GIVĒON",
+    "bpm": 125,
+    "genre": "Hip-Hop",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 728,
+    "title": "Lemon Pepper Freestyle",
+    "artist": "Drake ft. Rick Ross",
+    "bpm": 128,
+    "genre": "Hip-Hop",
+    "duration": 499,
+    "bpmVerified": true
+  },
+  {
+    "id": 729,
+    "title": "All I Know",
+    "artist": "Drake ft. Future",
+    "bpm": 132,
+    "genre": "Hip-Hop",
+    "duration": 271,
+    "bpmVerified": true
+  },
+  {
+    "id": 730,
+    "title": "When to Say When",
+    "artist": "Drake",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 344,
+    "bpmVerified": true
+  },
+  {
+    "id": 731,
+    "title": "Desires",
+    "artist": "Drake ft. Future",
+    "bpm": 84,
+    "genre": "Hip-Hop",
+    "duration": 225,
+    "bpmVerified": true
+  },
+  {
+    "id": 732,
+    "title": "Emotionless",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 263,
+    "bpmVerified": true
+  },
+  {
+    "id": 733,
+    "title": "Blue Tint",
+    "artist": "Drake ft. Future",
+    "bpm": 100,
+    "genre": "Hip-Hop",
+    "duration": 244,
+    "bpmVerified": true
+  },
+  {
+    "id": 734,
+    "title": "Summer Games",
+    "artist": "Drake",
+    "bpm": 88,
+    "genre": "Hip-Hop",
+    "duration": 253,
+    "bpmVerified": true
+  },
+  {
+    "id": 735,
+    "title": "Forever",
+    "artist": "Drake ft. Kanye West",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 307,
+    "bpmVerified": true
+  },
+  {
+    "id": 736,
+    "title": "The Language",
+    "artist": "Drake",
+    "bpm": 120,
+    "genre": "Hip-Hop",
+    "duration": 246,
+    "bpmVerified": true
+  },
+  {
+    "id": 737,
+    "title": "Wu-Tang Forever",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 348,
+    "bpmVerified": true
+  },
+  {
+    "id": 738,
+    "title": "Draft Day",
+    "artist": "Drake",
+    "bpm": 108,
+    "genre": "Hip-Hop",
+    "duration": 221,
+    "bpmVerified": true
+  },
+  {
+    "id": 739,
+    "title": "0 to 100 / The Catch Up",
+    "artist": "Drake",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 445,
+    "bpmVerified": true
+  },
+  {
+    "id": 740,
+    "title": "Tuesday",
+    "artist": "iLoveMakonnen ft. Drake",
+    "bpm": 78,
+    "genre": "Hip-Hop",
+    "duration": 196,
+    "bpmVerified": true
+  },
+  {
+    "id": 741,
+    "title": "Know Yourself",
+    "artist": "Drake",
+    "bpm": 92,
+    "genre": "Hip-Hop",
+    "duration": 281,
+    "bpmVerified": true
+  },
+  {
+    "id": 742,
+    "title": "10 Bands",
+    "artist": "Drake",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 184,
+    "bpmVerified": true
+  },
+  {
+    "id": 743,
+    "title": "6 God",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 180,
+    "bpmVerified": true
+  },
+  {
+    "id": 744,
+    "title": "Star67",
+    "artist": "Drake",
+    "bpm": 82,
+    "genre": "Hip-Hop",
+    "duration": 307,
+    "bpmVerified": true
+  },
+  {
+    "id": 745,
+    "title": "Legend",
+    "artist": "Drake",
+    "bpm": 80,
+    "genre": "Hip-Hop",
+    "duration": 255,
+    "bpmVerified": true
+  },
+  {
+    "id": 746,
+    "title": "6PM in New York",
+    "artist": "Drake",
+    "bpm": 96,
+    "genre": "Hip-Hop",
+    "duration": 508,
+    "bpmVerified": true
+  }
 ]

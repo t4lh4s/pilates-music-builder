@@ -6,40 +6,52 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { PlaylistSong } from '@/lib/types'
 
-function SortableItem({ song, onRemove }: { song: PlaylistSong; onRemove: (id: string) => void }) {
+function SortableItem({ song, index, onRemove }: { song: PlaylistSong; index: number; onRemove: (id: string) => void }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: song.playlistId })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1 }
   const dur = song.duration ?? song.length ?? 0
   const mins = Math.floor(dur / 60)
   const secs = String(dur % 60).padStart(2, '0')
+
   return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-3 py-2.5 px-1 group">
-      <button {...attributes} {...listeners} className="text-sage-300 hover:text-sage-500 cursor-grab active:cursor-grabbing shrink-0">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><circle cx="4" cy="3" r="1.2"/><circle cx="4" cy="7" r="1.2"/><circle cx="4" cy="11" r="1.2"/><circle cx="9" cy="3" r="1.2"/><circle cx="9" cy="7" r="1.2"/><circle cx="9" cy="11" r="1.2"/></svg>
+    <div ref={setNodeRef} style={style} className="flex items-center gap-2 py-2.5 px-1 group border-b border-cream-100 last:border-0">
+      <button {...attributes} {...listeners} className="text-sage-300 hover:text-sage-500 cursor-grab active:cursor-grabbing shrink-0 touch-none">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+          <circle cx="4" cy="3" r="1.2"/><circle cx="4" cy="7" r="1.2"/><circle cx="4" cy="11" r="1.2"/>
+          <circle cx="9" cy="3" r="1.2"/><circle cx="9" cy="7" r="1.2"/><circle cx="9" cy="11" r="1.2"/>
+        </svg>
       </button>
+      <span className="text-xs text-sage-300 w-4 shrink-0">{index + 1}</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-sage-800 truncate">{song.title ?? song.name}</p>
+        <p className="text-sm font-semibold text-sage-800 truncate leading-tight">{song.title ?? song.name}</p>
         <p className="text-xs text-sage-400 truncate">{song.artist}</p>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <span className="text-xs text-sage-400 font-mono">{song.bpm}</span>
-        <span className="text-xs text-sage-300">{mins}:{secs}</span>
-        <button onClick={() => onRemove(song.playlistId)} className="text-sage-300 hover:text-red-400 transition-colors ml-1">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 2l10 10M12 2L2 12"/></svg>
+      <div className="flex items-center gap-1.5 shrink-0">
+        <span className="text-xs font-mono text-sage-500">{song.bpm}</span>
+        <span className="text-xs text-sage-300">·</span>
+        <span className="text-xs text-sage-400">{mins}:{secs}</span>
+        <button onClick={() => onRemove(song.playlistId)} className="text-sage-200 hover:text-red-400 transition-colors ml-1 opacity-0 group-hover:opacity-100">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M2 2l10 10M12 2L2 12"/>
+          </svg>
         </button>
       </div>
     </div>
   )
 }
 
-export default function PlaylistPanel({ playlist, onReorder, onRemove, spotifyToken }: {
-  playlist: PlaylistSong[]; onReorder: (songs: PlaylistSong[]) => void; onRemove: (id: string) => void; spotifyToken: string | null
+export default function PlaylistPanel({ playlist, onReorder, onRemove }: {
+  playlist: PlaylistSong[]
+  onReorder: (songs: PlaylistSong[]) => void
+  onRemove: (id: string) => void
 }) {
   const [playlistName, setPlaylistName] = useState('My Pilates Playlist')
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const [message, setMessage] = useState('')
+  const [copied, setCopied] = useState(false)
 
-  const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }))
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  )
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
@@ -50,91 +62,85 @@ export default function PlaylistPanel({ playlist, onReorder, onRemove, spotifyTo
     }
   }
 
-  async function exportToSpotify() {
-    if (!spotifyToken) {
-      window.location.href = '/api/auth/callback'
-      return
-    }
-    if (playlist.length === 0) { setMessage('Add some songs first!'); setStatus('error'); return }
-    setStatus('loading')
-    setMessage('')
-    try {
-      const res = await fetch('/api/playlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ access_token: spotifyToken, playlist_name: playlistName, track_uris: playlist.map(s => s.spotify_uri).filter(Boolean) }),
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed')
-      setStatus('success')
-      setMessage('Playlist created!')
-      if (data.playlist_url) window.open(data.playlist_url, '_blank')
-    } catch {
-      setStatus('success')
-      setMessage('Opening songs in Spotify...')
-      playlist.forEach((song, i) => {
-        setTimeout(() => {
-          const query = encodeURIComponent(`${song.title ?? song.name} ${song.artist}`)
-          window.open(`https://open.spotify.com/search/${query}`, '_blank')
-        }, i * 500)
-      })
-    }
+  const totalSeconds = playlist.reduce((acc, s) => acc + (s.duration ?? s.length ?? 0), 0)
+  const totalMins = Math.floor(totalSeconds / 60)
+  const totalSecs = String(totalSeconds % 60).padStart(2, '0')
+  const avgBpm = playlist.length ? Math.round(playlist.reduce((acc, s) => acc + s.bpm, 0) / playlist.length) : 0
+
+  function copyPlaylist() {
+    const text = `${playlistName}\n\n` + playlist.map((s, i) => {
+      const dur = s.duration ?? s.length ?? 0
+      const m = Math.floor(dur / 60)
+      const sec = String(dur % 60).padStart(2, '0')
+      return `${i + 1}. ${s.title ?? s.name} — ${s.artist} (${s.bpm} BPM, ${m}:${sec})`
+    }).join('\n')
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
   }
 
-  const totalSeconds = playlist.reduce((acc, s) => acc + (s.duration ?? s.length ?? 0), 0)
-  const mins = Math.floor(totalSeconds / 60)
-  const secs = String(totalSeconds % 60).padStart(2, '0')
-  const avgBpm = playlist.length ? Math.round(playlist.reduce((acc, s) => acc + s.bpm, 0) / playlist.length) : 0
+  function clearPlaylist() {
+    playlist.forEach(s => onRemove(s.playlistId))
+  }
 
   return (
     <div className="h-full flex flex-col bg-cream-50 rounded-3xl border border-cream-200 shadow-sm overflow-hidden">
+
+      {/* Header */}
       <div className="px-5 pt-5 pb-3 border-b border-cream-200">
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-3">
           <h2 className="font-display text-lg font-bold text-sage-900">Your Playlist</h2>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-sage-100 text-sage-600 rounded-full">{playlist.length} tracks</span>
+          <span className="text-xs font-semibold px-2.5 py-1 bg-sage-100 text-sage-600 rounded-full">
+            {playlist.length} tracks
+          </span>
         </div>
+        <input
+          value={playlistName}
+          onChange={e => setPlaylistName(e.target.value)}
+          className="w-full px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 focus:outline-none focus:border-sage-400 mb-2"
+          placeholder="Playlist name..."
+        />
         {playlist.length > 0 && (
-          <p className="text-xs text-sage-400 flex items-center gap-3">
-            <span>⏱ {mins}m {secs}s</span>
+          <div className="flex items-center gap-3 text-xs text-sage-500">
+            <span>⏱ {totalMins}m {totalSecs}s</span>
             <span>·</span>
             <span>♩ avg {avgBpm} BPM</span>
-          </p>
-        )}
-        {spotifyToken && <p className="text-xs text-green-600 font-medium mt-1.5">✓ Connected to Spotify</p>}
-        {!spotifyToken && (
-          <button onClick={() => window.location.href = '/api/auth/callback'} className="text-xs text-sage-400 underline mt-1.5 hover:text-sage-600">
-            Connect Spotify to export
-          </button>
+            <button onClick={clearPlaylist} className="ml-auto text-xs text-sage-300 hover:text-red-400 transition-colors">
+              Clear all
+            </button>
+          </div>
         )}
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-2 divide-y divide-cream-100">
+
+      {/* Song list */}
+      <div className="flex-1 overflow-y-auto px-4 py-2">
         {playlist.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-8">
             <div className="text-3xl mb-2">🎵</div>
-            <p className="text-sm text-sage-400">Add songs from the library</p>
+            <p className="text-sm font-medium text-sage-500">Your playlist is empty</p>
+            <p className="text-xs text-sage-300 mt-1">Add songs from the library</p>
           </div>
         ) : (
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={playlist.map(s => s.playlistId)} strategy={verticalListSortingStrategy}>
-              {playlist.map(song => <SortableItem key={song.playlistId} song={song} onRemove={onRemove}/>)}
+              {playlist.map((song, i) => (
+                <SortableItem key={song.playlistId} song={song} index={i} onRemove={onRemove}/>
+              ))}
             </SortableContext>
           </DndContext>
         )}
       </div>
+
+      {/* Footer actions */}
       {playlist.length > 0 && (
-        <div className="px-4 pb-5 pt-3 border-t border-cream-200 space-y-2">
-          <input value={playlistName} onChange={e => setPlaylistName(e.target.value)} className="w-full px-4 py-2.5 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 focus:outline-none focus:border-sage-400"/>
-          <button onClick={exportToSpotify} disabled={status === 'loading'} className="w-full py-3 bg-green-500 hover:bg-green-600 disabled:opacity-60 text-white font-bold text-sm rounded-xl transition-colors shadow-sm">
-            {status === 'loading' ? 'Exporting...' : '⬆ Export to Spotify'}
+        <div className="px-4 pb-5 pt-3 border-t border-cream-200">
+          <button
+            onClick={copyPlaylist}
+            className="w-full py-2.5 bg-sage-500 hover:bg-sage-600 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm"
+          >
+            {copied ? '✓ Copied!' : '📋 Copy Playlist'}
           </button>
-          <button onClick={() => {
-            const searchLinks = playlist.map(s => `https://open.spotify.com/search/${encodeURIComponent((s.title ?? s.name ?? '') + ' ' + s.artist)}`).join('\n')
-            navigator.clipboard.writeText(searchLinks).then(() => { setMessage('Search links copied!'); setStatus('success') })
-          }} className="w-full py-2.5 bg-white hover:bg-sage-50 border border-sage-200 text-sage-700 font-semibold text-sm rounded-xl transition-colors">
-            📋 Copy Spotify Search Links
-          </button>
-          {status === 'success' && <p className="text-xs text-green-600 text-center font-medium">✓ {message}</p>}
-          {status === 'error' && <p className="text-xs text-red-500 text-center">✗ {message}</p>}
         </div>
       )}
     </div>

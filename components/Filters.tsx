@@ -101,14 +101,14 @@ export default function Filters({
             <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[0]}
               onChange={e => onLengthChange([Math.min(parseInt(e.target.value), lengthRange[1] - 10), lengthRange[1]])}
               className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">6m</span>
+            <span className="text-xs text-sage-400 w-6 text-right">10m</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-sage-400 w-6">1m</span>
             <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[1]}
               onChange={e => onLengthChange([lengthRange[0], Math.max(parseInt(e.target.value), lengthRange[0] + 10)])}
               className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">6m</span>
+            <span className="text-xs text-sage-400 w-6 text-right">10m</span>
           </div>
         </div>
       </div>

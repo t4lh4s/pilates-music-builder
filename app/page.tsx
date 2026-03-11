@@ -128,7 +128,7 @@ export default function Home() {
             </main>
             <aside className="hidden lg:block w-72 shrink-0">
               <div className="sticky top-24" style={{ height: 'calc(100vh - 7rem)' }}>
-                <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist} spotifyToken={spotifyToken}/>
+                <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
               </div>
             </aside>
           </div>
@@ -139,7 +139,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
           <div className="relative mt-auto bg-cream-100 rounded-t-3xl shadow-xl" style={{ maxHeight: '80vh' }}>
             <div className="px-4 pb-6 pt-6" style={{ height: 'calc(80vh - 60px)' }}>
-              <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist} spotifyToken={spotifyToken}/>
+              <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
             </div>
           </div>
         </div>

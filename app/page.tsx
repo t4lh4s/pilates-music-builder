@@ -12,6 +12,7 @@ export default function Home() {
   const [selectedGenre, setSelectedGenre] = useState('All')
   const [bpmRange, setBpmRange] = useState<[number, number]>([60, 200])
   const [lengthRange, setLengthRange] = useState<[number, number]>([60, 360])
+  const [selectedTempo, setSelectedTempo] = useState('all')
   const [search, setSearch] = useState('')
   const [showPlaylist, setShowPlaylist] = useState(false)
   const [spotifyToken, setSpotifyToken] = useState<string | null>(null)
@@ -37,6 +38,7 @@ export default function Home() {
     params.set('minBpm', bpmRange[0].toString())
     params.set('maxBpm', bpmRange[1].toString())
     params.set('minLength', lengthRange[0].toString())
+    if (selectedTempo !== 'all') params.set('tempo', selectedTempo)
     params.set('maxLength', lengthRange[1].toString())
     const res = await fetch(`/api/songs?${params}`)
     const data = await res.json()
@@ -85,14 +87,14 @@ export default function Home() {
           <div className="flex gap-6">
             <aside className="hidden lg:block w-60 shrink-0">
               <div className="sticky top-24">
-                <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange} onLengthChange={setLengthRange}/>
+                <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange} onLengthChange={setLengthRange} selectedTempo={selectedTempo} onTempoChange={setSelectedTempo}/>
               </div>
             </aside>
             <main className="flex-1 min-w-0">
               <div className="lg:hidden mb-4">
                 <details className="bg-cream-50 border border-cream-300 rounded-2xl">
                   <summary className="px-5 py-3 text-sm font-semibold text-sage-700 cursor-pointer">⚙️ Filters</summary>
-                  <div className="px-5 pb-4"><Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange} onLengthChange={setLengthRange}/></div>
+                  <div className="px-5 pb-4"><Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange} onLengthChange={setLengthRange} selectedTempo={selectedTempo} onTempoChange={setSelectedTempo}/></div>
                 </details>
               </div>
               <p className="text-sm text-sage-500 mb-4"><span className="font-semibold text-sage-700">{songs.length}</span> songs found</p>

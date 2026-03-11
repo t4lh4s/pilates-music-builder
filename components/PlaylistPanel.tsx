@@ -9,8 +9,8 @@ import { PlaylistSong } from '@/lib/types'
 function SortableItem({ song, onRemove }: { song: PlaylistSong; onRemove: (id: string) => void }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: song.playlistId })
   const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.5 : 1 }
-  const mins = Math.floor(song.length / 60)
-  const secs = String(song.length % 60).padStart(2, '0')
+  const mins = Math.floor(song.duration ?? song.length ?? 0 / 60)
+  const secs = String(song.duration ?? song.length ?? 0 % 60).padStart(2, '0')
   return (
     <div ref={setNodeRef} style={style} className="flex items-center gap-3 py-2.5 px-1 group">
       <button {...attributes} {...listeners} className="text-sage-300 hover:text-sage-500 cursor-grab active:cursor-grabbing shrink-0">

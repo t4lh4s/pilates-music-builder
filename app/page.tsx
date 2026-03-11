@@ -41,7 +41,7 @@ export default function Home() {
     const res = await fetch(`/api/songs?${params}`)
     const data = await res.json()
     const filtered = search.trim()
-      ? data.filter((s: Song) => s.name.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
+      ? data.filter((s: Song) => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
       : data
     setSongs(filtered)
     setLoading(false)

@@ -14,7 +14,7 @@ export default function SongCard({ song, isInPlaylist, onAdd }: SongCardProps) {
       {/* Genre pill */}
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className="font-display text-sm font-semibold text-sage-900 truncate leading-tight">{song.name}</h3>
+          <h3 className="font-display text-sm font-semibold text-sage-900 truncate leading-tight">{song.title}</h3>
           <p className="text-xs text-sage-500 mt-0.5 truncate">{song.artist}</p>
         </div>
         <span className="shrink-0 text-xs font-medium px-2 py-0.5 rounded-full bg-sage-100 text-sage-600">
@@ -29,14 +29,14 @@ export default function SongCard({ song, isInPlaylist, onAdd }: SongCardProps) {
         </span>
         <span className="text-xs text-sage-400">·</span>
         <span className="text-xs text-sage-500">{bpmLabel(song.bpm)}</span>
-        <span className="text-xs text-sage-400 ml-auto">{formatDuration(song.length)}</span>
+        <span className="text-xs text-sage-400 ml-auto">{formatDuration(song.duration)}</span>
       </div>
 
       {/* Add button */}
       <button
         onClick={() => onAdd(song)}
         disabled={isInPlaylist}
-        className={`w-full py-2 rounded-xl text-xs font-semibold transition-all duration-150 
+        className={`w-full py-2 rounded-xl text-xs font-semibold transition-all duration-150
           ${isInPlaylist
             ? 'bg-sage-100 text-sage-400 cursor-not-allowed'
             : 'bg-sage-500 text-white hover:bg-sage-600 active:scale-95 shadow-sm hover:shadow'

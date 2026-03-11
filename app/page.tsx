@@ -11,7 +11,7 @@ export default function Home() {
   const [playlist, setPlaylist] = useState<PlaylistSong[]>([])
   const [selectedGenre, setSelectedGenre] = useState('All')
   const [bpmRange, setBpmRange] = useState<[number, number]>([60, 200])
-  const [lengthRange, setLengthRange] = useState<[number, number]>([60, 360])
+  const [lengthRange, setLengthRange] = useState<[number, number]>([60, 600])
   const [selectedTempo, setSelectedTempo] = useState('all')
   const [search, setSearch] = useState('')
   const [showPlaylist, setShowPlaylist] = useState(false)
@@ -42,9 +42,16 @@ export default function Home() {
     params.set('maxLength', lengthRange[1].toString())
     const res = await fetch(`/api/songs?${params}`)
     const data = await res.json()
+    const filtered2 = selectedTempo !== 'all' ? data.filter((s: any) => {
+      if (selectedTempo === 'slow') return s.bpm <= 80
+      if (selectedTempo === 'medium') return s.bpm > 80 && s.bpm <= 100
+      if (selectedTempo === 'fast') return s.bpm > 100 && s.bpm <= 120
+      if (selectedTempo === 'high') return s.bpm > 120
+      return true
+    }) : filtered2
     const filtered = search.trim()
-      ? data.filter((s: Song) => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
-      : data
+      ? filtered2.filter((s: Song) => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
+      : filtered2
     setSongs(filtered)
     setLoading(false)
   }, [selectedGenre, bpmRange, lengthRange, search])

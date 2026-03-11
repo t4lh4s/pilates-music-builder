@@ -15,7 +15,7 @@ interface FiltersProps {
 const BPM_MIN = 60
 const BPM_MAX = 200
 const LEN_MIN = 60
-const LEN_MAX = 360
+const LEN_MAX = 600
 
 function formatLen(s: number) {
   const m = Math.floor(s / 60)

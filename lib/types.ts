@@ -1,13 +1,16 @@
 export interface Song {
-  id: string
-  name: string
+  id: number
+  title: string
+  name?: string
   artist: string
   bpm: number
   genre: string
-  length: number // seconds
-  spotify_uri: string
+  duration: number
+  length?: number
+  bpmVerified?: boolean
+  spotify_uri?: string
 }
 
 export interface PlaylistSong extends Song {
-  playlistId: string // unique id for drag-and-drop
+  playlistId: string
 }

@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 
 export default function LandingPage({ onEnter }: { onEnter: () => void }) {
   const [visible, setVisible] = useState(false)
@@ -39,11 +40,30 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
           </div>
           <span className="text-white font-semibold tracking-wide text-sm">Pilates Music Builder</span>
         </div>
-        <button onClick={handleEnter}
-          className="text-sm font-semibold px-5 py-2 rounded-full transition-all duration-200 hover:scale-105"
-          style={{ background: 'rgba(122, 184, 122, 0.15)', border: '1px solid rgba(122, 184, 122, 0.4)', color: '#a8d4a8' }}>
-          Open App →
-        </button>
+        <div className="flex items-center gap-3">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-medium px-4 py-2 rounded-full transition-all duration-200"
+                style={{ color: '#8bc88b' }}>
+                Sign in
+              </button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="text-sm font-semibold px-5 py-2 rounded-full transition-all duration-200 hover:scale-105"
+                style={{ background: 'rgba(122, 184, 122, 0.15)', border: '1px solid rgba(122, 184, 122, 0.4)', color: '#a8d4a8' }}>
+                Get started →
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <button onClick={handleEnter}
+              className="text-sm font-semibold px-5 py-2 rounded-full transition-all duration-200 hover:scale-105"
+              style={{ background: 'rgba(122, 184, 122, 0.15)', border: '1px solid rgba(122, 184, 122, 0.4)', color: '#a8d4a8' }}>
+              Open App →
+            </button>
+            <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: 'w-8 h-8' } }}/>
+          </SignedIn>
+        </div>
       </nav>
 
       {/* Hero */}
@@ -69,13 +89,40 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
               reads your movements, and finds music that fits — so you can focus on teaching.
             </p>
 
-            <div className="flex items-center gap-4">
-              <button onClick={handleEnter}
-                className="px-8 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105 hover:shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 24px rgba(90, 158, 90, 0.3)' }}>
-                Start Planning Free
-              </button>
-              <span className="text-sm" style={{ color: '#6a8a6a' }}>No account needed</span>
+            <div className="flex flex-col gap-3">
+              {/* Primary CTA — sign up */}
+              <SignedOut>
+                <SignUpButton mode="modal">
+                  <button
+                    className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105 hover:shadow-lg text-center"
+                    style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 24px rgba(90, 158, 90, 0.3)' }}>
+                    Create Free Account
+                  </button>
+                </SignUpButton>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm" style={{ color: '#6a8a6a' }}>Already have an account?</span>
+                  <SignInButton mode="modal">
+                    <button className="text-sm font-semibold underline underline-offset-2 transition-colors"
+                      style={{ color: '#7ab87a' }}>
+                      Sign in
+                    </button>
+                  </SignInButton>
+                </div>
+                <button onClick={handleEnter}
+                  className="text-sm transition-colors"
+                  style={{ color: '#4a6a4a' }}>
+                  Continue without account →
+                </button>
+              </SignedOut>
+
+              {/* If signed in, go straight to app */}
+              <SignedIn>
+                <button onClick={handleEnter}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105 text-center"
+                  style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 24px rgba(90, 158, 90, 0.3)' }}>
+                  Open My App →
+                </button>
+              </SignedIn>
             </div>
 
             {/* Social proof */}
@@ -98,8 +145,6 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
           <div className={`transition-all duration-700 delay-400 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="rounded-3xl overflow-hidden shadow-2xl"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(122, 184, 122, 0.15)', backdropFilter: 'blur(20px)' }}>
-
-              {/* Fake app header */}
               <div className="px-5 py-4 flex items-center gap-3" style={{ borderBottom: '1px solid rgba(122, 184, 122, 0.1)' }}>
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f57' }}/>
@@ -108,8 +153,6 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
                 </div>
                 <span className="text-xs font-medium mx-auto" style={{ color: '#6a8a6a' }}>Class Builder — Mat Pilates · 55 min · Intermediate</span>
               </div>
-
-              {/* Class blocks preview */}
               <div className="p-5 space-y-3">
                 {[
                   { emoji: '🌅', name: 'Warm Up', bpm: '60–78', time: '8:32', pct: 85, color: '#4a90d9' },
@@ -118,7 +161,7 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
                   { emoji: '🔥', name: 'Peak Work', bpm: '100–130', time: '0:00', pct: 0, color: '#d97a4a' },
                   { emoji: '🧘', name: 'Cool Down', bpm: '60–78', time: '7:15', pct: 72, color: '#9a7acd' },
                 ].map((block, i) => (
-                  <div key={i} className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all"
+                  <div key={i} className="flex items-center gap-3 rounded-xl px-4 py-3"
                     style={{
                       background: block.active ? 'rgba(122, 184, 122, 0.12)' : 'rgba(255,255,255,0.03)',
                       border: `1px solid ${block.active ? 'rgba(122, 184, 122, 0.3)' : 'rgba(255,255,255,0.06)'}`,
@@ -131,15 +174,13 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-1 rounded-full" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                          <div className="h-full rounded-full transition-all" style={{ width: `${block.pct}%`, background: block.color }}/>
+                          <div className="h-full rounded-full" style={{ width: `${block.pct}%`, background: block.color }}/>
                         </div>
                         <span className="text-xs" style={{ color: '#5a7a5a' }}>{block.bpm}</span>
                       </div>
                     </div>
                   </div>
                 ))}
-
-                {/* Mini energy arc */}
                 <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(122, 184, 122, 0.1)' }}>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#5a7a5a' }}>Energy Arc</span>
@@ -167,13 +208,12 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
       {/* Features section */}
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-20"
         style={{ borderTop: '1px solid rgba(122, 184, 122, 0.1)' }}>
-        <div className={`text-center mb-16 transition-all duration-700 delay-500 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Georgia, serif', color: '#f0f7f0' }}>
             Everything you need to plan a class
           </h2>
           <p style={{ color: '#6a8a6a' }}>Two powerful tools. One seamless workflow.</p>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {[
             {
@@ -205,8 +245,6 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
             </div>
           ))}
         </div>
-
-        {/* Value props */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
             { icon: '⏱️', title: 'Save hours every week', desc: 'Instructors report cutting class prep time by 70%. Stop the endless Spotify rabbit hole.' },
@@ -231,14 +269,31 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
             Ready to plan your best class yet?
           </h2>
           <p className="mb-8 text-sm" style={{ color: '#6a8a6a' }}>
-            Join instructors who've made messy prep playlists a thing of the past.
+            Free to start. No credit card required.
           </p>
-          <button onClick={handleEnter}
-            className="px-10 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105"
-            style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 32px rgba(90, 158, 90, 0.25)' }}>
-            Start Building for Free
-          </button>
-          <p className="mt-4 text-xs" style={{ color: '#4a6a4a' }}>No signup required · Works on any device</p>
+          <SignedOut>
+            <SignUpButton mode="modal">
+              <button
+                className="px-10 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105 mb-4"
+                style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 32px rgba(90, 158, 90, 0.25)' }}>
+                Create Free Account
+              </button>
+            </SignUpButton>
+            <div>
+              <button onClick={handleEnter} className="text-xs transition-colors block mx-auto mt-3"
+                style={{ color: '#4a6a4a' }}>
+                Or continue without account →
+              </button>
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <button onClick={handleEnter}
+              className="px-10 py-4 rounded-2xl text-base font-bold transition-all duration-200 hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #5a9e5a, #3d7a3d)', color: 'white', boxShadow: '0 4px 32px rgba(90, 158, 90, 0.25)' }}>
+              Open My App →
+            </button>
+          </SignedIn>
+          <p className="mt-4 text-xs" style={{ color: '#4a6a4a' }}>Works on any device · Save your classes · Access anywhere</p>
         </div>
       </div>
 

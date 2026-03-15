@@ -299,9 +299,7 @@ export default function LandingPage({ onEnter }: { onEnter: () => void }) {
 
       {/* Footer */}
       <div className="relative z-10 text-center pb-10">
-        <p className="text-xs" style={{ color: '#3a5a3a' }}>
-          © 2026 Pilates Music Builder · Built for instructors, by people who care about the practice
-        </p>
+        <p className="text-xs" style={{ color: '#3a5a3a' }}>© 2026 Pilates Music Builder · Built for instructors, by people who care about the practice</p><p className="text-xs mt-1" style={{ color: '#3a5a3a' }}>BPM data powered by <a href="https://getsongbpm.com" target="_blank" rel="noopener" style={{ color: '#5a8a5a', textDecoration: 'underline' }}>GetSongBPM</a></p>
       </div>
     </div>
   )

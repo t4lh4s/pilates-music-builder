@@ -414,6 +414,7 @@ export default function ClassBuilder() {
   const [equipment, setEquipment] = useState<Set<string>>(new Set())
   const [songs, setSongs] = useState<Song[]>([])
   const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState('default')
   const [loading, setLoading] = useState(false)
 
   const activeBlock = blocks.find(b => b.id === activeBlockId) ?? null
@@ -513,9 +514,16 @@ export default function ClassBuilder() {
     navigator.clipboard.writeText(lines.join('\n'))
   }
 
-  const filteredSongs = search.trim()
+  const searchedSongs = search.trim()
     ? songs.filter(s => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
     : songs
+  const filteredSongs = [...searchedSongs].sort((a, b) => {
+    if (sortBy === 'bpm-asc') return a.bpm - b.bpm
+    if (sortBy === 'bpm-desc') return b.bpm - a.bpm
+    if (sortBy === 'duration-asc') return (a.duration ?? 0) - (b.duration ?? 0)
+    if (sortBy === 'duration-desc') return (b.duration ?? 0) - (a.duration ?? 0)
+    return 0
+  })
 
   const addedIds = new Set(blocks.flatMap(b => b.songs.map(s => s.id)))
   const activeBpmRange = activeBlock
@@ -588,11 +596,20 @@ export default function ClassBuilder() {
                   {activeMovements.length > 0 ? ` · based on ${activeMovements.length} movement${activeMovements.length > 1 ? 's' : ''}` : ''}
                 </p>
               </div>
+              <select value={sortBy} onChange={e => setSortBy(e.target.value)}
+                  className="px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-700 focus:outline-none focus:border-sage-400">
+                  <option value="default">Sort: Default</option>
+                  <option value="bpm-asc">BPM: Low to High</option>
+                  <option value="bpm-desc">BPM: High to Low</option>
+                  <option value="duration-asc">Duration: Shortest</option>
+                  <option value="duration-desc">Duration: Longest</option>
+                </select>
               <div className="relative ml-auto">
                 <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" value={search} onChange={e => setSearch(e.target.value)}
                   placeholder="Search songs..."
                   className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-56"/>
+              </div>
               </div>
             </div>
 

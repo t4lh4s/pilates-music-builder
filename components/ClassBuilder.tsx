@@ -5,6 +5,78 @@ import { generateTemplate, BLOCK_COLORS } from '@/lib/classTemplates'
 import { Movement, getMovementsForBlock, bpmRangeFromMovements, calcTargetBpm } from '@/lib/movements'
 import SongCard from '@/components/SongCard'
 
+// ─── Equipment config ─────────────────────────────────────────────────────────
+const MAT_EQUIPMENT = [
+  { id: 'mat', label: 'Mat', emoji: '🟩' },
+  { id: 'theraband', label: 'Theraband', emoji: '🎗️' },
+  { id: 'magic-circle', label: 'Magic Circle', emoji: '⭕' },
+  { id: 'small-ball', label: 'Small Ball', emoji: '🔵' },
+  { id: 'foam-roller', label: 'Foam Roller', emoji: '🪵' },
+  { id: 'weights', label: 'Hand Weights', emoji: '🏋️' },
+  { id: 'block', label: 'Yoga Block', emoji: '🧱' },
+  { id: 'strap', label: 'Stretch Strap', emoji: '🪢' },
+]
+
+const REFORMER_EQUIPMENT = [
+  { id: 'reformer', label: 'Reformer', emoji: '⚙️' },
+  { id: 'box', label: 'Long/Short Box', emoji: '📦' },
+  { id: 'jump-board', label: 'Jump Board', emoji: '🦘' },
+  { id: 'magic-circle', label: 'Magic Circle', emoji: '⭕' },
+  { id: 'pole', label: 'Pole / Dowel', emoji: '🪄' },
+  { id: 'theraband', label: 'Theraband', emoji: '🎗️' },
+  { id: 'weights', label: 'Hand Weights', emoji: '🏋️' },
+  { id: 'platform-extender', label: 'Platform Extender', emoji: '📐' },
+]
+
+// ─── Energy Arc Chart ─────────────────────────────────────────────────────────
+function EnergyArc({ blocks, blockMovements }: {
+  blocks: ClassBlock[]
+  blockMovements: Record<string, Movement[]>
+}) {
+  const bpms = blocks.map(b => {
+    const movements = blockMovements[b.id] ?? []
+    const songs = b.songs
+    if (songs.length > 0) {
+      return Math.round(songs.reduce((a, s) => a + s.bpm, 0) / songs.length)
+    }
+    if (movements.length > 0) return calcTargetBpm(movements)
+    return Math.round((b.bpmMin + b.bpmMax) / 2)
+  })
+
+  const max = Math.max(...bpms, 1)
+  const min = Math.min(...bpms)
+  const range = max - min || 1
+
+  return (
+    <div className="mt-3">
+      <div className="flex items-end gap-1 h-10">
+        {blocks.map((b, i) => {
+          const colors = BLOCK_COLORS[b.color] ?? BLOCK_COLORS.sage
+          const heightPct = ((bpms[i] - min) / range) * 70 + 30
+          const hasSongs = b.songs.length > 0
+          return (
+            <div key={b.id} className="flex-1 flex flex-col items-center gap-0.5">
+              <span className="text-xs text-sage-400 font-mono leading-none">{bpms[i]}</span>
+              <div
+                className={`w-full rounded-t transition-all ${hasSongs ? colors.bar : 'bg-cream-300'}`}
+                style={{ height: `${heightPct}%` }}
+                title={`${b.name}: ${bpms[i]} BPM`}
+              />
+            </div>
+          )
+        })}
+      </div>
+      <div className="flex gap-1 mt-1">
+        {blocks.map(b => (
+          <div key={b.id} className="flex-1 text-center">
+            <span className="text-xs">{b.emoji}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Setup Screen ─────────────────────────────────────────────────────────────
 function SetupScreen({ onStart }: {
   onStart: (f: 'mat' | 'reformer', d: number, l: 'beginner' | 'intermediate' | 'advanced') => void
@@ -84,15 +156,14 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   const available = getMovementsForBlock(format, block.id, level)
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
-
   if (available.length === 0) return null
 
   return (
-    <div className="mb-6">
+    <div className="mb-5">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h4 className="text-sm font-semibold text-sage-700">Select Movements</h4>
-          <p className="text-xs text-sage-400">Songs will be filtered to match your selection</p>
+          <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
+          <p className="text-xs text-sage-400">Select what you're teaching — songs will match</p>
         </div>
         {targetBpm && (
           <div className="text-right">
@@ -122,14 +193,35 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   )
 }
 
+// ─── Block Notes ──────────────────────────────────────────────────────────────
+function BlockNotes({ blockId, value, onChange }: {
+  blockId: string
+  value: string
+  onChange: (blockId: string, note: string) => void
+}) {
+  return (
+    <div className="mb-5">
+      <label className="block text-sm font-semibold text-sage-700 mb-2">Teaching Notes</label>
+      <textarea
+        value={value}
+        onChange={e => onChange(blockId, e.target.value)}
+        placeholder="Cues, reminders, modifications for this block..."
+        rows={3}
+        className="w-full px-4 py-3 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 resize-none"
+      />
+    </div>
+  )
+}
+
 // ─── Block Card ───────────────────────────────────────────────────────────────
-function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedMovements }: {
+function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedMovements, hasNotes }: {
   block: ClassBlock
   index: number
   isActive: boolean
   onActivate: () => void
   onRemoveSong: (playlistId: string) => void
   selectedMovements: Movement[]
+  hasNotes: boolean
 }) {
   const colors = BLOCK_COLORS[block.color] ?? BLOCK_COLORS.sage
   const blockSeconds = block.songs.reduce((acc, s) => acc + (s.duration ?? 0), 0)
@@ -151,7 +243,8 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedM
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-sage-400 uppercase tracking-wider">Block {index + 1}</span>
                 {isFull && <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">✓ Full</span>}
-                {isOver && <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">Over target</span>}
+                {isOver && <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">Over</span>}
+                {hasNotes && <span className="text-xs">📝</span>}
               </div>
               <h3 className="font-display font-bold text-sage-900 leading-tight">{block.name}</h3>
               <p className="text-xs text-sage-400 mt-0.5">{block.description}</p>
@@ -178,9 +271,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedM
             {selectedMovements.slice(0, 3).map(m => (
               <span key={m.id} className="text-xs bg-white/70 text-sage-600 px-2 py-0.5 rounded-full">{m.name}</span>
             ))}
-            {selectedMovements.length > 3 && (
-              <span className="text-xs text-sage-400">+{selectedMovements.length - 3} more</span>
-            )}
+            {selectedMovements.length > 3 && <span className="text-xs text-sage-400">+{selectedMovements.length - 3} more</span>}
           </div>
         )}
       </button>
@@ -213,9 +304,41 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedM
   )
 }
 
+// ─── Equipment Checklist ──────────────────────────────────────────────────────
+function EquipmentChecklist({ format, selected, onToggle }: {
+  format: 'mat' | 'reformer'
+  selected: Set<string>
+  onToggle: (id: string) => void
+}) {
+  const items = format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT
+  return (
+    <div className="bg-cream-50 rounded-2xl border border-cream-200 p-4">
+      <h3 className="font-display font-bold text-sage-900 mb-3">Equipment Needed</h3>
+      <div className="grid grid-cols-2 gap-2">
+        {items.map(item => {
+          const checked = selected.has(item.id)
+          return (
+            <button key={item.id} onClick={() => onToggle(item.id)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
+                checked
+                  ? 'bg-sage-500 text-white border-sage-500'
+                  : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300'
+              }`}>
+              <span>{item.emoji}</span>
+              <span className="truncate">{item.label}</span>
+              {checked && <span className="ml-auto text-xs">✓</span>}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ─── Summary Panel ────────────────────────────────────────────────────────────
-function SummaryPanel({ blocks, targetDuration, onCopy, onReset }: {
+function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset }: {
   blocks: ClassBlock[]
+  blockMovements: Record<string, Movement[]>
   targetDuration: number
   onCopy: () => void
   onReset: () => void
@@ -235,6 +358,7 @@ function SummaryPanel({ blocks, targetDuration, onCopy, onReset }: {
         <h3 className="font-display font-bold text-sage-900">Class Summary</h3>
         <button onClick={onReset} className="text-xs text-sage-300 hover:text-red-400 transition-colors">Reset</button>
       </div>
+
       <div>
         <div className="flex justify-between items-baseline mb-1.5">
           <span className={`text-2xl font-bold ${isOver ? 'text-red-500' : 'text-sage-900'}`}>{totalMins}:{totalSecs}</span>
@@ -248,6 +372,13 @@ function SummaryPanel({ blocks, targetDuration, onCopy, onReset }: {
           {avgBpm > 0 && <span className="text-xs text-sage-400">avg {avgBpm} BPM</span>}
         </div>
       </div>
+
+      {/* Energy arc */}
+      <div>
+        <p className="text-xs font-semibold text-sage-500 uppercase tracking-wider mb-1">Energy Arc</p>
+        <EnergyArc blocks={blocks} blockMovements={blockMovements} />
+      </div>
+
       <div className="space-y-1.5">
         {blocks.map(b => {
           const bSecs = b.songs.reduce((a, s) => a + (s.duration ?? 0), 0)
@@ -263,9 +394,10 @@ function SummaryPanel({ blocks, targetDuration, onCopy, onReset }: {
           )
         })}
       </div>
+
       {allSongs.length > 0 && (
         <button onClick={onCopy} className="w-full py-2.5 bg-sage-500 hover:bg-sage-600 text-white font-semibold text-sm rounded-xl transition-colors">
-          📋 Copy Full Class
+          📋 Copy Full Class Plan
         </button>
       )}
     </div>
@@ -277,8 +409,9 @@ export default function ClassBuilder() {
   const [setup, setSetup] = useState<{ format: 'mat' | 'reformer'; duration: number; level: 'beginner' | 'intermediate' | 'advanced' } | null>(null)
   const [blocks, setBlocks] = useState<ClassBlock[]>([])
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null)
-  // Map of blockId -> selected movements
   const [blockMovements, setBlockMovements] = useState<Record<string, Movement[]>>({})
+  const [blockNotes, setBlockNotes] = useState<Record<string, string>>({})
+  const [equipment, setEquipment] = useState<Set<string>>(new Set())
   const [songs, setSongs] = useState<Song[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
@@ -286,14 +419,11 @@ export default function ClassBuilder() {
   const activeBlock = blocks.find(b => b.id === activeBlockId) ?? null
   const activeMovements = activeBlockId ? (blockMovements[activeBlockId] ?? []) : []
 
-  // Recalculate BPM range when movements change, then fetch songs
   useEffect(() => {
     if (!activeBlock || !setup) return
     setLoading(true)
-
     const movements = blockMovements[activeBlock.id] ?? []
     const [minBpm, maxBpm] = bpmRangeFromMovements(movements, activeBlock.bpmMin, activeBlock.bpmMax)
-
     const params = new URLSearchParams()
     params.set('minBpm', minBpm.toString())
     params.set('maxBpm', maxBpm.toString())
@@ -309,16 +439,27 @@ export default function ClassBuilder() {
     setSetup({ format, duration, level })
     setActiveBlockId(newBlocks[0].id)
     setBlockMovements({})
+    setBlockNotes({})
+    setEquipment(new Set())
   }
 
   function toggleMovement(blockId: string, movement: Movement) {
     setBlockMovements(prev => {
       const current = prev[blockId] ?? []
       const exists = current.find(m => m.id === movement.id)
-      return {
-        ...prev,
-        [blockId]: exists ? current.filter(m => m.id !== movement.id) : [...current, movement],
-      }
+      return { ...prev, [blockId]: exists ? current.filter(m => m.id !== movement.id) : [...current, movement] }
+    })
+  }
+
+  function updateNote(blockId: string, note: string) {
+    setBlockNotes(prev => ({ ...prev, [blockId]: note }))
+  }
+
+  function toggleEquipment(id: string) {
+    setEquipment(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
     })
   }
 
@@ -337,17 +478,28 @@ export default function ClassBuilder() {
 
   function copyFullClass() {
     if (!setup) return
+    const equipmentList = Array.from(equipment)
+      .map(id => {
+        const items = setup.format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT
+        return items.find(e => e.id === id)?.label
+      })
+      .filter(Boolean)
+      .join(', ')
+
     const lines = [
       `${setup.format === 'mat' ? '🧘 Mat' : '⚙️ Reformer'} Pilates — ${setup.duration} min — ${setup.level.charAt(0).toUpperCase() + setup.level.slice(1)}`,
       '',
+      ...(equipmentList ? [`📦 Equipment: ${equipmentList}`, ''] : []),
       ...blocks.flatMap(b => {
         const movements = blockMovements[b.id] ?? []
+        const note = blockNotes[b.id] ?? ''
         const bSecs = b.songs.reduce((a, s) => a + (s.duration ?? 0), 0)
         const bMins = Math.floor(bSecs / 60)
         const bSec = String(bSecs % 60).padStart(2, '0')
         return [
           `${b.emoji} ${b.name} (${bMins}:${bSec})`,
           ...(movements.length > 0 ? [`   Movements: ${movements.map(m => m.name).join(', ')}`] : []),
+          ...(note ? [`   Notes: ${note}`] : []),
           ...b.songs.map((s, i) => {
             const dur = s.duration ?? 0
             const m = Math.floor(dur / 60)
@@ -366,8 +518,6 @@ export default function ClassBuilder() {
     : songs
 
   const addedIds = new Set(blocks.flatMap(b => b.songs.map(s => s.id)))
-
-  // Active BPM range display
   const activeBpmRange = activeBlock
     ? bpmRangeFromMovements(activeMovements, activeBlock.bpmMin, activeBlock.bpmMax)
     : [85, 100]
@@ -376,13 +526,19 @@ export default function ClassBuilder() {
 
   return (
     <div className="flex gap-6">
-      {/* Left: blocks + summary */}
+      {/* Left column */}
       <div className="w-80 shrink-0 space-y-3 sticky top-24 self-start" style={{ maxHeight: 'calc(100vh - 7rem)', overflowY: 'auto' }}>
         <SummaryPanel
           blocks={blocks}
+          blockMovements={blockMovements}
           targetDuration={setup.duration}
           onCopy={copyFullClass}
-          onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}) }}
+          onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()) }}
+        />
+        <EquipmentChecklist
+          format={setup.format}
+          selected={equipment}
+          onToggle={toggleEquipment}
         />
         {blocks.map((block, i) => (
           <BlockCard
@@ -393,16 +549,16 @@ export default function ClassBuilder() {
             onActivate={() => { setActiveBlockId(block.id); setSearch('') }}
             onRemoveSong={(pid) => removeSongFromBlock(block.id, pid)}
             selectedMovements={blockMovements[block.id] ?? []}
+            hasNotes={!!(blockNotes[block.id]?.trim())}
           />
         ))}
       </div>
 
-      {/* Right: movement picker + song browser */}
+      {/* Right column */}
       <div className="flex-1 min-w-0">
         {activeBlock && setup ? (
           <>
-            {/* Movement picker */}
-            <div className="bg-cream-50 border border-cream-200 rounded-2xl p-5 mb-5">
+            <div className="bg-cream-50 border border-cream-200 rounded-2xl p-5 mb-5 space-y-0">
               <MovementPicker
                 block={activeBlock}
                 format={setup.format}
@@ -411,14 +567,17 @@ export default function ClassBuilder() {
                 onToggle={(m) => toggleMovement(activeBlock.id, m)}
               />
               {activeMovements.length === 0 && (
-                <p className="text-xs text-sage-400 italic">
-                  No movements selected — showing all songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range.
-                  Select movements above to refine suggestions.
+                <p className="text-xs text-sage-400 italic mb-5">
+                  No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.
                 </p>
               )}
+              <BlockNotes
+                blockId={activeBlock.id}
+                value={blockNotes[activeBlock.id] ?? ''}
+                onChange={updateNote}
+              />
             </div>
 
-            {/* Song browser */}
             <div className="flex items-center gap-3 mb-4">
               <div>
                 <h3 className="font-display font-bold text-sage-900 text-lg">

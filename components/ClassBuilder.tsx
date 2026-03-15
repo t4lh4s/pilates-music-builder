@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useUser } from '@clerk/nextjs'
 import { Song, PlaylistSong, ClassBlock } from '@/lib/types'
 import { generateTemplate, BLOCK_COLORS } from '@/lib/classTemplates'
 import { Movement, getMovementsForBlock, bpmRangeFromMovements, calcTargetBpm } from '@/lib/movements'
@@ -27,7 +28,6 @@ const REFORMER_EQUIPMENT = [
   { id: 'platform-extender', label: 'Platform Extender', emoji: '📐' },
 ]
 
-// ─── Energy Arc — SVG line chart ──────────────────────────────────────────────
 function EnergyArc({ blocks, blockMovements }: {
   blocks: ClassBlock[]
   blockMovements: Record<string, Movement[]>
@@ -38,38 +38,23 @@ function EnergyArc({ blocks, blockMovements }: {
     if (movements.length > 0) return calcTargetBpm(movements)
     return Math.round((b.bpmMin + b.bpmMax) / 2)
   })
-
-  const W = 280
-  const H = 64
-  const PAD = 8
-  const innerW = W - PAD * 2
-  const innerH = H - PAD * 2
-
+  const W = 280, H = 64, PAD = 8
+  const innerW = W - PAD * 2, innerH = H - PAD * 2
   const minBpm = Math.min(...bpms) - 5
   const maxBpm = Math.max(...bpms) + 5
   const range = maxBpm - minBpm || 1
-
-  // One point per block, evenly spaced
   const points = bpms.map((bpm, i) => ({
     x: PAD + (i / (blocks.length - 1)) * innerW,
     y: PAD + innerH - ((bpm - minBpm) / range) * innerH,
-    bpm,
-    block: blocks[i],
   }))
-
-  // Build smooth SVG path using cubic bezier curves
   const pathD = points.reduce((acc, pt, i) => {
     if (i === 0) return `M ${pt.x} ${pt.y}`
     const prev = points[i - 1]
     const cpX = (prev.x + pt.x) / 2
     return `${acc} C ${cpX} ${prev.y}, ${cpX} ${pt.y}, ${pt.x} ${pt.y}`
   }, '')
-
-  // Filled area path (close back to bottom)
   const fillD = `${pathD} L ${points[points.length - 1].x} ${H} L ${points[0].x} ${H} Z`
-
   const hasSongs = blocks.some(b => b.songs.length > 0)
-
   return (
     <div>
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible">
@@ -79,21 +64,12 @@ function EnergyArc({ blocks, blockMovements }: {
             <stop offset="100%" stopColor="#6b9e6b" stopOpacity="0.02"/>
           </linearGradient>
         </defs>
-        {/* Filled area */}
-        <path d={fillD} fill="url(#arcGradient)" />
-        {/* Line */}
+        <path d={fillD} fill="url(#arcGradient)"/>
         <path d={pathD} fill="none" stroke={hasSongs ? '#5a8f5a' : '#c8d5c8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        {/* Dots + labels */}
-        {points.map((pt, i) => {
-          const colors = BLOCK_COLORS[blocks[i].color] ?? BLOCK_COLORS.sage
-          return (
-            <g key={i}>
-              <circle cx={pt.x} cy={pt.y} r="4" fill={blocks[i].songs.length > 0 ? '#5a8f5a' : '#c8d5c8'} stroke="white" strokeWidth="1.5"/>
-            </g>
-          )
-        })}
+        {points.map((pt, i) => (
+          <circle key={i} cx={pt.x} cy={pt.y} r="4" fill={blocks[i].songs.length > 0 ? '#5a8f5a' : '#c8d5c8'} stroke="white" strokeWidth="1.5"/>
+        ))}
       </svg>
-      {/* Block labels below */}
       <div className="flex justify-between mt-1 px-1">
         {blocks.map((b, i) => (
           <div key={b.id} className="flex flex-col items-center gap-0.5" style={{ width: `${100 / blocks.length}%` }}>
@@ -106,9 +82,10 @@ function EnergyArc({ blocks, blockMovements }: {
   )
 }
 
-// ─── Setup Screen ─────────────────────────────────────────────────────────────
-function SetupScreen({ onStart }: {
+function SetupScreen({ onStart, savedClasses, onLoad }: {
   onStart: (f: 'mat' | 'reformer', d: number, l: 'beginner' | 'intermediate' | 'advanced') => void
+  savedClasses: any[]
+  onLoad: (saved: any) => void
 }) {
   const [format, setFormat] = useState<'mat' | 'reformer'>('mat')
   const [duration, setDuration] = useState(55)
@@ -119,6 +96,34 @@ function SetupScreen({ onStart }: {
         <h2 className="font-display text-3xl font-bold text-sage-900 mb-2">Build Your Class</h2>
         <p className="text-sage-500">Tell us about your class and we'll structure it for you</p>
       </div>
+
+      {/* Saved classes */}
+      {savedClasses.length > 0 && (
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-sage-700 mb-3">Saved Classes</label>
+          <div className="space-y-2">
+            {savedClasses.map(c => (
+              <button key={c.id} onClick={() => onLoad(c)}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-cream-300 bg-white hover:border-sage-400 hover:bg-sage-50 transition-all text-left">
+                <div>
+                  <p className="font-semibold text-sage-800 text-sm">{c.name}</p>
+                  <p className="text-xs text-sage-400 mt-0.5">
+                    {c.format === 'mat' ? '🧘 Mat' : '⚙️ Reformer'} · {c.duration} min · {c.level}
+                    {' · '}{new Date(c.updated_at).toLocaleDateString()}
+                  </p>
+                </div>
+                <span className="text-sage-400 text-sm">Load →</span>
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-cream-300"/>
+            <span className="text-xs text-sage-400">or start fresh</span>
+            <div className="flex-1 h-px bg-cream-300"/>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8">
         <label className="block text-sm font-semibold text-sage-700 mb-3">Class Format</label>
         <div className="grid grid-cols-2 gap-3">
@@ -169,7 +174,6 @@ function SetupScreen({ onStart }: {
   )
 }
 
-// ─── Movement Picker ──────────────────────────────────────────────────────────
 function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   block: ClassBlock
   format: 'mat' | 'reformer'
@@ -214,7 +218,6 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   )
 }
 
-// ─── Block Notes ──────────────────────────────────────────────────────────────
 function BlockNotes({ blockId, value, onChange }: {
   blockId: string
   value: string
@@ -231,15 +234,9 @@ function BlockNotes({ blockId, value, onChange }: {
   )
 }
 
-// ─── Block Card ───────────────────────────────────────────────────────────────
 function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedMovements, hasNotes }: {
-  block: ClassBlock
-  index: number
-  isActive: boolean
-  onActivate: () => void
-  onRemoveSong: (playlistId: string) => void
-  selectedMovements: Movement[]
-  hasNotes: boolean
+  block: ClassBlock; index: number; isActive: boolean; onActivate: () => void
+  onRemoveSong: (playlistId: string) => void; selectedMovements: Movement[]; hasNotes: boolean
 }) {
   const colors = BLOCK_COLORS[block.color] ?? BLOCK_COLORS.sage
   const blockSeconds = block.songs.reduce((acc, s) => acc + (s.duration ?? 0), 0)
@@ -318,11 +315,8 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedM
   )
 }
 
-// ─── Equipment Checklist ──────────────────────────────────────────────────────
 function EquipmentChecklist({ format, selected, onToggle }: {
-  format: 'mat' | 'reformer'
-  selected: Set<string>
-  onToggle: (id: string) => void
+  format: 'mat' | 'reformer'; selected: Set<string>; onToggle: (id: string) => void
 }) {
   const items = format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT
   return (
@@ -347,18 +341,21 @@ function EquipmentChecklist({ format, selected, onToggle }: {
   )
 }
 
-// ─── Summary Panel ────────────────────────────────────────────────────────────
-function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset }: {
+function SummaryPanel({ blocks, blockMovements, targetDuration, className, savedId, saveStatus, onSave, onCopy, onReset }: {
   blocks: ClassBlock[]
   blockMovements: Record<string, Movement[]>
   targetDuration: number
+  className: string
+  savedId: string | null
+  saveStatus: 'idle' | 'saving' | 'saved' | 'error'
+  onSave: () => void
   onCopy: () => void
   onReset: () => void
 }) {
   const totalSeconds = blocks.reduce((acc, b) => acc + b.songs.reduce((a, s) => a + (s.duration ?? 0), 0), 0)
   const targetSeconds = targetDuration * 60
   const totalMins = Math.floor(totalSeconds / 60)
-  const totalSecs = String(totalSeconds % 60).padStart(2, '00')
+  const totalSecs = String(totalSeconds % 60).padStart(2, '0')
   const pct = Math.min(100, Math.round((totalSeconds / targetSeconds) * 100))
   const allSongs = blocks.flatMap(b => b.songs)
   const avgBpm = allSongs.length ? Math.round(allSongs.reduce((a, s) => a + s.bpm, 0) / allSongs.length) : 0
@@ -402,16 +399,31 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset 
         })}
       </div>
       {allSongs.length > 0 && (
-        <button onClick={onCopy} className="w-full py-2.5 bg-sage-500 hover:bg-sage-600 text-white font-semibold text-sm rounded-xl transition-colors">
-          📋 Copy Full Class Plan
-        </button>
+        <div className="space-y-2">
+          <button onClick={onSave}
+            disabled={saveStatus === 'saving'}
+            className={`w-full py-2.5 font-semibold text-sm rounded-xl transition-colors ${
+              saveStatus === 'saved' ? 'bg-green-500 text-white' :
+              saveStatus === 'error' ? 'bg-red-400 text-white' :
+              'bg-sage-500 hover:bg-sage-600 text-white'
+            }`}>
+            {saveStatus === 'saving' ? '⏳ Saving...' :
+             saveStatus === 'saved' ? '✓ Saved!' :
+             saveStatus === 'error' ? '✗ Error — try again' :
+             savedId ? '💾 Update Saved Class' : '💾 Save Class'}
+          </button>
+          <button onClick={onCopy}
+            className="w-full py-2.5 bg-white hover:bg-sage-50 border border-sage-200 text-sage-700 font-semibold text-sm rounded-xl transition-colors">
+            📋 Copy Full Class Plan
+          </button>
+        </div>
       )}
     </div>
   )
 }
 
-// ─── Main ClassBuilder ────────────────────────────────────────────────────────
 export default function ClassBuilder() {
+  const { isSignedIn } = useUser()
   const [setup, setSetup] = useState<{ format: 'mat' | 'reformer'; duration: number; level: 'beginner' | 'intermediate' | 'advanced' } | null>(null)
   const [blocks, setBlocks] = useState<ClassBlock[]>([])
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null)
@@ -422,9 +434,22 @@ export default function ClassBuilder() {
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('default')
   const [loading, setLoading] = useState(false)
+  const [className, setClassName] = useState('My Pilates Class')
+  const [savedId, setSavedId] = useState<string | null>(null)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
+  const [savedClasses, setSavedClasses] = useState<any[]>([])
 
   const activeBlock = blocks.find(b => b.id === activeBlockId) ?? null
   const activeMovements = activeBlockId ? (blockMovements[activeBlockId] ?? []) : []
+
+  // Load saved classes on mount
+  useEffect(() => {
+    if (!isSignedIn) return
+    fetch('/api/playlists')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setSavedClasses(data) })
+      .catch(() => {})
+  }, [isSignedIn])
 
   useEffect(() => {
     if (!activeBlock || !setup) return
@@ -448,6 +473,59 @@ export default function ClassBuilder() {
     setBlockMovements({})
     setBlockNotes({})
     setEquipment(new Set())
+    setSavedId(null)
+    setSaveStatus('idle')
+  }
+
+  function handleLoad(saved: any) {
+    const d = saved.data
+    setBlocks(d.blocks)
+    setBlockMovements(d.blockMovements ?? {})
+    setBlockNotes(d.blockNotes ?? {})
+    setEquipment(new Set(d.equipment ?? []))
+    setSetup({ format: saved.format, duration: saved.duration, level: saved.level })
+    setClassName(saved.name)
+    setSavedId(saved.id)
+    setSaveStatus('idle')
+    setActiveBlockId(d.blocks[0]?.id ?? null)
+  }
+
+  async function handleSave() {
+    if (!isSignedIn) {
+      alert('Please sign in to save your class.')
+      return
+    }
+    setSaveStatus('saving')
+    const payload = {
+      id: savedId,
+      name: className,
+      format: setup?.format,
+      duration: setup?.duration,
+      level: setup?.level,
+      data: {
+        blocks,
+        blockMovements,
+        blockNotes,
+        equipment: Array.from(equipment),
+      },
+    }
+    try {
+      const res = await fetch('/api/playlists', {
+        method: savedId ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setSavedId(data.id)
+      setSaveStatus('saved')
+      // Refresh saved classes list
+      fetch('/api/playlists').then(r => r.json()).then(d => { if (Array.isArray(d)) setSavedClasses(d) })
+      setTimeout(() => setSaveStatus('idle'), 3000)
+    } catch {
+      setSaveStatus('error')
+      setTimeout(() => setSaveStatus('idle'), 3000)
+    }
   }
 
   function toggleMovement(blockId: string, movement: Movement) {
@@ -489,6 +567,7 @@ export default function ClassBuilder() {
       .map(id => (setup.format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT).find(e => e.id === id)?.label)
       .filter(Boolean).join(', ')
     const lines = [
+      `${className}`,
       `${setup.format === 'mat' ? '🧘 Mat' : '⚙️ Reformer'} Pilates — ${setup.duration} min — ${setup.level.charAt(0).toUpperCase() + setup.level.slice(1)}`,
       '',
       ...(equipmentList ? [`📦 Equipment: ${equipmentList}`, ''] : []),
@@ -532,14 +611,36 @@ export default function ClassBuilder() {
     ? bpmRangeFromMovements(activeMovements, activeBlock.bpmMin, activeBlock.bpmMax)
     : [85, 100]
 
-  if (!setup) return <SetupScreen onStart={handleStart}/>
+  if (!setup) return (
+    <SetupScreen
+      onStart={handleStart}
+      savedClasses={savedClasses}
+      onLoad={handleLoad}
+    />
+  )
 
   return (
     <div className="flex gap-6">
       <div className="w-80 shrink-0 space-y-3">
-        <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration}
+        {/* Class name input */}
+        <div className="bg-cream-50 rounded-2xl border border-cream-200 px-4 py-3">
+          <label className="block text-xs font-semibold text-sage-500 uppercase tracking-wider mb-1.5">Class Name</label>
+          <input value={className} onChange={e => setClassName(e.target.value)}
+            className="w-full text-sm font-semibold text-sage-900 bg-transparent focus:outline-none placeholder-sage-300"
+            placeholder="My Pilates Class"/>
+        </div>
+
+        <SummaryPanel
+          blocks={blocks}
+          blockMovements={blockMovements}
+          targetDuration={setup.duration}
+          className={className}
+          savedId={savedId}
+          saveStatus={saveStatus}
+          onSave={handleSave}
           onCopy={copyFullClass}
-          onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()) }}/>
+          onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()); setSavedId(null) }}
+        />
         <EquipmentChecklist format={setup.format} selected={equipment} onToggle={toggleEquipment}/>
         {blocks.map((block, i) => (
           <BlockCard key={block.id} block={block} index={i} isActive={activeBlockId === block.id}
@@ -566,9 +667,7 @@ export default function ClassBuilder() {
 
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <div>
-                <h3 className="font-display font-bold text-sage-900 text-lg">
-                  {activeBlock.emoji} {activeBlock.name}
-                </h3>
+                <h3 className="font-display font-bold text-sage-900 text-lg">{activeBlock.emoji} {activeBlock.name}</h3>
                 <p className="text-sm text-sage-400">
                   {activeBpmRange[0]}–{activeBpmRange[1]} BPM
                   {activeMovements.length > 0 ? ` · based on ${activeMovements.length} movement${activeMovements.length > 1 ? 's' : ''}` : ''}
@@ -585,8 +684,7 @@ export default function ClassBuilder() {
                 </select>
                 <div className="relative">
                   <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                  <input type="text" value={search} onChange={e => setSearch(e.target.value)}
-                    placeholder="Search songs..."
+                  <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search songs..."
                     className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-48"/>
                 </div>
               </div>

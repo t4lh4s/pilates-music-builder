@@ -196,7 +196,7 @@ export default function Home() {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                     {songs.map(song => (
-                      <SongCard key={song.id} song={song} isInPlaylist={playlistSongIds.has(song.id)} onAdd={addToPlaylist}/>
+                      <SongCard key={song.id} song={song} isInPlaylist={playlistSongIds.has(String(song.id))} onAdd={addToPlaylist}/>
                     ))}
                   </div>
                 )}

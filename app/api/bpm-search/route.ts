@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       url = `${BASE_URL}/tempo/?api_key=${API_KEY}&bpm=${bpm}&limit=20`
     } else if (query) {
       // Search by song/artist
-      url = `${BASE_URL}/search/?api_key=${API_KEY}&type=both&lookup=${encodeURIComponent(query)}&limit=20`
+      url = `${BASE_URL}/search/?api_key=${API_KEY}&type=song&lookup=${encodeURIComponent(query)}&limit=20`
     } else {
       return NextResponse.json({ error: 'Missing query or bpm parameter' }, { status: 400 })
     }
@@ -52,7 +52,7 @@ function normalizeSongs(data: any, isTempo: boolean): any[] {
   return raw
     .filter(s => s.song_title || s.title)
     .map(s => ({
-      id: `gsbpm-${s.song_id || s.id}`,
+      id: String(`gsbpm-${s.song_id || s.id}`),
       title: s.song_title || s.title,
       artist: s.artist?.name || 'Unknown Artist',
       bpm: parseInt(s.tempo) || 0,

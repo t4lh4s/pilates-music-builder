@@ -11,7 +11,7 @@ import LandingPage from '@/components/LandingPage'
 type Mode = 'browse' | 'class'
 
 export default function Home() {
-  const { isSignedIn, user } = useUser()
+  const { isSignedIn } = useUser()
   const [showLanding, setShowLanding] = useState(true)
   const [appVisible, setAppVisible] = useState(false)
   const [mode, setMode] = useState<Mode>('browse')
@@ -78,108 +78,156 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen transition-opacity duration-500 ${appVisible ? 'opacity-100' : 'opacity-0'}`}
-      style={{ background: 'linear-gradient(135deg, #f4f7f4 0%, #f9f6ed 50%, #f4f0e8 100%)' }}>
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, #9fbf9f 0%, transparent 70%)' }}/>
-        <div className="absolute bottom-0 -left-20 w-72 h-72 rounded-full opacity-15"
-          style={{ background: 'radial-gradient(circle, #d4835a 0%, transparent 70%)' }}/>
-      </div>
+      style={{ background: 'linear-gradient(160deg, #f4f7f4 0%, #f9f6ed 60%, #f5f0e8 100%)' }}>
+
+      {/* Subtle background texture */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.015]"
+        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}/>
 
       <div className="relative z-10">
-        <header className="border-b border-cream-300 bg-cream-50/80 backdrop-blur-sm sticky top-0 z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-            <button onClick={() => setShowLanding(true)} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-9 h-9 rounded-xl bg-sage-500 flex items-center justify-center text-white text-lg shadow-sm">🧘</div>
-              <div>
-                <h1 className="font-display text-xl font-bold text-sage-900 leading-none">Pilates Music Builder</h1>
+        {/* Header */}
+        <header className="border-b border-cream-200/80 bg-white/70 backdrop-blur-md sticky top-0 z-20">
+          <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center gap-4">
+            {/* Logo */}
+            <button onClick={() => setShowLanding(true)}
+              className="flex items-center gap-2.5 hover:opacity-80 transition-opacity shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-sage-900 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
+                  <path d="M9 18V5l12-2v13M9 18c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2zm12-2c0 1.1-1.34 2-3 2s-3-.9-3-2 1.34-2 3-2 3 .9 3 2z"/>
+                </svg>
+              </div>
+              <div className="hidden sm:block">
+                <p className="font-display font-semibold text-sage-900 text-sm leading-none">Pilates Music Builder</p>
                 <p className="text-xs text-sage-400 mt-0.5">Craft your perfect soundtrack</p>
               </div>
             </button>
 
-            <div className="flex items-center bg-cream-200 rounded-xl p-1 gap-1">
-              <button onClick={() => setMode('browse')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${mode === 'browse' ? 'bg-white text-sage-900 shadow-sm' : 'text-sage-500 hover:text-sage-700'}`}>
-                🎵 Song Browser
-              </button>
-              <button onClick={() => setMode('class')}
-                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${mode === 'class' ? 'bg-white text-sage-900 shadow-sm' : 'text-sage-500 hover:text-sage-700'}`}>
-                🏗️ Class Builder
-              </button>
+            {/* Mode toggle — centered */}
+            <div className="flex-1 flex justify-center">
+              <div className="inline-flex items-center bg-cream-100 rounded-xl p-1 gap-0.5 border border-cream-200">
+                <button onClick={() => setMode('browse')}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    mode === 'browse'
+                      ? 'bg-white text-sage-900 shadow-sm font-semibold'
+                      : 'text-sage-500 hover:text-sage-700'
+                  }`}>
+                  Song Browser
+                </button>
+                <button onClick={() => setMode('class')}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    mode === 'class'
+                      ? 'bg-white text-sage-900 shadow-sm font-semibold'
+                      : 'text-sage-500 hover:text-sage-700'
+                  }`}>
+                  Class Builder
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            {/* Right: search + auth */}
+            <div className="flex items-center gap-3 shrink-0">
               {mode === 'browse' && (
-                <div className="relative hidden sm:block">
-                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                  <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search songs or artists..."
-                    className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-64"/>
+                <div className="relative hidden md:block">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+                    placeholder="Search songs or artists..."
+                    className="pl-8 pr-4 py-2 text-sm bg-cream-50 border border-cream-200 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-300 focus:bg-white transition-all w-56"/>
                 </div>
               )}
 
-              {/* Auth */}
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="px-4 py-2 text-sm font-semibold bg-sage-500 text-white rounded-xl hover:bg-sage-600 transition-colors">
-                    Sign In
+                  <button className="px-3.5 py-2 text-xs font-semibold bg-sage-900 text-white rounded-xl hover:bg-sage-800 transition-colors">
+                    Sign in
                   </button>
                 </SignInButton>
               </SignedOut>
               <SignedIn>
-                <UserButton afterSignOutUrl="/" appearance={{
-                  elements: { avatarBox: 'w-9 h-9' }
-                }}/>
+                <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: 'w-8 h-8' } }}/>
               </SignedIn>
 
               {mode === 'browse' && (
                 <button onClick={() => setShowPlaylist(!showPlaylist)}
-                  className="lg:hidden relative flex items-center gap-2 px-4 py-2 bg-sage-500 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-sage-600">
+                  className="lg:hidden relative flex items-center gap-1.5 px-3 py-2 bg-sage-900 text-white text-xs font-semibold rounded-xl">
                   Playlist
-                  {playlist.length > 0 && <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">{playlist.length}</span>}
+                  {playlist.length > 0 && (
+                    <span className="w-4 h-4 bg-terracotta-400 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                      {playlist.length}
+                    </span>
+                  )}
                 </button>
               )}
             </div>
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        {/* Content */}
+        <div className="max-w-7xl mx-auto px-6 py-6">
           {mode === 'class' ? (
             <ClassBuilder/>
           ) : (
             <div className="flex gap-6">
-              <aside className="hidden lg:block w-60 shrink-0">
-                <div className="sticky top-24">
-                  <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange}
-                    selectedTempo={selectedTempo} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
+              {/* Filters */}
+              <aside className="hidden lg:block w-56 shrink-0">
+                <div className="sticky top-20">
+                  <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
+                    lengthRange={lengthRange} selectedTempo={selectedTempo}
+                    onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
                     onLengthChange={setLengthRange} onTempoChange={setSelectedTempo}/>
                 </div>
               </aside>
+
+              {/* Song grid */}
               <main className="flex-1 min-w-0">
+                {/* Mobile filters */}
                 <div className="lg:hidden mb-4">
-                  <details className="bg-cream-50 border border-cream-300 rounded-2xl">
-                    <summary className="px-5 py-3 text-sm font-semibold text-sage-700 cursor-pointer">⚙️ Filters</summary>
+                  <details className="bg-white border border-cream-200 rounded-2xl">
+                    <summary className="px-5 py-3 text-sm font-semibold text-sage-700 cursor-pointer">Filters</summary>
                     <div className="px-5 pb-4">
-                      <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange} lengthRange={lengthRange}
-                        selectedTempo={selectedTempo} onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
+                      <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
+                        lengthRange={lengthRange} selectedTempo={selectedTempo}
+                        onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
                         onLengthChange={setLengthRange} onTempoChange={setSelectedTempo}/>
                     </div>
                   </details>
                 </div>
-                <p className="text-sm text-sage-500 mb-4"><span className="font-semibold text-sage-700">{songs.length}</span> songs found</p>
+
+                {/* Count */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="font-semibold text-sage-900">{songs.length}</span>
+                  <span className="text-sm text-sage-400">songs</span>
+                </div>
+
                 {loading ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                    {[...Array(6)].map((_, i) => <div key={i} className="skeleton h-40 rounded-2xl"/>)}
+                    {[...Array(9)].map((_, i) => <div key={i} className="skeleton h-44 rounded-2xl"/>)}
                   </div>
                 ) : songs.length === 0 ? (
-                  <div className="text-center py-16"><div className="text-4xl mb-3">🔍</div><p className="text-sage-500 font-medium">No songs match your filters</p></div>
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-cream-100 flex items-center justify-center mb-4">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9fbf9f" strokeWidth="1.5">
+                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                      </svg>
+                    </div>
+                    <p className="font-medium text-sage-600">No songs match your filters</p>
+                    <p className="text-sm text-sage-400 mt-1">Try adjusting the BPM range or genre</p>
+                  </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                    {songs.map(song => <SongCard key={song.id} song={song} isInPlaylist={playlistSongIds.has(song.id)} onAdd={addToPlaylist}/>)}
+                    {songs.map(song => (
+                      <SongCard key={song.id} song={song}
+                        isInPlaylist={playlistSongIds.has(song.id)}
+                        onAdd={addToPlaylist}/>
+                    ))}
                   </div>
                 )}
               </main>
+
+              {/* Playlist panel */}
               <aside className="hidden lg:block w-72 shrink-0">
-                <div className="sticky top-24" style={{ height: 'calc(100vh - 7rem)' }}>
+                <div className="sticky top-20" style={{ height: 'calc(100vh - 6rem)' }}>
                   <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
                 </div>
               </aside>
@@ -188,11 +236,12 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Mobile playlist drawer */}
       {showPlaylist && mode === 'browse' && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
-          <div className="relative mt-auto bg-cream-100 rounded-t-3xl shadow-xl" style={{ maxHeight: '80vh' }}>
-            <div className="px-4 pb-6 pt-6" style={{ height: 'calc(80vh - 60px)' }}>
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
+          <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl" style={{ maxHeight: '80vh' }}>
+            <div className="px-4 pb-6 pt-5" style={{ height: 'calc(80vh - 60px)' }}>
               <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
             </div>
           </div>

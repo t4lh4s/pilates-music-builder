@@ -25,99 +25,90 @@ function formatLen(s: number) {
 
 const TEMPOS = [
   { label: 'All', value: 'all' },
-  { label: '🧘 Slow', value: 'slow', sub: '60–80' },
-  { label: '💪 Medium', value: 'medium', sub: '80–100' },
-  { label: '🔥 Fast', value: 'fast', sub: '100–120' },
-  { label: '⚡ High Energy', value: 'high', sub: '120+' },
+  { label: 'Slow', value: 'slow', sub: '60–80' },
+  { label: 'Medium', value: 'medium', sub: '80–100' },
+  { label: 'Fast', value: 'fast', sub: '100–120' },
+  { label: 'High Energy', value: 'high', sub: '120+' },
 ]
+
+function FilterSection({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p className="text-xs font-semibold text-sage-400 uppercase tracking-widest mb-2.5">{label}</p>
+      {children}
+    </div>
+  )
+}
+
+function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button onClick={onClick}
+      className={`text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-150 ${
+        active
+          ? 'bg-sage-900 text-white shadow-sm'
+          : 'bg-cream-100 text-sage-500 hover:bg-cream-200 border border-cream-300'
+      }`}>
+      {children}
+    </button>
+  )
+}
 
 export default function Filters({
   genres, selectedGenre, bpmRange, lengthRange, selectedTempo,
   onGenreChange, onBpmChange, onLengthChange, onTempoChange,
 }: FiltersProps) {
   return (
-    <div className="bg-cream-50 border border-cream-300 rounded-2xl p-5 space-y-5">
-      <h2 className="font-display text-lg font-semibold text-sage-800">Filter Songs</h2>
+    <div className="bg-white rounded-2xl border border-cream-200 shadow-sm p-5 space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-base font-semibold text-sage-900">Filters</h2>
+        <button
+          onClick={() => { onGenreChange('All'); onBpmChange([BPM_MIN, BPM_MAX]); onLengthChange([LEN_MIN, LEN_MAX]); onTempoChange('all') }}
+          className="text-xs text-sage-400 hover:text-sage-600 transition-colors">
+          Reset
+        </button>
+      </div>
 
-      {/* Tempo */}
-      <div>
-        <label className="block text-xs font-semibold text-sage-600 uppercase tracking-wider mb-2">Tempo</label>
+      <FilterSection label="Tempo">
         <div className="flex flex-wrap gap-1.5">
           {TEMPOS.map(t => (
-            <button key={t.value} onClick={() => onTempoChange(t.value)}
-              className={`text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-150
-                ${selectedTempo === t.value ? 'bg-sage-500 text-white shadow-sm' : 'bg-cream-200 text-sage-600 hover:bg-sage-100'}`}>
-              {t.label}{t.sub ? ` (${t.sub})` : ''}
-            </button>
+            <Pill key={t.value} active={selectedTempo === t.value} onClick={() => onTempoChange(t.value)}>
+              {t.label}{t.sub && <span className={`ml-1 ${selectedTempo === t.value ? 'text-sage-300' : 'text-sage-400'}`}>{t.sub}</span>}
+            </Pill>
           ))}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* Genre */}
-      <div>
-        <label className="block text-xs font-semibold text-sage-600 uppercase tracking-wider mb-2">Genre</label>
+      <FilterSection label="Genre">
         <div className="flex flex-wrap gap-1.5">
           {['All', ...genres].map(g => (
-            <button key={g} onClick={() => onGenreChange(g)}
-              className={`text-xs px-3 py-1.5 rounded-full font-medium transition-all duration-150
-                ${selectedGenre === g ? 'bg-sage-500 text-white shadow-sm' : 'bg-cream-200 text-sage-600 hover:bg-sage-100'}`}>
+            <Pill key={g} active={selectedGenre === g} onClick={() => onGenreChange(g)}>
               {g}
-            </button>
+            </Pill>
           ))}
         </div>
-      </div>
+      </FilterSection>
 
-      {/* BPM */}
-      <div>
-        <label className="block text-xs font-semibold text-sage-600 uppercase tracking-wider mb-2">
-          BPM Range <span className="font-normal text-sage-400 normal-case">({bpmRange[0]} – {bpmRange[1]})</span>
-        </label>
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-sage-400 w-6">{BPM_MIN}</span>
-            <input type="range" min={BPM_MIN} max={BPM_MAX} value={bpmRange[0]}
-              onChange={e => onBpmChange([Math.min(parseInt(e.target.value), bpmRange[1] - 5), bpmRange[1]])}
-              className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">{BPM_MAX}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-sage-400 w-6">{BPM_MIN}</span>
-            <input type="range" min={BPM_MIN} max={BPM_MAX} value={bpmRange[1]}
-              onChange={e => onBpmChange([bpmRange[0], Math.max(parseInt(e.target.value), bpmRange[0] + 5)])}
-              className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">{BPM_MAX}</span>
-          </div>
+      <FilterSection label={`BPM  ${bpmRange[0]} – ${bpmRange[1]}`}>
+        <div className="space-y-2.5 px-1">
+          <input type="range" min={BPM_MIN} max={BPM_MAX} value={bpmRange[0]}
+            onChange={e => onBpmChange([Math.min(parseInt(e.target.value), bpmRange[1] - 5), bpmRange[1]])}
+            className="w-full accent-sage-500"/>
+          <input type="range" min={BPM_MIN} max={BPM_MAX} value={bpmRange[1]}
+            onChange={e => onBpmChange([bpmRange[0], Math.max(parseInt(e.target.value), bpmRange[0] + 5)])}
+            className="w-full accent-sage-500"/>
         </div>
-      </div>
+      </FilterSection>
 
-      {/* Length */}
-      <div>
-        <label className="block text-xs font-semibold text-sage-600 uppercase tracking-wider mb-2">
-          Song Length <span className="font-normal text-sage-400 normal-case">({formatLen(lengthRange[0])} – {formatLen(lengthRange[1])})</span>
-        </label>
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-sage-400 w-6">1m</span>
-            <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[0]}
-              onChange={e => onLengthChange([Math.min(parseInt(e.target.value), lengthRange[1] - 10), lengthRange[1]])}
-              className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">10m</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-sage-400 w-6">1m</span>
-            <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[1]}
-              onChange={e => onLengthChange([lengthRange[0], Math.max(parseInt(e.target.value), lengthRange[0] + 10)])}
-              className="flex-1 accent-sage-500"/>
-            <span className="text-xs text-sage-400 w-6 text-right">10m</span>
-          </div>
+      <FilterSection label={`Length  ${formatLen(lengthRange[0])} – ${formatLen(lengthRange[1])}`}>
+        <div className="space-y-2.5 px-1">
+          <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[0]}
+            onChange={e => onLengthChange([Math.min(parseInt(e.target.value), lengthRange[1] - 10), lengthRange[1]])}
+            className="w-full accent-sage-500"/>
+          <input type="range" min={LEN_MIN} max={LEN_MAX} value={lengthRange[1]}
+            onChange={e => onLengthChange([lengthRange[0], Math.max(parseInt(e.target.value), lengthRange[0] + 10)])}
+            className="w-full accent-sage-500"/>
         </div>
-      </div>
-
-      {/* Reset */}
-      <button onClick={() => { onGenreChange('All'); onBpmChange([BPM_MIN, BPM_MAX]); onLengthChange([LEN_MIN, LEN_MAX]); onTempoChange('all') }}
-        className="w-full text-xs text-sage-500 hover:text-sage-700 underline underline-offset-2 transition-colors">
-        Reset filters
-      </button>
+      </FilterSection>
     </div>
   )
 }

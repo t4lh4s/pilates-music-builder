@@ -14,25 +14,27 @@ function SortableItem({ song, index, onRemove }: { song: PlaylistSong; index: nu
   const secs = String(dur % 60).padStart(2, '0')
 
   return (
-    <div ref={setNodeRef} style={style} className="flex items-center gap-2 py-2.5 px-1 group border-b border-cream-100 last:border-0">
-      <button {...attributes} {...listeners} className="text-sage-300 hover:text-sage-500 cursor-grab active:cursor-grabbing shrink-0 touch-none">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
-          <circle cx="4" cy="3" r="1.2"/><circle cx="4" cy="7" r="1.2"/><circle cx="4" cy="11" r="1.2"/>
-          <circle cx="9" cy="3" r="1.2"/><circle cx="9" cy="7" r="1.2"/><circle cx="9" cy="11" r="1.2"/>
+    <div ref={setNodeRef} style={style}
+      className="flex items-center gap-2.5 py-2.5 group border-b border-cream-100 last:border-0">
+      <button {...attributes} {...listeners}
+        className="text-cream-300 hover:text-sage-400 cursor-grab active:cursor-grabbing shrink-0 touch-none transition-colors">
+        <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor">
+          <circle cx="3" cy="4" r="1.5"/><circle cx="3" cy="8" r="1.5"/><circle cx="3" cy="12" r="1.5"/>
+          <circle cx="9" cy="4" r="1.5"/><circle cx="9" cy="8" r="1.5"/><circle cx="9" cy="12" r="1.5"/>
         </svg>
       </button>
-      <span className="text-xs text-sage-300 w-4 shrink-0">{index + 1}</span>
+      <span className="text-xs text-cream-400 w-4 shrink-0 text-right tabular-nums">{index + 1}</span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-sage-800 truncate leading-tight">{song.title ?? song.name}</p>
-        <p className="text-xs text-sage-400 truncate">{song.artist}</p>
+        <p className="text-sm font-medium text-sage-900 truncate leading-tight">{song.title ?? song.name}</p>
+        <p className="text-xs text-sage-400 truncate mt-0.5">{song.artist}</p>
       </div>
-      <div className="flex items-center gap-1.5 shrink-0">
-        <span className="text-xs font-mono text-sage-500">{song.bpm}</span>
-        <span className="text-xs text-sage-300">·</span>
-        <span className="text-xs text-sage-400">{mins}:{secs}</span>
-        <button onClick={() => onRemove(song.playlistId)} className="text-sage-200 hover:text-red-400 transition-colors ml-1 opacity-0 group-hover:opacity-100">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M2 2l10 10M12 2L2 12"/>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-xs font-semibold text-sage-600 tabular-nums">{song.bpm}</span>
+        <span className="text-xs text-sage-300 tabular-nums">{mins}:{secs}</span>
+        <button onClick={() => onRemove(song.playlistId)}
+          className="w-5 h-5 flex items-center justify-center rounded-full text-cream-300 hover:text-red-400 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100 ml-0.5">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M1 1l8 8M9 1L1 9"/>
           </svg>
         </button>
       </div>
@@ -85,40 +87,44 @@ export default function PlaylistPanel({ playlist, onReorder, onRemove }: {
   }
 
   return (
-    <div className="h-full flex flex-col bg-cream-50 rounded-3xl border border-cream-200 shadow-sm overflow-hidden">
-
+    <div className="h-full flex flex-col bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-5 pt-5 pb-3 border-b border-cream-200">
+      <div className="px-5 pt-5 pb-4 border-b border-cream-100">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-display text-lg font-bold text-sage-900">Your Playlist</h2>
-          <span className="text-xs font-semibold px-2.5 py-1 bg-sage-100 text-sage-600 rounded-full">
+          <h2 className="font-display text-base font-semibold text-sage-900">Playlist</h2>
+          <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-sage-100 text-sage-600">
             {playlist.length} tracks
           </span>
         </div>
         <input
           value={playlistName}
           onChange={e => setPlaylistName(e.target.value)}
-          className="w-full px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 focus:outline-none focus:border-sage-400 mb-2"
+          className="w-full px-3 py-2 text-sm bg-cream-50 border border-cream-200 rounded-xl text-sage-800 focus:outline-none focus:border-sage-300 focus:bg-white transition-colors"
           placeholder="Playlist name..."
         />
         {playlist.length > 0 && (
-          <div className="flex items-center gap-3 text-xs text-sage-500">
-            <span>⏱ {totalMins}m {totalSecs}s</span>
+          <div className="flex items-center gap-3 mt-2.5 text-xs text-sage-400">
+            <span className="font-medium text-sage-600">{totalMins}:{totalSecs}</span>
             <span>·</span>
-            <span>♩ avg {avgBpm} BPM</span>
-            <button onClick={clearPlaylist} className="ml-auto text-xs text-sage-300 hover:text-red-400 transition-colors">
-              Clear all
+            <span>avg {avgBpm} BPM</span>
+            <button onClick={clearPlaylist}
+              className="ml-auto text-cream-400 hover:text-red-400 transition-colors text-xs">
+              Clear
             </button>
           </div>
         )}
       </div>
 
       {/* Song list */}
-      <div className="flex-1 overflow-y-auto px-4 py-2">
+      <div className="flex-1 overflow-y-auto px-5 py-2">
         {playlist.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center py-8">
-            <div className="text-3xl mb-2">🎵</div>
-            <p className="text-sm font-medium text-sage-500">Your playlist is empty</p>
+          <div className="flex flex-col items-center justify-center h-full text-center py-10">
+            <div className="w-12 h-12 rounded-2xl bg-cream-100 flex items-center justify-center mb-3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9fbf9f" strokeWidth="1.5">
+                <path d="M9 18V5l12-2v13M9 18c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/>
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-sage-500">No songs yet</p>
             <p className="text-xs text-sage-300 mt-1">Add songs from the library</p>
           </div>
         ) : (
@@ -132,14 +138,12 @@ export default function PlaylistPanel({ playlist, onReorder, onRemove }: {
         )}
       </div>
 
-      {/* Footer actions */}
+      {/* Footer */}
       {playlist.length > 0 && (
-        <div className="px-4 pb-5 pt-3 border-t border-cream-200">
-          <button
-            onClick={copyPlaylist}
-            className="w-full py-2.5 bg-sage-500 hover:bg-sage-600 text-white font-semibold text-sm rounded-xl transition-colors shadow-sm"
-          >
-            {copied ? '✓ Copied!' : '📋 Copy Playlist'}
+        <div className="px-5 pb-5 pt-3 border-t border-cream-100">
+          <button onClick={copyPlaylist}
+            className="w-full py-2.5 bg-sage-900 hover:bg-sage-800 text-white font-medium text-sm rounded-xl transition-colors">
+            {copied ? '✓ Copied!' : 'Copy Playlist'}
           </button>
         </div>
       )}

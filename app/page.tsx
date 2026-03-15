@@ -78,7 +78,7 @@ export default function Home() {
     })
   }
   function removeFromPlaylist(playlistId: string) { setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId)) }
-  const playlistSongIds = new Set(playlist.map(s => s.id))
+  const playlistSongIds = new Set(playlist.map(s => String(s.id)))
 
   if (showLanding) return <LandingPage onEnter={handleEnterApp}/>
 

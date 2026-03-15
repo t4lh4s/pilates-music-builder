@@ -4,7 +4,7 @@ import { Song } from '@/lib/types'
 
 interface SongSearchProps {
   onAdd: (song: Song) => void
-  addedIds: Set<string>
+  addedIds: Set<string | number>
   targetBpm?: number // hint for relevance sorting
 }
 
@@ -104,7 +104,7 @@ export default function SongSearch({ onAdd, addedIds, targetBpm }: SongSearchPro
               </p>
             )}
             {results.map(song => {
-              const isAdded = addedIds.has(song.id)
+              const isAdded = addedIds.has(song.id) || addedIds.has(String(song.id))
               const bpmDiff = targetBpm ? Math.abs(song.bpm - targetBpm) : null
               const bpmMatch = bpmDiff !== null && bpmDiff <= 8
 

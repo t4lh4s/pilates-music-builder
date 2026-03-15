@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
+import { useUser, UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { Song, PlaylistSong } from '@/lib/types'
 import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'

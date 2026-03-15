@@ -527,7 +527,7 @@ export default function ClassBuilder() {
   return (
     <div className="flex gap-6">
       {/* Left column */}
-      <div className="w-80 shrink-0 space-y-3 sticky top-24 self-start" style={{ maxHeight: 'calc(100vh - 7rem)', overflowY: 'auto' }}>
+      <div className="w-80 shrink-0 space-y-3 sticky top-24 self-start" style={{}}>
         <SummaryPanel
           blocks={blocks}
           blockMovements={blockMovements}

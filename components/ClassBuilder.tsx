@@ -27,44 +27,86 @@ const REFORMER_EQUIPMENT = [
   { id: 'platform-extender', label: 'Platform Extender', emoji: '📐' },
 ]
 
+// ─── Energy Arc — SVG line chart ──────────────────────────────────────────────
 function EnergyArc({ blocks, blockMovements }: {
   blocks: ClassBlock[]
   blockMovements: Record<string, Movement[]>
 }) {
   const bpms = blocks.map(b => {
     const movements = blockMovements[b.id] ?? []
-    const songs = b.songs
-    if (songs.length > 0) return Math.round(songs.reduce((a, s) => a + s.bpm, 0) / songs.length)
+    if (b.songs.length > 0) return Math.round(b.songs.reduce((a, s) => a + s.bpm, 0) / b.songs.length)
     if (movements.length > 0) return calcTargetBpm(movements)
     return Math.round((b.bpmMin + b.bpmMax) / 2)
   })
-  const max = Math.max(...bpms, 1)
-  const min = Math.min(...bpms)
-  const range = max - min || 1
+
+  const W = 280
+  const H = 64
+  const PAD = 8
+  const innerW = W - PAD * 2
+  const innerH = H - PAD * 2
+
+  const minBpm = Math.min(...bpms) - 5
+  const maxBpm = Math.max(...bpms) + 5
+  const range = maxBpm - minBpm || 1
+
+  // One point per block, evenly spaced
+  const points = bpms.map((bpm, i) => ({
+    x: PAD + (i / (blocks.length - 1)) * innerW,
+    y: PAD + innerH - ((bpm - minBpm) / range) * innerH,
+    bpm,
+    block: blocks[i],
+  }))
+
+  // Build smooth SVG path using cubic bezier curves
+  const pathD = points.reduce((acc, pt, i) => {
+    if (i === 0) return `M ${pt.x} ${pt.y}`
+    const prev = points[i - 1]
+    const cpX = (prev.x + pt.x) / 2
+    return `${acc} C ${cpX} ${prev.y}, ${cpX} ${pt.y}, ${pt.x} ${pt.y}`
+  }, '')
+
+  // Filled area path (close back to bottom)
+  const fillD = `${pathD} L ${points[points.length - 1].x} ${H} L ${points[0].x} ${H} Z`
+
+  const hasSongs = blocks.some(b => b.songs.length > 0)
+
   return (
-    <div className="mt-3">
-      <div className="flex items-end gap-1 h-10">
-        {blocks.map((b, i) => {
-          const colors = BLOCK_COLORS[b.color] ?? BLOCK_COLORS.sage
-          const heightPct = ((bpms[i] - min) / range) * 70 + 30
+    <div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="w-full overflow-visible">
+        <defs>
+          <linearGradient id="arcGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#6b9e6b" stopOpacity="0.3"/>
+            <stop offset="100%" stopColor="#6b9e6b" stopOpacity="0.02"/>
+          </linearGradient>
+        </defs>
+        {/* Filled area */}
+        <path d={fillD} fill="url(#arcGradient)" />
+        {/* Line */}
+        <path d={pathD} fill="none" stroke={hasSongs ? '#5a8f5a' : '#c8d5c8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Dots + labels */}
+        {points.map((pt, i) => {
+          const colors = BLOCK_COLORS[blocks[i].color] ?? BLOCK_COLORS.sage
           return (
-            <div key={b.id} className="flex-1 flex flex-col items-center gap-0.5">
-              <span className="text-xs text-sage-400 font-mono leading-none">{bpms[i]}</span>
-              <div className={`w-full rounded-t transition-all ${b.songs.length > 0 ? colors.bar : 'bg-cream-300'}`}
-                style={{ height: `${heightPct}%` }} title={`${b.name}: ${bpms[i]} BPM`}/>
-            </div>
+            <g key={i}>
+              <circle cx={pt.x} cy={pt.y} r="4" fill={blocks[i].songs.length > 0 ? '#5a8f5a' : '#c8d5c8'} stroke="white" strokeWidth="1.5"/>
+            </g>
           )
         })}
-      </div>
-      <div className="flex gap-1 mt-1">
-        {blocks.map(b => (
-          <div key={b.id} className="flex-1 text-center"><span className="text-xs">{b.emoji}</span></div>
+      </svg>
+      {/* Block labels below */}
+      <div className="flex justify-between mt-1 px-1">
+        {blocks.map((b, i) => (
+          <div key={b.id} className="flex flex-col items-center gap-0.5" style={{ width: `${100 / blocks.length}%` }}>
+            <span className="text-xs font-mono text-sage-500">{bpms[i]}</span>
+            <span className="text-xs">{b.emoji}</span>
+          </div>
         ))}
       </div>
     </div>
   )
 }
 
+// ─── Setup Screen ─────────────────────────────────────────────────────────────
 function SetupScreen({ onStart }: {
   onStart: (f: 'mat' | 'reformer', d: number, l: 'beginner' | 'intermediate' | 'advanced') => void
 }) {
@@ -127,6 +169,7 @@ function SetupScreen({ onStart }: {
   )
 }
 
+// ─── Movement Picker ──────────────────────────────────────────────────────────
 function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   block: ClassBlock
   format: 'mat' | 'reformer'
@@ -171,6 +214,7 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   )
 }
 
+// ─── Block Notes ──────────────────────────────────────────────────────────────
 function BlockNotes({ blockId, value, onChange }: {
   blockId: string
   value: string
@@ -187,6 +231,7 @@ function BlockNotes({ blockId, value, onChange }: {
   )
 }
 
+// ─── Block Card ───────────────────────────────────────────────────────────────
 function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedMovements, hasNotes }: {
   block: ClassBlock
   index: number
@@ -273,6 +318,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, selectedM
   )
 }
 
+// ─── Equipment Checklist ──────────────────────────────────────────────────────
 function EquipmentChecklist({ format, selected, onToggle }: {
   format: 'mat' | 'reformer'
   selected: Set<string>
@@ -301,6 +347,7 @@ function EquipmentChecklist({ format, selected, onToggle }: {
   )
 }
 
+// ─── Summary Panel ────────────────────────────────────────────────────────────
 function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset }: {
   blocks: ClassBlock[]
   blockMovements: Record<string, Movement[]>
@@ -311,7 +358,7 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset 
   const totalSeconds = blocks.reduce((acc, b) => acc + b.songs.reduce((a, s) => a + (s.duration ?? 0), 0), 0)
   const targetSeconds = targetDuration * 60
   const totalMins = Math.floor(totalSeconds / 60)
-  const totalSecs = String(totalSeconds % 60).padStart(2, '0')
+  const totalSecs = String(totalSeconds % 60).padStart(2, '00')
   const pct = Math.min(100, Math.round((totalSeconds / targetSeconds) * 100))
   const allSongs = blocks.flatMap(b => b.songs)
   const avgBpm = allSongs.length ? Math.round(allSongs.reduce((a, s) => a + s.bpm, 0) / allSongs.length) : 0
@@ -336,7 +383,7 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset 
         </div>
       </div>
       <div>
-        <p className="text-xs font-semibold text-sage-500 uppercase tracking-wider mb-1">Energy Arc</p>
+        <p className="text-xs font-semibold text-sage-500 uppercase tracking-wider mb-2">Energy Arc</p>
         <EnergyArc blocks={blocks} blockMovements={blockMovements}/>
       </div>
       <div className="space-y-1.5">
@@ -363,6 +410,7 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, onCopy, onReset 
   )
 }
 
+// ─── Main ClassBuilder ────────────────────────────────────────────────────────
 export default function ClassBuilder() {
   const [setup, setSetup] = useState<{ format: 'mat' | 'reformer'; duration: number; level: 'beginner' | 'intermediate' | 'advanced' } | null>(null)
   const [blocks, setBlocks] = useState<ClassBlock[]>([])
@@ -467,7 +515,6 @@ export default function ClassBuilder() {
     navigator.clipboard.writeText(lines.join('\n'))
   }
 
-  // Filter then sort
   const searchedSongs = search.trim()
     ? songs.filter(s => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase()))
     : songs
@@ -489,9 +536,9 @@ export default function ClassBuilder() {
 
   return (
     <div className="flex gap-6">
-      {/* Left column */}
       <div className="w-80 shrink-0 space-y-3">
-        <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration} onCopy={copyFullClass}
+        <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration}
+          onCopy={copyFullClass}
           onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()) }}/>
         <EquipmentChecklist format={setup.format} selected={equipment} onToggle={toggleEquipment}/>
         {blocks.map((block, i) => (
@@ -503,7 +550,6 @@ export default function ClassBuilder() {
         ))}
       </div>
 
-      {/* Right column */}
       <div className="flex-1 min-w-0">
         {activeBlock && setup ? (
           <>
@@ -518,7 +564,6 @@ export default function ClassBuilder() {
               <BlockNotes blockId={activeBlock.id} value={blockNotes[activeBlock.id] ?? ''} onChange={updateNote}/>
             </div>
 
-            {/* Song browser header with search + sort */}
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <div>
                 <h3 className="font-display font-bold text-sage-900 text-lg">

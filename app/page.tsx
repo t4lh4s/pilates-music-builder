@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { useUser, UserButton, SignInButton } from '@clerk/nextjs'
 import { Song, PlaylistSong } from '@/lib/types'
 import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'
@@ -10,6 +11,7 @@ import LandingPage from '@/components/LandingPage'
 type Mode = 'browse' | 'class'
 
 export default function Home() {
+  const { isSignedIn, user } = useUser()
   const [showLanding, setShowLanding] = useState(true)
   const [appVisible, setAppVisible] = useState(false)
   const [mode, setMode] = useState<Mode>('browse')
@@ -83,6 +85,7 @@ export default function Home() {
         <div className="absolute bottom-0 -left-20 w-72 h-72 rounded-full opacity-15"
           style={{ background: 'radial-gradient(circle, #d4835a 0%, transparent 70%)' }}/>
       </div>
+
       <div className="relative z-10">
         <header className="border-b border-cream-300 bg-cream-50/80 backdrop-blur-sm sticky top-0 z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
@@ -113,6 +116,21 @@ export default function Home() {
                     className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-64"/>
                 </div>
               )}
+
+              {/* Auth */}
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="px-4 py-2 text-sm font-semibold bg-sage-500 text-white rounded-xl hover:bg-sage-600 transition-colors">
+                    Sign In
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" appearance={{
+                  elements: { avatarBox: 'w-9 h-9' }
+                }}/>
+              </SignedIn>
+
               {mode === 'browse' && (
                 <button onClick={() => setShowPlaylist(!showPlaylist)}
                   className="lg:hidden relative flex items-center gap-2 px-4 py-2 bg-sage-500 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-sage-600">

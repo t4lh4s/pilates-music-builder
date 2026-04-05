@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { Song } from '@/lib/types'
 
 interface SpotifyTrack {
   id: string
@@ -12,7 +11,7 @@ interface SpotifyTrack {
 }
 
 interface SpotifyImportProps {
-  onImport: (songs: Song[]) => void
+  onImport: (songs: any[]) => void
   addedIds: Set<string | number>
 }
 
@@ -33,7 +32,6 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
     setProgress(0)
 
     try {
-      // Step 1: Fetch tracks from Spotify
       const res = await fetch(`/api/spotify/playlist?url=${encodeURIComponent(url.trim())}`)
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to fetch playlist')
@@ -41,7 +39,6 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
       setPlaylistName(data.playlistName)
       setStep('enriching')
 
-      // Step 2: Look up BPM for each track via GetSongBPM
       const enriched: SpotifyTrack[] = []
       const total = data.tracks.length
 
@@ -52,26 +49,22 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
         try {
           const bpmRes = await fetch(`/api/bpm-search?q=${encodeURIComponent(`${track.title} ${track.artist}`)}`)
           const bpmData = await bpmRes.json()
-          // Find best match — same title and artist
-          const match = Array.isArray(bpmData) ? bpmData.find((s: any) =>
-            s.title?.toLowerCase() === track.title?.toLowerCase() &&
-            s.artist?.toLowerCase().includes(track.artist?.toLowerCase().split(' ')[0])
-          ) || bpmData[0] : null
+          const match = Array.isArray(bpmData)
+            ? bpmData.find((s: any) =>
+                s.title?.toLowerCase() === track.title?.toLowerCase() &&
+                s.artist?.toLowerCase().includes(track.artist?.toLowerCase().split(' ')[0])
+              ) || bpmData[0]
+            : null
 
-          enriched.push({
-            ...track,
-            bpm: match?.bpm || undefined,
-          })
+          enriched.push({ ...track, bpm: match?.bpm || undefined })
         } catch {
           enriched.push({ ...track, bpm: undefined })
         }
 
-        // Small delay to avoid hammering the BPM API
         if (i < data.tracks.length - 1) await new Promise(r => setTimeout(r, 150))
       }
 
       setTracks(enriched)
-      // Auto-select all tracks that have BPM data
       setSelected(new Set(enriched.filter(t => t.bpm).map(t => t.id)))
       setStep('done')
     } catch (err: any) {
@@ -89,10 +82,11 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
   }
 
   function toggleAll() {
-    if (selected.size === tracks.filter(t => t.bpm).length) {
+    const withBpm = tracks.filter(t => t.bpm)
+    if (selected.size === withBpm.length) {
       setSelected(new Set())
     } else {
-      setSelected(new Set(tracks.filter(t => t.bpm).map(t => t.id)))
+      setSelected(new Set(withBpm.map(t => t.id)))
     }
   }
 
@@ -109,7 +103,7 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
         genre: 'Unknown',
         source: 'spotify',
         spotifyUrl: t.spotifyUrl,
-      })) as Song[]
+      }))
     onImport(toImport)
     setStep('idle')
     setUrl('')
@@ -131,7 +125,6 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
 
   return (
     <div className="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
-      {/* Header */}
       <div className="px-4 py-3 border-b border-cream-100"
         style={{ background: 'linear-gradient(135deg, #1a2e1a, #2d4a2d)' }}>
         <div className="flex items-center gap-2 mb-0.5">
@@ -144,7 +137,7 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
       </div>
 
       <div className="p-4">
-        {step === 'idle' || step === 'error' ? (
+        {(step === 'idle' || step === 'error') && (
           <>
             <div className="flex gap-2 mb-3">
               <input
@@ -167,17 +160,19 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
                 <p className="text-xs text-red-600">{error}</p>
               </div>
             )}
-            <p className="text-xs text-sage-300 text-center">
-              Playlist must be public · BPM looked up automatically
-            </p>
+            <p className="text-xs text-sage-300 text-center">Playlist must be public · BPM looked up automatically</p>
           </>
-        ) : step === 'fetching' ? (
+        )}
+
+        {step === 'fetching' && (
           <div className="text-center py-6">
             <div className="w-8 h-8 border-2 border-sage-200 border-t-sage-500 rounded-full animate-spin mx-auto mb-3"/>
             <p className="text-sm font-medium text-sage-700">Fetching playlist...</p>
             <p className="text-xs text-sage-400 mt-1">Reading tracks from Spotify</p>
           </div>
-        ) : step === 'enriching' ? (
+        )}
+
+        {step === 'enriching' && (
           <div className="text-center py-6">
             <div className="w-full bg-cream-200 rounded-full h-2 mb-3">
               <div className="h-2 rounded-full transition-all duration-300"
@@ -186,9 +181,10 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
             <p className="text-sm font-medium text-sage-700">Looking up BPM data...</p>
             <p className="text-xs text-sage-400 mt-1">{progress}% complete</p>
           </div>
-        ) : step === 'done' ? (
+        )}
+
+        {step === 'done' && (
           <>
-            {/* Playlist info */}
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-sm font-semibold text-sage-900">{playlistName}</p>
@@ -197,31 +193,24 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
                   {withoutBpm.length > 0 && ` · ${withoutBpm.length} skipped`}
                 </p>
               </div>
-              <button onClick={reset} className="text-xs text-sage-300 hover:text-sage-500 transition-colors">
-                ← Back
-              </button>
+              <button onClick={reset} className="text-xs text-sage-300 hover:text-sage-500 transition-colors">← Back</button>
             </div>
 
-            {/* Select all */}
             {withBpm.length > 0 && (
               <div className="flex items-center justify-between mb-2">
-                <button onClick={toggleAll}
-                  className="text-xs font-medium text-sage-500 hover:text-sage-700 transition-colors">
+                <button onClick={toggleAll} className="text-xs font-medium text-sage-500 hover:text-sage-700 transition-colors">
                   {selected.size === withBpm.length ? 'Deselect all' : 'Select all'}
                 </button>
                 <span className="text-xs text-sage-400">{selected.size} selected</span>
               </div>
             )}
 
-            {/* Track list */}
             <div className="space-y-1 max-h-64 overflow-y-auto mb-3">
               {tracks.map(track => {
                 const isSelected = selected.has(track.id)
                 const hasBpm = !!track.bpm
-                const dur = track.duration
-                const mins = Math.floor(dur / 60)
-                const secs = String(dur % 60).padStart(2, '0')
-
+                const mins = Math.floor(track.duration / 60)
+                const secs = String(track.duration % 60).padStart(2, '0')
                 return (
                   <div key={track.id}
                     onClick={() => hasBpm && toggleTrack(track.id)}
@@ -244,13 +233,10 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
                       <p className="text-xs text-sage-400 truncate">{track.artist}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {hasBpm ? (
-                        <span className="text-xs font-semibold text-sage-600 bg-sage-100 px-1.5 py-0.5 rounded-full">
-                          {track.bpm} BPM
-                        </span>
-                      ) : (
-                        <span className="text-xs text-sage-300">No BPM</span>
-                      )}
+                      {hasBpm
+                        ? <span className="text-xs font-semibold text-sage-600 bg-sage-100 px-1.5 py-0.5 rounded-full">{track.bpm} BPM</span>
+                        : <span className="text-xs text-sage-300">No BPM</span>
+                      }
                       <span className="text-xs text-sage-300 tabular-nums">{mins}:{secs}</span>
                     </div>
                   </div>
@@ -258,14 +244,13 @@ export default function SpotifyImport({ onImport, addedIds }: SpotifyImportProps
               })}
             </div>
 
-            {/* Import button */}
             <button onClick={handleImport} disabled={selected.size === 0}
               className="w-full py-2.5 text-sm font-semibold rounded-xl text-white transition-all disabled:opacity-40"
               style={{ background: selected.size > 0 ? '#1DB954' : '#ccc' }}>
               Add {selected.size} song{selected.size !== 1 ? 's' : ''} to playlist
             </button>
           </>
-        ) : null}
+        )}
       </div>
     </div>
   )

@@ -6,6 +6,7 @@ import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'
 import PlaylistPanel from '@/components/PlaylistPanel'
 import SongSearch from '@/components/SongSearch'
+import SpotifyImport from '@/components/SpotifyImport'
 import ClassBuilder from '@/components/ClassBuilder'
 import LandingPage from '@/components/LandingPage'
 
@@ -73,11 +74,25 @@ export default function Home() {
 
   function addToPlaylist(song: Song) {
     setPlaylist(prev => {
-      if (prev.some(s => s.id === song.id)) return prev
+      if (prev.some(s => String(s.id) === String(song.id))) return prev
       return [...prev, { ...song, playlistId: `${song.id}-${Date.now()}` }]
     })
   }
-  function removeFromPlaylist(playlistId: string) { setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId)) }
+
+  function addBulkToPlaylist(songs: Song[]) {
+    setPlaylist(prev => {
+      const existingIds = new Set(prev.map(s => String(s.id)))
+      const newSongs = songs
+        .filter(s => !existingIds.has(String(s.id)))
+        .map(s => ({ ...s, playlistId: `${s.id}-${Date.now()}-${Math.random()}` }))
+      return [...prev, ...newSongs]
+    })
+  }
+
+  function removeFromPlaylist(playlistId: string) {
+    setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId))
+  }
+
   const playlistSongIds = new Set(playlist.map(s => String(s.id)))
 
   if (showLanding) return <LandingPage onEnter={handleEnterApp}/>
@@ -157,7 +172,7 @@ export default function Home() {
           ) : (
             <div className="flex gap-6">
               <aside className="hidden lg:block w-56 shrink-0">
-                <div className="sticky top-20 space-y-4">
+                <div className="sticky top-20">
                   <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
                     lengthRange={lengthRange} selectedTempo={selectedTempo}
                     onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
@@ -196,7 +211,9 @@ export default function Home() {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                     {songs.map(song => (
-                      <SongCard key={song.id} song={song} isInPlaylist={playlistSongIds.has(String(song.id))} onAdd={addToPlaylist}/>
+                      <SongCard key={song.id} song={song}
+                        isInPlaylist={playlistSongIds.has(String(song.id))}
+                        onAdd={addToPlaylist}/>
                     ))}
                   </div>
                 )}
@@ -205,6 +222,7 @@ export default function Home() {
               <aside className="hidden lg:block w-72 shrink-0">
                 <div className="sticky top-20 space-y-4" style={{ maxHeight: 'calc(100vh - 6rem)', overflowY: 'auto' }}>
                   <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
+                  <SpotifyImport onImport={addBulkToPlaylist} addedIds={playlistSongIds}/>
                   <SongSearch onAdd={addToPlaylist} addedIds={playlistSongIds}/>
                 </div>
               </aside>
@@ -219,6 +237,7 @@ export default function Home() {
           <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl overflow-y-auto" style={{ maxHeight: '90vh' }}>
             <div className="px-4 pb-6 pt-5 space-y-4">
               <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
+              <SpotifyImport onImport={addBulkToPlaylist} addedIds={playlistSongIds}/>
               <SongSearch onAdd={addToPlaylist} addedIds={playlistSongIds}/>
             </div>
           </div>

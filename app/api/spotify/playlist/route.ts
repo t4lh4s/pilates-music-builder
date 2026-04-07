@@ -19,10 +19,8 @@ async function getToken(): Promise<string> {
 }
 
 function extractPlaylistId(input: string): string | null {
-  // Handle full URLs: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
   const urlMatch = input.match(/playlist\/([a-zA-Z0-9]+)/)
   if (urlMatch) return urlMatch[1]
-  // Handle bare IDs
   if (/^[a-zA-Z0-9]{22}$/.test(input.trim())) return input.trim()
   return null
 }
@@ -39,32 +37,45 @@ export async function GET(request: Request) {
   try {
     const token = await getToken()
 
-    // Fetch playlist metadata
+    // Fetch playlist metadata — no fields filter, simpler request
     const playlistRes = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}?fields=name,description,tracks(total)`,
+      `https://api.spotify.com/v1/playlists/${playlistId}`,
       { headers: { 'Authorization': `Bearer ${token}` } }
     )
+
     if (!playlistRes.ok) {
-      if (playlistRes.status === 404) return NextResponse.json({ error: 'Playlist not found. Make sure it is public.' }, { status: 404 })
-      throw new Error('Failed to fetch playlist')
+      const errData = await playlistRes.json().catch(() => ({}))
+      console.error('Spotify playlist fetch error:', playlistRes.status, errData)
+      if (playlistRes.status === 404) {
+        return NextResponse.json({ error: 'Playlist not found. Make sure it is set to Public in Spotify.' }, { status: 404 })
+      }
+      if (playlistRes.status === 401) {
+        return NextResponse.json({ error: 'Spotify authorization failed. Please try again.' }, { status: 401 })
+      }
+      return NextResponse.json({ error: `Spotify error: ${playlistRes.status}` }, { status: 500 })
     }
+
     const playlist = await playlistRes.json()
 
     // Fetch all tracks (paginate if >100)
     const tracks: any[] = []
-    let nextUrl = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?fields=next,items(track(id,name,duration_ms,artists,external_urls,preview_url))&limit=100`
+    let nextUrl: string | null =
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`
 
     while (nextUrl && tracks.length < 500) {
-      const res = await fetch(nextUrl, { headers: { 'Authorization': `Bearer ${token}` } })
+      const res = await fetch(nextUrl, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (!res.ok) break
       const data = await res.json()
       const items = data.items || []
       for (const item of items) {
-        if (item.track && item.track.name) {
+        if (item?.track?.name && item.track.type === 'track') {
           tracks.push({
             id: item.track.id,
             title: item.track.name,
             artist: item.track.artists?.[0]?.name || 'Unknown',
-            duration: Math.round((item.track.duration_ms || 0) / 1000), // convert to seconds
+            duration: Math.round((item.track.duration_ms || 0) / 1000),
             spotifyUrl: item.track.external_urls?.spotify || null,
           })
         }

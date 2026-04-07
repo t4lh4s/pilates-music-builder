@@ -5,7 +5,7 @@ const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET!
 
 async function getToken(): Promise<string> {
   const credentials = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')
-  const res = await fetch('https://accounts.spotify.com/api/token', {
+  const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
     headers: {
       'Authorization': `Basic ${credentials}`,
@@ -13,8 +13,8 @@ async function getToken(): Promise<string> {
     },
     body: 'grant_type=client_credentials',
   })
-  const data = await trackRes.json()
-  if (!res.ok) throw new Error('Failed to get Spotify token')
+  const data = await tokenRes.json()
+  if (!tokenRes.ok) throw new Error('Failed to get Spotify token')
   return data.access_token
 }
 
@@ -37,7 +37,6 @@ export async function GET(request: Request) {
   try {
     const token = await getToken()
 
-    // Fetch playlist metadata — no fields filter, simpler request
     const playlistRes = await fetch(
       `https://api.spotify.com/v1/playlists/${playlistId}`,
       { headers: { 'Authorization': `Bearer ${token}` } }
@@ -57,18 +56,17 @@ export async function GET(request: Request) {
 
     const playlist = await playlistRes.json()
 
-    // Fetch all tracks (paginate if >100)
     const tracks: any[] = []
     let nextUrl: string | null =
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`
 
     while (nextUrl && tracks.length < 500) {
-      const trackRes: Response = await fetch(nextUrl, {
+      const pageRes: Response = await fetch(nextUrl, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      if (!trackRes.ok) break
-      const data = await trackRes.json()
-      const items = data.items || []
+      if (!pageRes.ok) break
+      const pageData = await pageRes.json()
+      const items = pageData.items || []
       for (const item of items) {
         if (item?.track?.name && item.track.type === 'track') {
           tracks.push({
@@ -80,7 +78,7 @@ export async function GET(request: Request) {
           })
         }
       }
-      nextUrl = data.next || null
+      nextUrl = pageData.next || null
     }
 
     return NextResponse.json({

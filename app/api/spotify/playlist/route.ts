@@ -13,7 +13,7 @@ async function getToken(): Promise<string> {
     },
     body: 'grant_type=client_credentials',
   })
-  const data = await res.json()
+  const data = await trackRes.json()
   if (!res.ok) throw new Error('Failed to get Spotify token')
   return data.access_token
 }
@@ -63,11 +63,11 @@ export async function GET(request: Request) {
       `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=100`
 
     while (nextUrl && tracks.length < 500) {
-      const res = await fetch(nextUrl, {
+      const trackRes: Response = await fetch(nextUrl, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      if (!res.ok) break
-      const data = await res.json()
+      if (!trackRes.ok) break
+      const data = await trackRes.json()
       const items = data.items || []
       for (const item of items) {
         if (item?.track?.name && item.track.type === 'track') {

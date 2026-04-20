@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Song, PlaylistSong, ClassBlock } from '@/lib/types'
 import { generateTemplate, BLOCK_COLORS } from '@/lib/classTemplates'
-import { Movement, getMovementsForBlock, bpmRangeFromMovements, calcTargetBpm } from '@/lib/movements'
+import { Movement, MOVEMENTS, getMovementsForBlock, bpmRangeFromMovements, calcTargetBpm } from '@/lib/movements'
 import SongCard from '@/components/SongCard'
 
 const MAT_EQUIPMENT = [
@@ -30,6 +30,10 @@ const REFORMER_EQUIPMENT = [
 
 const BLOCK_EMOJIS = ['🌅','🧍','💪','🔥','🧘','⚡','🌊','🎯','🏃','🌿','✨','🦋','🌸','🎵','🏆']
 const COLOR_KEYS = Object.keys(BLOCK_COLORS)
+
+function isCustomBlock(blockId: string) {
+  return blockId.startsWith('custom-')
+}
 
 // ─── PDF Export ───────────────────────────────────────────────────────────────
 async function loadJsPDF(): Promise<any> {
@@ -65,8 +69,7 @@ async function exportToPDF(className: string, setup: { format: 'mat' | 'reformer
   doc.setTextColor(...(DARK as [number, number, number])); doc.setFontSize(9); doc.setFont('helvetica', 'bold')
   doc.text(`Total Duration: ${totalMins}:${totalSecs}`, margin + 4, y + 8)
   if (avgBpm > 0) doc.text(`Avg BPM: ${avgBpm}`, margin + contentW / 2, y + 8)
-  doc.text(`Total Songs: ${allSongs.length}`, margin + contentW - 4, y + 8, { align: 'right' })
-  y += 18
+  doc.text(`Total Songs: ${allSongs.length}`, margin + contentW - 4, y + 8, { align: 'right' }); y += 18
   const equipmentList = Array.from(equipment).map(id => (setup.format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT).find(e => e.id === id)?.label).filter(Boolean)
   if (equipmentList.length > 0) {
     doc.setFontSize(10); doc.setFont('helvetica', 'bold'); doc.setTextColor(...(GREEN as [number, number, number])); doc.text('EQUIPMENT NEEDED', margin, y); y += 5
@@ -207,25 +210,20 @@ function BlockNameEditor({ name, emoji, onNameChange, onEmojiChange }: {
   useEffect(() => { if (editing) inputRef.current?.focus() }, [editing])
   return (
     <div className="flex items-center gap-1.5 min-w-0">
-      {/* Emoji picker */}
       <div className="relative">
         <button onClick={e => { e.stopPropagation(); setShowEmoji(!showEmoji) }}
           className="text-xl hover:scale-110 transition-transform shrink-0 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/50">
           {emoji}
         </button>
         {showEmoji && (
-          <div className="absolute top-9 left-0 z-50 bg-white border border-cream-200 rounded-xl shadow-lg p-2 grid grid-cols-5 gap-1 w-40"
-            onClick={e => e.stopPropagation()}>
+          <div className="absolute top-9 left-0 z-50 bg-white border border-cream-200 rounded-xl shadow-lg p-2 grid grid-cols-5 gap-1 w-40" onClick={e => e.stopPropagation()}>
             {BLOCK_EMOJIS.map(e => (
               <button key={e} onClick={() => { onEmojiChange(e); setShowEmoji(false) }}
-                className={`text-base w-7 h-7 flex items-center justify-center rounded-lg hover:bg-sage-50 transition-colors ${e === emoji ? 'bg-sage-100' : ''}`}>
-                {e}
-              </button>
+                className={`text-base w-7 h-7 flex items-center justify-center rounded-lg hover:bg-sage-50 transition-colors ${e === emoji ? 'bg-sage-100' : ''}`}>{e}</button>
             ))}
           </div>
         )}
       </div>
-      {/* Name */}
       {editing ? (
         <input ref={inputRef} value={name} onChange={e => onNameChange(e.target.value)}
           onBlur={() => setEditing(false)}
@@ -235,15 +233,123 @@ function BlockNameEditor({ name, emoji, onNameChange, onEmojiChange }: {
       ) : (
         <button onClick={e => { e.stopPropagation(); setEditing(true) }}
           className="flex-1 text-left font-display font-bold text-sage-900 leading-tight text-sm hover:text-sage-600 transition-colors truncate group">
-          {name}
-          <span className="ml-1 opacity-0 group-hover:opacity-40 text-xs font-normal">✏️</span>
+          {name}<span className="ml-1 opacity-0 group-hover:opacity-40 text-xs font-normal">✏️</span>
         </button>
       )}
     </div>
   )
 }
 
-// ─── Movement Picker ──────────────────────────────────────────────────────────
+// ─── Custom Block BPM Picker ──────────────────────────────────────────────────
+function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange }: {
+  block: ClassBlock
+  format: 'mat' | 'reformer'
+  level: 'beginner' | 'intermediate' | 'advanced'
+  selectedMovements: Movement[]
+  onToggle: (m: Movement) => void
+  onBpmRangeChange: (min: number, max: number) => void
+}) {
+  const [movSearch, setMovSearch] = useState('')
+  const selectedIds = new Set(selectedMovements.map(m => m.id))
+  const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
+
+  // Filter movements from entire library based on search
+  const levelOrder = { beginner: 0, intermediate: 1, advanced: 2 }
+  const userLevel = levelOrder[level]
+  const searchResults = movSearch.trim()
+    ? MOVEMENTS.filter(m =>
+        (m.format === format || m.format === 'both') &&
+        levelOrder[m.level] <= userLevel &&
+        m.name.toLowerCase().includes(movSearch.toLowerCase())
+      ).slice(0, 12)
+    : []
+
+  return (
+    <div className="mb-5">
+      {/* BPM Range */}
+      <div className="mb-5 p-4 bg-sage-50 rounded-xl border border-sage-100">
+        <div className="flex items-center justify-between mb-3">
+          <div>
+            <h4 className="text-sm font-semibold text-sage-700">BPM Range</h4>
+            <p className="text-xs text-sage-400">Set the tempo range for songs in this block</p>
+          </div>
+          {targetBpm && (
+            <div className="text-right">
+              <div className="text-xs text-sage-400">Target from movements</div>
+              <div className="text-lg font-bold text-sage-700">{targetBpm} BPM</div>
+            </div>
+          )}
+        </div>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-xs font-mono text-sage-600 w-8">{block.bpmMin}</span>
+          <input type="range" min={60} max={block.bpmMax - 5} value={block.bpmMin}
+            onChange={e => onBpmRangeChange(parseInt(e.target.value), block.bpmMax)}
+            className="flex-1 accent-sage-500"/>
+          <span className="text-xs text-sage-400">min</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-mono text-sage-600 w-8">{block.bpmMax}</span>
+          <input type="range" min={block.bpmMin + 5} max={200} value={block.bpmMax}
+            onChange={e => onBpmRangeChange(block.bpmMin, parseInt(e.target.value))}
+            className="flex-1 accent-sage-500"/>
+          <span className="text-xs text-sage-400">max</span>
+        </div>
+        <p className="text-xs text-sage-400 mt-2 text-center">
+          Songs will be filtered to <span className="font-semibold text-sage-600">{block.bpmMin}–{block.bpmMax} BPM</span>
+        </p>
+      </div>
+
+      {/* Movement search — full library */}
+      <div>
+        <h4 className="text-sm font-semibold text-sage-700 mb-1">Add Movements</h4>
+        <p className="text-xs text-sage-400 mb-3">Search the full exercise library — BPM range updates automatically</p>
+        <div className="relative mb-3">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" value={movSearch} onChange={e => setMovSearch(e.target.value)}
+            placeholder="e.g. Footwork, Hundred, Teaser..."
+            className="w-full pl-8 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400"/>
+        </div>
+
+        {/* Search results */}
+        {searchResults.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {searchResults.map(m => {
+              const selected = selectedIds.has(m.id)
+              return (
+                <button key={m.id} onClick={() => onToggle(m)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
+                  {selected && <span>✓</span>}{m.name}
+                  <span className={`font-mono text-xs ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                </button>
+              )
+            })}
+          </div>
+        )}
+        {movSearch.trim() && searchResults.length === 0 && (
+          <p className="text-xs text-sage-400 italic">No movements found — try a different name</p>
+        )}
+
+        {/* Selected movements */}
+        {selectedMovements.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-sage-500 uppercase tracking-wider mb-2">Selected</p>
+            <div className="flex flex-wrap gap-2">
+              {selectedMovements.map(m => (
+                <button key={m.id} onClick={() => onToggle(m)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-sage-500 text-white border-sage-500 shadow-sm">
+                  ✓ {m.name}
+                  <span className="font-mono text-xs text-sage-200">{m.bpm}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Template Movement Picker ─────────────────────────────────────────────────
 function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   block: ClassBlock; format: 'mat' | 'reformer'; level: 'beginner' | 'intermediate' | 'advanced'
   selectedMovements: Movement[]; onToggle: (m: Movement) => void
@@ -299,7 +405,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
   const colors = BLOCK_COLORS[block.color] ?? BLOCK_COLORS.sage
   const blockSeconds = block.songs.reduce((acc, s) => acc + (s.duration ?? 0), 0)
   const fillPct = Math.min(100, Math.round((blockSeconds / block.targetDuration) * 100))
-  const blockMins = Math.floor(blockSeconds / 60), blockSecs = String(blockSeconds % 60).padStart(2, '0')
+  const blockMins = Math.floor(blockSeconds / 60), blockSecs = String(blockSeconds % 60).padStart(2, '00')
   const targetMins = Math.floor(block.targetDuration / 60)
   const isOver = blockSeconds > block.targetDuration, isFull = fillPct >= 95
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
@@ -307,24 +413,19 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
   return (
     <div className={`rounded-2xl border-2 transition-all ${isActive ? colors.border + ' shadow-md' : 'border-cream-200 hover:border-cream-300'} ${colors.bg}`}>
       <div className="p-4">
-        {/* Block header row */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0" onClick={onActivate}>
             <div className="flex items-center gap-1.5 mb-1">
               <span className="text-xs font-semibold text-sage-400 uppercase tracking-wider">Block {index + 1}</span>
+              {isCustomBlock(block.id) && <span className="text-xs px-1.5 py-0.5 rounded-full bg-sage-100 text-sage-500 font-medium">Custom</span>}
               {isFull && <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">✓ Full</span>}
               {isOver && <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">Over</span>}
               {hasNotes && <span className="text-xs">📝</span>}
             </div>
-            <BlockNameEditor
-              name={block.name}
-              emoji={block.emoji}
+            <BlockNameEditor name={block.name} emoji={block.emoji}
               onNameChange={n => onUpdateBlock(block.id, { name: n })}
-              onEmojiChange={e => onUpdateBlock(block.id, { emoji: e })}
-            />
+              onEmojiChange={e => onUpdateBlock(block.id, { emoji: e })}/>
           </div>
-
-          {/* Controls: move up/down + delete */}
           <div className="flex items-center gap-0.5 shrink-0">
             <button onClick={e => { e.stopPropagation(); onMoveBlock(block.id, 'up') }} disabled={index === 0}
               className="w-6 h-6 flex items-center justify-center rounded text-sage-300 hover:text-sage-600 disabled:opacity-20 transition-colors">
@@ -342,8 +443,6 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
             )}
           </div>
         </div>
-
-        {/* Time + BPM + progress */}
         <button onClick={onActivate} className="w-full text-left">
           <div className="flex items-center justify-between mb-2">
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${colors.badge}`}>
@@ -365,8 +464,6 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
           )}
         </button>
       </div>
-
-      {/* Songs */}
       {block.songs.length > 0 && (
         <div className="px-4 pb-3 space-y-1.5 border-t border-white/60 pt-3">
           {block.songs.map((song, i) => {
@@ -422,12 +519,11 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, className, saved
   onSave: () => void; onCopy: () => void; onExportPDF: () => void; onReset: () => void
 }) {
   const totalSeconds = blocks.reduce((acc, b) => acc + b.songs.reduce((a, s) => a + (s.duration ?? 0), 0), 0)
-  const targetSeconds = targetDuration * 60
-  const totalMins = Math.floor(totalSeconds / 60), totalSecs = String(totalSeconds % 60).padStart(2, '0')
-  const pct = Math.min(100, Math.round((totalSeconds / targetSeconds) * 100))
+  const totalMins = Math.floor(totalSeconds / 60), totalSecs = String(totalSeconds % 60).padStart(2, '00')
+  const pct = Math.min(100, Math.round((totalSeconds / (targetDuration * 60)) * 100))
   const allSongs = blocks.flatMap(b => b.songs)
   const avgBpm = allSongs.length ? Math.round(allSongs.reduce((a, s) => a + s.bpm, 0) / allSongs.length) : 0
-  const isOver = totalSeconds > targetSeconds
+  const isOver = totalSeconds > targetDuration * 60
   return (
     <div className="bg-cream-50 rounded-2xl border border-cream-200 p-4 space-y-4">
       <div className="flex items-center justify-between">
@@ -509,11 +605,13 @@ export default function ClassBuilder() {
     if (!activeBlock || !setup) return
     setLoading(true)
     const movements = blockMovements[activeBlock.id] ?? []
-    const [minBpm, maxBpm] = bpmRangeFromMovements(movements, activeBlock.bpmMin, activeBlock.bpmMax)
+    const [minBpm, maxBpm] = isCustomBlock(activeBlock.id)
+      ? [activeBlock.bpmMin, activeBlock.bpmMax]
+      : bpmRangeFromMovements(movements, activeBlock.bpmMin, activeBlock.bpmMax)
     const params = new URLSearchParams()
     params.set('minBpm', minBpm.toString()); params.set('maxBpm', maxBpm.toString())
     fetch(`/api/songs?${params}`).then(r => r.json()).then(data => { setSongs(data); setLoading(false) })
-  }, [activeBlockId, blockMovements])
+  }, [activeBlockId, blockMovements, blocks])
 
   function handleStart(format: 'mat' | 'reformer', duration: number, level: 'beginner' | 'intermediate' | 'advanced') {
     const template = generateTemplate(format, duration, level)
@@ -557,7 +655,6 @@ export default function ClassBuilder() {
     catch (e) { console.error('PDF export error:', e); alert('PDF export failed. Please try again.') }
   }
 
-  // Block CRUD
   function updateBlock(id: string, updates: Partial<ClassBlock>) {
     setBlocks(prev => prev.map(b => b.id === id ? { ...b, ...updates } : b))
   }
@@ -597,14 +694,22 @@ export default function ClassBuilder() {
   }
 
   function toggleMovement(blockId: string, movement: Movement) {
-    setBlockMovements(prev => { const current = prev[blockId] ?? []; const exists = current.find(m => m.id === movement.id); return { ...prev, [blockId]: exists ? current.filter(m => m.id !== movement.id) : [...current, movement] } })
+    setBlockMovements(prev => {
+      const current = prev[blockId] ?? []
+      const exists = current.find(m => m.id === movement.id)
+      const updated = exists ? current.filter(m => m.id !== movement.id) : [...current, movement]
+      // For custom blocks, auto-update BPM range based on movements
+      if (isCustomBlock(blockId) && updated.length > 0) {
+        const avg = Math.round(updated.reduce((a, m) => a + m.bpm, 0) / updated.length)
+        const newMin = Math.max(60, avg - 12), newMax = Math.min(200, avg + 12)
+        setBlocks(bPrev => bPrev.map(b => b.id === blockId ? { ...b, bpmMin: newMin, bpmMax: newMax } : b))
+      }
+      return { ...prev, [blockId]: updated }
+    })
   }
 
   function updateNote(blockId: string, note: string) { setBlockNotes(prev => ({ ...prev, [blockId]: note })) }
-
-  function toggleEquipment(id: string) {
-    setEquipment(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next })
-  }
+  function toggleEquipment(id: string) { setEquipment(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next }) }
 
   function addSongToBlock(song: Song) {
     if (!activeBlockId) return
@@ -625,7 +730,12 @@ export default function ClassBuilder() {
   const searchedSongs = search.trim() ? songs.filter(s => s.title.toLowerCase().includes(search.toLowerCase()) || s.artist.toLowerCase().includes(search.toLowerCase())) : songs
   const filteredSongs = [...searchedSongs].sort((a, b) => { if (sortBy === 'bpm-asc') return a.bpm - b.bpm; if (sortBy === 'bpm-desc') return b.bpm - a.bpm; if (sortBy === 'duration-asc') return (a.duration ?? 0) - (b.duration ?? 0); if (sortBy === 'duration-desc') return (b.duration ?? 0) - (a.duration ?? 0); return 0 })
   const addedIds = new Set(blocks.flatMap(b => b.songs.map(s => s.id)))
-  const activeBpmRange = activeBlock ? bpmRangeFromMovements(activeMovements, activeBlock.bpmMin, activeBlock.bpmMax) : [85, 100]
+
+  const activeBpmRange = activeBlock
+    ? isCustomBlock(activeBlock.id)
+      ? [activeBlock.bpmMin, activeBlock.bpmMax]
+      : bpmRangeFromMovements(activeMovements, activeBlock.bpmMin, activeBlock.bpmMax)
+    : [85, 100]
 
   if (!setup) return <SetupScreen onStart={handleStart} savedClasses={savedClasses} onLoad={handleLoad} onDelete={handleDelete}/>
 
@@ -644,15 +754,11 @@ export default function ClassBuilder() {
           <BlockCard key={block.id} block={block} index={i} isActive={activeBlockId === block.id}
             onActivate={() => { setActiveBlockId(block.id); setSearch(''); setSortBy('default') }}
             onRemoveSong={pid => removeSongFromBlock(block.id, pid)}
-            onUpdateBlock={updateBlock}
-            onDeleteBlock={deleteBlock}
-            onMoveBlock={moveBlock}
-            canDelete={blocks.length > 1}
-            totalBlocks={blocks.length}
+            onUpdateBlock={updateBlock} onDeleteBlock={deleteBlock} onMoveBlock={moveBlock}
+            canDelete={blocks.length > 1} totalBlocks={blocks.length}
             selectedMovements={blockMovements[block.id] ?? []}
             hasNotes={!!(blockNotes[block.id]?.trim())}/>
         ))}
-        {/* Add Block button */}
         <button onClick={addBlock}
           className="w-full py-3 border-2 border-dashed border-cream-300 rounded-2xl text-sm font-medium text-sage-400 hover:border-sage-300 hover:text-sage-600 hover:bg-sage-50 transition-all flex items-center justify-center gap-2">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 1v12M1 7h12"/></svg>
@@ -664,14 +770,31 @@ export default function ClassBuilder() {
         {activeBlock && setup ? (
           <>
             <div className="bg-cream-50 border border-cream-200 rounded-2xl p-5 mb-5">
-              <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)}/>
-              {activeMovements.length === 0 && <p className="text-xs text-sage-400 italic mb-5">No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.</p>}
+              {isCustomBlock(activeBlock.id) ? (
+                <CustomBlockControls
+                  block={activeBlock}
+                  format={setup.format}
+                  level={setup.level}
+                  selectedMovements={activeMovements}
+                  onToggle={m => toggleMovement(activeBlock.id, m)}
+                  onBpmRangeChange={(min, max) => updateBlock(activeBlock.id, { bpmMin: min, bpmMax: max })}
+                />
+              ) : (
+                <>
+                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)}/>
+                  {activeMovements.length === 0 && <p className="text-xs text-sage-400 italic mb-5">No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.</p>}
+                </>
+              )}
               <BlockNotes blockId={activeBlock.id} value={blockNotes[activeBlock.id] ?? ''} onChange={updateNote}/>
             </div>
+
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <div>
                 <h3 className="font-display font-bold text-sage-900 text-lg">{activeBlock.emoji} {activeBlock.name}</h3>
-                <p className="text-sm text-sage-400">{activeBpmRange[0]}–{activeBpmRange[1]} BPM{activeMovements.length > 0 ? ` · based on ${activeMovements.length} movement${activeMovements.length > 1 ? 's' : ''}` : ''}</p>
+                <p className="text-sm text-sage-400">
+                  {activeBpmRange[0]}–{activeBpmRange[1]} BPM
+                  {!isCustomBlock(activeBlock.id) && activeMovements.length > 0 ? ` · based on ${activeMovements.length} movement${activeMovements.length > 1 ? 's' : ''}` : ''}
+                </p>
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-700 focus:outline-none focus:border-sage-400">
@@ -688,6 +811,7 @@ export default function ClassBuilder() {
                 </div>
               </div>
             </div>
+
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">{[...Array(6)].map((_, i) => <div key={i} className="h-40 rounded-2xl bg-cream-100 animate-pulse"/>)}</div>
             ) : filteredSongs.length === 0 ? (

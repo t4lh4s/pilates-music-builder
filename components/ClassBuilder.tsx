@@ -253,16 +253,35 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
 
-  // Filter movements from entire library based on search
   const levelOrder = { beginner: 0, intermediate: 1, advanced: 2 }
   const userLevel = levelOrder[level]
-  const searchResults = movSearch.trim()
-    ? MOVEMENTS.filter(m =>
-        (m.format === format || m.format === 'both') &&
-        levelOrder[m.level] <= userLevel &&
-        m.name.toLowerCase().includes(movSearch.toLowerCase())
-      ).slice(0, 12)
-    : []
+
+  // All movements for this format/level
+  const allMovements = MOVEMENTS.filter(m =>
+    (m.format === format || m.format === 'both') &&
+    levelOrder[m.level] <= userLevel
+  )
+
+  // Filter by search or show all
+  const displayed = movSearch.trim()
+    ? allMovements.filter(m => m.name.toLowerCase().includes(movSearch.toLowerCase()))
+    : allMovements
+
+  // Group by block category for display when not searching
+  const grouped = movSearch.trim() ? null : displayed.reduce((acc, m) => {
+    const key = m.blocks[0] ?? 'other'
+    if (!acc[key]) acc[key] = []
+    acc[key].push(m)
+    return acc
+  }, {} as Record<string, Movement[]>)
+
+  // Human-readable group labels
+  const groupLabels: Record<string, string> = {
+    warmup: 'Warm Up', standing: 'Standing', floorwork1: 'Floor Work',
+    peak: 'Peak Work', cooldown: 'Cool Down',
+    footwork: 'Footwork', abdominals: 'Abdominals', legships: 'Legs & Hips',
+    upperbody: 'Upper Body', stretch: 'Stretch & Finishing', other: 'Other'
+  }
 
   return (
     <div className="mb-5">
@@ -295,55 +314,76 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
           <span className="text-xs text-sage-400">max</span>
         </div>
         <p className="text-xs text-sage-400 mt-2 text-center">
-          Songs will be filtered to <span className="font-semibold text-sage-600">{block.bpmMin}–{block.bpmMax} BPM</span>
+          Songs filtered to <span className="font-semibold text-sage-600">{block.bpmMin}–{block.bpmMax} BPM</span>
         </p>
       </div>
 
-      {/* Movement search — full library */}
+      {/* Movement browser */}
       <div>
-        <h4 className="text-sm font-semibold text-sage-700 mb-1">Add Movements</h4>
-        <p className="text-xs text-sage-400 mb-3">Search the full exercise library — BPM range updates automatically</p>
-        <div className="relative mb-3">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
+          {selectedMovements.length > 0 && (
+            <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
+          )}
+        </div>
+        <p className="text-xs text-sage-400 mb-3">Browse or search — selecting movements auto-updates BPM range</p>
+
+        {/* Search */}
+        <div className="relative mb-4">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input type="text" value={movSearch} onChange={e => setMovSearch(e.target.value)}
-            placeholder="e.g. Footwork, Hundred, Teaser..."
+            placeholder="Filter movements..."
             className="w-full pl-8 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400"/>
+          {movSearch && (
+            <button onClick={() => setMovSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-sage-300 hover:text-sage-500">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 1l10 10M11 1L1 11"/></svg>
+            </button>
+          )}
         </div>
 
-        {/* Search results */}
-        {searchResults.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-3">
-            {searchResults.map(m => {
-              const selected = selectedIds.has(m.id)
-              return (
-                <button key={m.id} onClick={() => onToggle(m)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
-                  {selected && <span>✓</span>}{m.name}
-                  <span className={`font-mono text-xs ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
-                </button>
-              )
-            })}
-          </div>
-        )}
-        {movSearch.trim() && searchResults.length === 0 && (
-          <p className="text-xs text-sage-400 italic">No movements found — try a different name</p>
-        )}
-
-        {/* Selected movements */}
-        {selectedMovements.length > 0 && (
-          <div>
-            <p className="text-xs font-semibold text-sage-500 uppercase tracking-wider mb-2">Selected</p>
-            <div className="flex flex-wrap gap-2">
-              {selectedMovements.map(m => (
-                <button key={m.id} onClick={() => onToggle(m)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-sage-500 text-white border-sage-500 shadow-sm">
-                  ✓ {m.name}
-                  <span className="font-mono text-xs text-sage-200">{m.bpm}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Movement list — scrollable */}
+        <div className="max-h-64 overflow-y-auto space-y-4 pr-1">
+          {movSearch.trim() ? (
+            // Flat list when searching
+            displayed.length === 0 ? (
+              <p className="text-xs text-sage-400 italic text-center py-4">No movements found</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {displayed.map(m => {
+                  const selected = selectedIds.has(m.id)
+                  return (
+                    <button key={m.id} onClick={() => onToggle(m)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
+                      {selected && <span>✓</span>}{m.name}
+                      <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          ) : (
+            // Grouped by category when not searching
+            Object.entries(grouped!).map(([groupKey, groupMovements]) => (
+              <div key={groupKey}>
+                <p className="text-xs font-semibold text-sage-400 uppercase tracking-wider mb-2">
+                  {groupLabels[groupKey] ?? groupKey}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {groupMovements.map(m => {
+                    const selected = selectedIds.has(m.id)
+                    return (
+                      <button key={m.id} onClick={() => onToggle(m)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
+                        {selected && <span>✓</span>}{m.name}
+                        <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   )

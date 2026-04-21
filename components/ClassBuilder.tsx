@@ -514,7 +514,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
           <div className="flex items-center gap-2 mt-2" onClick={e => e.stopPropagation()}>
             <span className="text-xs text-sage-400">Target:</span>
             <select
-              value={block.targetDuration}
+              value={block.targetDuration || 600}
               onChange={e => onUpdateBlock(block.id, { targetDuration: parseInt(e.target.value) })}
               className="text-xs bg-white/70 border border-white/60 rounded-lg px-1.5 py-0.5 text-sage-600 focus:outline-none focus:border-sage-300">
               {[2,3,4,5,6,7,8,9,10,12,15,20].map(m => (

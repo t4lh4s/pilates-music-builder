@@ -436,7 +436,7 @@ function BlockNotes({ blockId, value, onChange }: { blockId: string; value: stri
 }
 
 // ─── Block Card ───────────────────────────────────────────────────────────────
-function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateBlock, onDeleteBlock, onMoveBlock, canDelete, totalBlocks, selectedMovements, hasNotes }: {
+function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateBlock, onDeleteBlock, onMoveBlock, canDelete, totalBlocks, selectedMovements, hasNotes, dragHandleProps }: {
   block: ClassBlock; index: number; isActive: boolean; onActivate: () => void
   onRemoveSong: (playlistId: string) => void
   onUpdateBlock: (id: string, updates: Partial<ClassBlock>) => void
@@ -446,6 +446,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
   selectedMovements: Movement[]; hasNotes: boolean
   dragHandleProps?: any
 }) {
+  // dragHandleProps is passed from SortableBlockCard
   const colors = BLOCK_COLORS[block.color] ?? BLOCK_COLORS.sage
   const blockSeconds = block.songs.reduce((acc, s) => acc + (s.duration ?? 0), 0)
   const fillPct = Math.min(100, Math.round((blockSeconds / block.targetDuration) * 100))

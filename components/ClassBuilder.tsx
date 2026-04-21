@@ -1,5 +1,8 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { useUser } from '@clerk/nextjs'
 import { Song, PlaylistSong, ClassBlock } from '@/lib/types'
 import { generateTemplate, BLOCK_COLORS } from '@/lib/classTemplates'
@@ -441,6 +444,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
   onMoveBlock: (id: string, dir: 'up' | 'down') => void
   canDelete: boolean; totalBlocks: number
   selectedMovements: Movement[]; hasNotes: boolean
+  dragHandleProps?: any
 }) {
   const colors = BLOCK_COLORS[block.color] ?? BLOCK_COLORS.sage
   const blockSeconds = block.songs.reduce((acc, s) => acc + (s.duration ?? 0), 0)
@@ -467,6 +471,15 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
               onEmojiChange={e => onUpdateBlock(block.id, { emoji: e })}/>
           </div>
           <div className="flex items-center gap-0.5 shrink-0">
+            {/* Drag handle */}
+            <div {...(dragHandleProps ?? {})} onClick={e => e.stopPropagation()}
+              className="w-6 h-6 flex items-center justify-center rounded cursor-grab active:cursor-grabbing text-sage-200 hover:text-sage-400 transition-colors touch-none">
+              <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor">
+                <circle cx="2.5" cy="2.5" r="1.5"/><circle cx="7.5" cy="2.5" r="1.5"/>
+                <circle cx="2.5" cy="7" r="1.5"/><circle cx="7.5" cy="7" r="1.5"/>
+                <circle cx="2.5" cy="11.5" r="1.5"/><circle cx="7.5" cy="11.5" r="1.5"/>
+              </svg>
+            </div>
             <button onClick={e => { e.stopPropagation(); onMoveBlock(block.id, 'up') }} disabled={index === 0}
               className="w-6 h-6 flex items-center justify-center rounded text-sage-300 hover:text-sage-600 disabled:opacity-20 transition-colors">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 7l3-4 3 4"/></svg>
@@ -495,6 +508,30 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
               <div className={`h-full rounded-full transition-all ${isOver ? 'bg-red-400' : colors.bar}`} style={{ width: `${fillPct}%` }}/>
             </div>
             <span className="text-xs text-sage-400">{fillPct}%</span>
+          </div>
+          {/* Inline target duration editor for all blocks */}
+          <div className="flex items-center gap-2 mt-2" onClick={e => e.stopPropagation()}>
+            <span className="text-xs text-sage-400">Target:</span>
+            <select
+              value={block.targetDuration}
+              onChange={e => onUpdateBlock(block.id, { targetDuration: parseInt(e.target.value) })}
+              className="text-xs bg-white/70 border border-white/60 rounded-lg px-1.5 py-0.5 text-sage-600 focus:outline-none focus:border-sage-300">
+              {[2,3,4,5,6,7,8,9,10,12,15,20].map(m => (
+                <option key={m} value={m * 60}>{m} min</option>
+              ))}
+            </select>
+            {isCustomBlock(block.id) && (
+              <>
+                <span className="text-xs text-sage-400 ml-1">BPM:</span>
+                <input type="number" min={60} max={200} value={block.bpmMin}
+                  onChange={e => onUpdateBlock(block.id, { bpmMin: parseInt(e.target.value) || 60 })}
+                  className="w-12 text-xs bg-white/70 border border-white/60 rounded-lg px-1.5 py-0.5 text-sage-600 focus:outline-none focus:border-sage-300 text-center"/>
+                <span className="text-xs text-sage-300">–</span>
+                <input type="number" min={60} max={200} value={block.bpmMax}
+                  onChange={e => onUpdateBlock(block.id, { bpmMax: parseInt(e.target.value) || 120 })}
+                  className="w-12 text-xs bg-white/70 border border-white/60 rounded-lg px-1.5 py-0.5 text-sage-600 focus:outline-none focus:border-sage-300 text-center"/>
+              </>
+            )}
           </div>
           {selectedMovements.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
@@ -530,6 +567,23 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
   )
 }
 
+
+
+// ─── Sortable Block Card Wrapper ──────────────────────────────────────────────
+function SortableBlockCard(props: Parameters<typeof BlockCard>[0]) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: props.block.id })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 50 : undefined,
+  }
+  return (
+    <div ref={setNodeRef} style={style}>
+      <BlockCard {...props} dragHandleProps={{ ...attributes, ...listeners }}/>
+    </div>
+  )
+}
 // ─── Equipment Checklist ──────────────────────────────────────────────────────
 function EquipmentChecklist({ format, selected, onToggle }: { format: 'mat' | 'reformer'; selected: Set<string>; onToggle: (id: string) => void }) {
   const items = format === 'mat' ? MAT_EQUIPMENT : REFORMER_EQUIPMENT
@@ -632,6 +686,7 @@ export default function ClassBuilder() {
   const [savedId, setSavedId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [savedClasses, setSavedClasses] = useState<any[]>([])
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   const activeBlock = blocks.find(b => b.id === activeBlockId) ?? null
   const activeMovements = activeBlockId ? (blockMovements[activeBlockId] ?? []) : []
@@ -790,15 +845,27 @@ export default function ClassBuilder() {
         <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration} className={className} savedId={savedId} saveStatus={saveStatus} onSave={handleSave} onCopy={copyFullClass} onExportPDF={handleExportPDF}
           onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()); setSavedId(null) }}/>
         <EquipmentChecklist format={setup.format} selected={equipment} onToggle={toggleEquipment}/>
-        {blocks.map((block, i) => (
-          <BlockCard key={block.id} block={block} index={i} isActive={activeBlockId === block.id}
-            onActivate={() => { setActiveBlockId(block.id); setSearch(''); setSortBy('default') }}
-            onRemoveSong={pid => removeSongFromBlock(block.id, pid)}
-            onUpdateBlock={updateBlock} onDeleteBlock={deleteBlock} onMoveBlock={moveBlock}
-            canDelete={blocks.length > 1} totalBlocks={blocks.length}
-            selectedMovements={blockMovements[block.id] ?? []}
-            hasNotes={!!(blockNotes[block.id]?.trim())}/>
-        ))}
+        <DndContext sensors={sensors} collisionDetection={closestCenter}
+          onDragEnd={(event: DragEndEvent) => {
+            const { active, over } = event
+            if (over && active.id !== over.id) {
+              const oldIdx = blocks.findIndex(b => b.id === active.id)
+              const newIdx = blocks.findIndex(b => b.id === over.id)
+              setBlocks(arrayMove(blocks, oldIdx, newIdx))
+            }
+          }}>
+          <SortableContext items={blocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+            {blocks.map((block, i) => (
+              <SortableBlockCard key={block.id} block={block} index={i} isActive={activeBlockId === block.id}
+                onActivate={() => { setActiveBlockId(block.id); setSearch(''); setSortBy('default') }}
+                onRemoveSong={pid => removeSongFromBlock(block.id, pid)}
+                onUpdateBlock={updateBlock} onDeleteBlock={deleteBlock} onMoveBlock={moveBlock}
+                canDelete={blocks.length > 1} totalBlocks={blocks.length}
+                selectedMovements={blockMovements[block.id] ?? []}
+                hasNotes={!!(blockNotes[block.id]?.trim())}/>
+            ))}
+          </SortableContext>
+        </DndContext>
         <button onClick={addBlock}
           className="w-full py-3 border-2 border-dashed border-cream-300 rounded-2xl text-sm font-medium text-sage-400 hover:border-sage-300 hover:text-sage-600 hover:bg-sage-50 transition-all flex items-center justify-center gap-2">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 1v12M1 7h12"/></svg>

@@ -6,9 +6,10 @@ import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'
 import RightPanel from '@/components/RightPanel'
 import ClassBuilder from '@/components/ClassBuilder'
+import BpmTapper from '@/components/BpmTapper'
 import LandingPage from '@/components/LandingPage'
 
-type Mode = 'browse' | 'class'
+type Mode = 'browse' | 'class' | 'bpm'
 
 export default function Home() {
   const { isSignedIn } = useUser()
@@ -118,6 +119,10 @@ export default function Home() {
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${mode === 'class' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
                   Class Builder
                 </button>
+                <button onClick={() => setMode('bpm')}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${mode === 'bpm' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
+                  BPM Counter
+                </button>
               </div>
             </div>
 
@@ -157,7 +162,9 @@ export default function Home() {
 
         {/* Content */}
         <div className="max-w-7xl mx-auto px-6 py-6">
-          {mode === 'class' ? (
+          {mode === 'bpm' ? (
+            <BpmTapper/>
+          ) : mode === 'class' ? (
             <ClassBuilder/>
           ) : (
             <div className="flex gap-6">

@@ -32,6 +32,8 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
   const [loadingTracks, setLoadingTracks] = useState(false)
   const [search, setSearch] = useState('')
   const [showAll, setShowAll] = useState(false)
+  const [allTracks, setAllTracks] = useState<Track[]>([])
+  const [loadingAll, setLoadingAll] = useState(false)
 
   useEffect(() => {
     if (!isSignedIn) { setLoading(false); return }
@@ -41,6 +43,35 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [isSignedIn])
+
+  async function fetchAllTracks() {
+    setSelectedId('all')
+    setLoadingAll(true)
+    setSearch('')
+    setShowAll(false)
+    try {
+      // Fetch tracks from all playlists in parallel
+      const results = await Promise.all(
+        playlists.map(pl =>
+          fetch(`/api/spotify-playlists/tracks?id=${pl.id}`)
+            .then(r => r.json())
+            .then(d => d.tracks ?? [])
+            .catch(() => [])
+        )
+      )
+      // Flatten and dedupe by title+artist
+      const seen = new Set<string>()
+      const merged: Track[] = []
+      for (const tracks of results) {
+        for (const t of tracks) {
+          const key = `${t.title?.toLowerCase()}|||${t.artist?.toLowerCase()}`
+          if (!seen.has(key)) { seen.add(key); merged.push(t) }
+        }
+      }
+      setAllTracks(merged)
+    } catch {}
+    setLoadingAll(false)
+  }
 
   async function selectPlaylist(id: string) {
     if (selectedId === id) return
@@ -87,7 +118,8 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
   }
 
   // Filter tracks by search + optionally BPM
-  const filtered = tracks.filter(t => {
+  const activeTracks = selectedId === 'all' ? allTracks : tracks
+  const filtered = activeTracks.filter(t => {
     if (search.trim() && !t.title.toLowerCase().includes(search.toLowerCase()) && !t.artist.toLowerCase().includes(search.toLowerCase())) return false
     return true
   })
@@ -100,6 +132,24 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
     <div>
       {/* Playlist selector */}
       <div className="flex gap-2 flex-wrap mb-5">
+        {/* All playlists option */}
+        {playlists.length > 1 && (
+          <button onClick={fetchAllTracks}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
+              selectedId === 'all'
+                ? 'bg-sage-900 text-white border-sage-900'
+                : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300'
+            }`}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <rect x="1" y="1" width="4" height="4" rx="1"/><rect x="7" y="1" width="4" height="4" rx="1"/>
+              <rect x="1" y="7" width="4" height="4" rx="1"/><rect x="7" y="7" width="4" height="4" rx="1"/>
+            </svg>
+            All Playlists
+            <span className={`text-xs ${selectedId === 'all' ? 'text-sage-300' : 'text-sage-400'}`}>
+              {playlists.reduce((a, p) => a + p.track_count, 0)}
+            </span>
+          </button>
+        )}
         {playlists.map(pl => (
           <button key={pl.id} onClick={() => selectPlaylist(pl.id)}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
@@ -119,7 +169,7 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
       {/* Track browser */}
       {selectedId && (
         <>
-          {loadingTracks ? (
+          {(loadingTracks || (selectedId === 'all' && loadingAll)) ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               {[...Array(6)].map((_, i) => <div key={i} className="h-40 rounded-2xl skeleton"/>)}
             </div>

@@ -1,6 +1,6 @@
 'use client'
 import { Song } from '@/lib/types'
-import { formatDuration, bpmColor, bpmLabel } from '@/lib/utils'
+import SaveToPlaylistButton from '@/components/SaveToPlaylistButton'
 
 interface SongCardProps {
   song: Song
@@ -8,8 +8,22 @@ interface SongCardProps {
   onAdd: (song: Song) => void
 }
 
+function bpmColor(bpm: number) {
+  if (bpm <= 80) return 'bg-blue-50 text-blue-600'
+  if (bpm <= 100) return 'bg-sage-100 text-sage-700'
+  if (bpm <= 120) return 'bg-amber-50 text-amber-600'
+  return 'bg-red-50 text-red-600'
+}
+
+function bpmLabel(bpm: number) {
+  if (bpm <= 80) return 'Slow'
+  if (bpm <= 100) return 'Medium'
+  if (bpm <= 120) return 'Fast'
+  return 'High Energy'
+}
+
 export default function SongCard({ song, isInPlaylist, onAdd }: SongCardProps) {
-  const dur = song.duration ?? song.length ?? 0
+  const dur = (song as any).duration ?? (song as any).length ?? 0
   const mins = Math.floor(dur / 60)
   const secs = String(dur % 60).padStart(2, '0')
 
@@ -30,18 +44,29 @@ export default function SongCard({ song, isInPlaylist, onAdd }: SongCardProps) {
         </div>
       )}
 
-      {/* Genre pill */}
+      {/* Genre pill + duration + save button */}
       <div className="flex items-start justify-between gap-2 mb-3">
         <span className="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-cream-200 text-sage-600">
-          {song.genre}
+          {(song as any).genre ?? 'Unknown'}
         </span>
-        <span className="text-xs text-sage-300 font-mono tabular-nums">{mins}:{secs}</span>
+        <div className="flex items-center gap-1">
+          <span className="text-xs text-sage-300 font-mono tabular-nums">{mins}:{secs}</span>
+          {!isInPlaylist && (
+            <SaveToPlaylistButton song={{
+              title: (song as any).title ?? (song as any).name ?? '',
+              artist: song.artist,
+              bpm: song.bpm,
+              duration: dur,
+              genre: (song as any).genre,
+            }}/>
+          )}
+        </div>
       </div>
 
       {/* Title + Artist */}
       <div className="mb-3">
         <h3 className="font-display font-semibold text-sage-900 leading-snug text-sm mb-0.5 line-clamp-2">
-          {song.title ?? song.name}
+          {(song as any).title ?? (song as any).name}
         </h3>
         <p className="text-xs text-sage-500 truncate">{song.artist}</p>
       </div>
@@ -54,12 +79,11 @@ export default function SongCard({ song, isInPlaylist, onAdd }: SongCardProps) {
         <span className="text-xs text-sage-400">{bpmLabel(song.bpm)}</span>
       </div>
 
-      {/* Add button — subtle, hover reveal */}
+      {/* Add button */}
       {!isInPlaylist ? (
         <button
           onClick={() => onAdd(song)}
-          className="song-add-btn w-full py-2 rounded-xl text-xs font-semibold bg-sage-500 text-white hover:bg-sage-600 transition-colors"
-        >
+          className="song-add-btn w-full py-2 rounded-xl text-xs font-semibold bg-sage-500 text-white hover:bg-sage-600 transition-colors">
           + Add to Class
         </button>
       ) : (

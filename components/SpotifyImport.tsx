@@ -1,54 +1,49 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useUser } from '@clerk/nextjs'
 
-interface ParsedTrack {
+interface Track {
   id: string
   title: string
   artist: string
-  duration: number // seconds
+  duration: number
   bpm?: number
 }
 
+interface SavedPlaylist {
+  id: string
+  name: string
+  track_count: number
+  created_at: string
+}
+
 interface Props {
-  onImport: (songs: any[]) => void
+  onAdd: (song: any) => void
   addedIds: Set<string | number>
 }
 
-// Parse Exportify CSV — handles quoted fields with commas inside
+// ── CSV parser ────────────────────────────────────────────────────────────────
 function parseCSV(text: string): Record<string, string>[] {
   const lines = text.split('\n').filter(l => l.trim())
   if (lines.length < 2) return []
-
-  function splitCSVLine(line: string): string[] {
-    const result: string[] = []
-    let current = ''
-    let inQuotes = false
+  function splitLine(line: string): string[] {
+    const result: string[] = []; let cur = ''; let inQ = false
     for (let i = 0; i < line.length; i++) {
-      const char = line[i]
-      if (char === '"') {
-        if (inQuotes && line[i + 1] === '"') { current += '"'; i++ }
-        else inQuotes = !inQuotes
-      } else if (char === ',' && !inQuotes) {
-        result.push(current.trim())
-        current = ''
-      } else {
-        current += char
-      }
+      const c = line[i]
+      if (c === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++ } else inQ = !inQ }
+      else if (c === ',' && !inQ) { result.push(cur.trim()); cur = '' }
+      else cur += c
     }
-    result.push(current.trim())
-    return result
+    result.push(cur.trim()); return result
   }
-
-  const headers = splitCSVLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim())
+  const headers = splitLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim())
   return lines.slice(1).map(line => {
-    const values = splitCSVLine(line)
-    const row: Record<string, string> = {}
-    headers.forEach((h, i) => { row[h] = (values[i] ?? '').replace(/^"|"$/g, '').trim() })
+    const vals = splitLine(line); const row: Record<string, string> = {}
+    headers.forEach((h, i) => { row[h] = (vals[i] ?? '').replace(/^"|"$/g, '').trim() })
     return row
-  }).filter(row => Object.values(row).some(v => v))
+  }).filter(r => Object.values(r).some(v => v))
 }
 
-// Find header value case-insensitively (Exportify column names vary slightly)
 function findCol(row: Record<string, string>, ...keys: string[]): string {
   for (const key of keys) {
     const found = Object.keys(row).find(k => k.toLowerCase().includes(key.toLowerCase()))
@@ -57,304 +52,413 @@ function findCol(row: Record<string, string>, ...keys: string[]): string {
   return ''
 }
 
-export default function SpotifyImport({ onImport, addedIds }: Props) {
-  const [step, setStep] = useState<'idle' | 'enriching' | 'done' | 'error'>('idle')
-  const [tracks, setTracks] = useState<ParsedTrack[]>([])
+export default function SpotifyImport({ onAdd, addedIds }: Props) {
+  const { isSignedIn } = useUser()
+  const [view, setView] = useState<'list' | 'import' | 'browse'>('list')
+  const [savedPlaylists, setSavedPlaylists] = useState<SavedPlaylist[]>([])
+  const [loadingPlaylists, setLoadingPlaylists] = useState(true)
+  const [openPlaylistId, setOpenPlaylistId] = useState<string | null>(null)
+  const [openTracks, setOpenTracks] = useState<Track[]>([])
+  const [loadingTracks, setLoadingTracks] = useState(false)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  // Import state
+  const [importStep, setImportStep] = useState<'idle' | 'enriching' | 'review' | 'saving' | 'error'>('idle')
+  const [importTracks, setImportTracks] = useState<Track[]>([])
+  const [importName, setImportName] = useState('')
   const [progress, setProgress] = useState(0)
   const [progressLabel, setProgressLabel] = useState('')
   const [error, setError] = useState('')
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [playlistName, setPlaylistName] = useState('')
   const [isDragging, setIsDragging] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
 
-  async function handleFile(file: File) {
-    if (!file.name.endsWith('.csv')) {
-      setError('Please upload a CSV file from Exportify')
-      setStep('error')
-      return
-    }
+  useEffect(() => {
+    if (isSignedIn) fetchPlaylists()
+    else setLoadingPlaylists(false)
+  }, [isSignedIn])
 
+  async function fetchPlaylists() {
+    setLoadingPlaylists(true)
+    try {
+      const res = await fetch('/api/spotify-playlists')
+      const data = await res.json()
+      if (Array.isArray(data)) setSavedPlaylists(data)
+    } catch {}
+    setLoadingPlaylists(false)
+  }
+
+  async function openPlaylist(id: string) {
+    if (openPlaylistId === id) { setOpenPlaylistId(null); return }
+    setOpenPlaylistId(id)
+    setLoadingTracks(true)
+    try {
+      const res = await fetch(`/api/spotify-playlists/tracks?id=${id}`)
+      const data = await res.json()
+      setOpenTracks(data.tracks ?? [])
+    } catch {}
+    setLoadingTracks(false)
+  }
+
+  async function deletePlaylist(id: string) {
+    setDeletingId(id)
+    await fetch(`/api/spotify-playlists?id=${id}`, { method: 'DELETE' })
+    setSavedPlaylists(prev => prev.filter(p => p.id !== id))
+    if (openPlaylistId === id) setOpenPlaylistId(null)
+    setDeletingId(null)
+  }
+
+  // ── File handling ──────────────────────────────────────────────────────────
+  async function handleFile(file: File) {
+    if (!file.name.endsWith('.csv')) { setError('Please upload a CSV file from Exportify'); return }
     setError('')
-    setStep('enriching')
+    setImportStep('enriching')
     setProgress(0)
     setProgressLabel('Reading file...')
 
     try {
       const text = await file.text()
       const rows = parseCSV(text)
+      if (rows.length === 0) throw new Error('No tracks found. Make sure this is an Exportify CSV.')
 
-      if (rows.length === 0) {
-        throw new Error('No tracks found in CSV. Make sure you exported from Exportify.')
-      }
+      setImportName(file.name.replace('.csv', '').replace(/_/g, ' '))
 
-      // Use filename (minus .csv) as playlist name
-      setPlaylistName(file.name.replace('.csv', '').replace(/_/g, ' '))
-
-      // Build track list from CSV
-      const parsed: ParsedTrack[] = rows.map((row, i) => {
+      const parsed: Track[] = rows.map((row, i) => {
         const title = findCol(row, 'Track Name', 'track name', 'name', 'title')
         const artist = findCol(row, 'Artist Name', 'artist name', 'artist', 'artists')
         const durationMs = parseInt(findCol(row, 'Duration (ms)', 'duration_ms', 'duration') || '0')
-        const tempoFromFile = parseFloat(findCol(row, 'Tempo', 'tempo', 'bpm') || '0')
-        return {
-          id: `csv-${i}-${title}-${artist}`.replace(/\s/g, '-'),
-          title,
-          artist,
-          duration: Math.round(durationMs / 1000),
-          bpm: tempoFromFile > 0 ? Math.round(tempoFromFile) : undefined,
-        }
+        const tempo = parseFloat(findCol(row, 'Tempo', 'tempo', 'bpm') || '0')
+        return { id: `csv-${i}-${title}`.replace(/\s/g, '-'), title, artist, duration: Math.round(durationMs / 1000), bpm: tempo > 0 ? Math.round(tempo) : undefined }
       }).filter(t => t.title && t.artist)
 
-      if (parsed.length === 0) {
-        throw new Error('Could not read tracks. Make sure the file is a valid Exportify CSV.')
-      }
+      if (parsed.length === 0) throw new Error('Could not read tracks. Make sure this is a valid Exportify CSV.')
 
-      // For tracks that already have Tempo from Exportify (some exports include it), use it
-      // For ones without, look up via GetSongBPM
-      const tracksNeedingBpm = parsed.filter(t => !t.bpm)
-      const tracksWithBpm = parsed.filter(t => !!t.bpm)
-
+      const needBpm = parsed.filter(t => !t.bpm)
       const enriched = [...parsed]
 
-      for (let i = 0; i < tracksNeedingBpm.length; i++) {
-        const track = tracksNeedingBpm[i]
-        const pct = Math.round(((i + 1) / tracksNeedingBpm.length) * 100)
-        setProgress(pct)
-        setProgressLabel(`Looking up BPM ${i + 1} of ${tracksNeedingBpm.length}...`)
-
+      for (let i = 0; i < needBpm.length; i++) {
+        const track = needBpm[i]
+        setProgress(Math.round(((i + 1) / needBpm.length) * 100))
+        setProgressLabel(`Looking up BPM ${i + 1} of ${needBpm.length}...`)
         try {
           const res = await fetch(`/api/bpm-search?q=${encodeURIComponent(`${track.title} ${track.artist}`)}`)
           const data = await res.json()
           if (Array.isArray(data) && data.length > 0) {
-            const match = data.find((s: any) =>
-              s.title?.toLowerCase() === track.title.toLowerCase() &&
-              s.artist?.toLowerCase().includes(track.artist.toLowerCase().split(' ')[0])
-            ) || data[0]
+            const match = data.find((s: any) => s.title?.toLowerCase() === track.title.toLowerCase()) || data[0]
             if (match?.bpm) {
               const idx = enriched.findIndex(t => t.id === track.id)
               if (idx !== -1) enriched[idx] = { ...enriched[idx], bpm: match.bpm }
             }
           }
-        } catch { /* skip, leave bpm undefined */ }
-
-        // Small delay to avoid rate limiting
+        } catch {}
         await new Promise(r => setTimeout(r, 120))
       }
 
-      setTracks(enriched)
+      setImportTracks(enriched)
       setSelected(new Set(enriched.filter(t => t.bpm).map(t => t.id)))
-      setStep('done')
+      setImportStep('review')
     } catch (err: any) {
       setError(err.message || 'Failed to process file')
-      setStep('error')
+      setImportStep('error')
     }
   }
 
-  function onFileInput(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (file) handleFile(file)
+  async function savePlaylist() {
+    if (!isSignedIn) { alert('Sign in to save playlists'); return }
+    setImportStep('saving')
+    const tracksToSave = importTracks.filter(t => selected.has(t.id))
+    try {
+      const res = await fetch('/api/spotify-playlists', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: importName, tracks: tracksToSave })
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setSavedPlaylists(prev => [data, ...prev])
+      setView('list')
+      setImportStep('idle')
+      setImportTracks([])
+      setSelected(new Set())
+      if (fileRef.current) fileRef.current.value = ''
+    } catch (err: any) {
+      setError(err.message || 'Failed to save')
+      setImportStep('review')
+    }
   }
 
-  function onDrop(e: React.DragEvent) {
-    e.preventDefault()
-    setIsDragging(false)
-    const file = e.dataTransfer.files?.[0]
-    if (file) handleFile(file)
-  }
+  const filteredTracks = searchQuery.trim()
+    ? openTracks.filter(t => t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.artist.toLowerCase().includes(searchQuery.toLowerCase()))
+    : openTracks
 
-  function toggleTrack(id: string) {
-    setSelected(prev => { const next = new Set(prev); next.has(id) ? next.delete(id) : next.add(id); return next })
-  }
-
-  function toggleAll() {
-    const withBpm = tracks.filter(t => t.bpm)
-    setSelected(selected.size === withBpm.length ? new Set() : new Set(withBpm.map(t => t.id)))
-  }
-
-  function handleImport() {
-    const toImport = tracks
-      .filter(t => selected.has(t.id) && t.bpm)
-      .map(t => ({
-        id: t.id,
-        title: t.title,
-        name: t.title,
-        artist: t.artist,
-        bpm: t.bpm!,
-        duration: t.duration,
-        genre: 'Unknown',
-        source: 'spotify',
-      }))
-    onImport(toImport)
-    setStep('idle')
-    setTracks([])
-    setSelected(new Set())
-    if (fileRef.current) fileRef.current.value = ''
-  }
-
-  function reset() {
-    setStep('idle')
-    setTracks([])
-    setError('')
-    setProgress(0)
-    setSelected(new Set())
-    if (fileRef.current) fileRef.current.value = ''
-  }
-
-  const withBpm = tracks.filter(t => t.bpm)
-  const withoutBpm = tracks.filter(t => !t.bpm)
-
+  // ── Views ──────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-white rounded-2xl border border-cream-200 shadow-sm overflow-hidden">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-cream-100"
-        style={{ background: 'linear-gradient(135deg, #1a2e1a, #2d4a2d)' }}>
-        <div className="flex items-center gap-2 mb-0.5">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#1DB954">
-            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-          </svg>
-          <span className="text-sm font-semibold text-white">Import from Spotify</span>
-          <span className="text-xs px-2 py-0.5 rounded-full font-medium ml-auto"
-            style={{ background: 'rgba(29,185,84,0.2)', color: '#1DB954' }}>
-            via Exportify
-          </span>
-        </div>
-        <p className="text-xs" style={{ color: '#7ab87a' }}>Export your Spotify playlist, then upload the CSV</p>
-      </div>
+    <div className="h-full flex flex-col">
 
-      <div className="p-4">
-        {/* Step 1 — instructions + upload */}
-        {(step === 'idle' || step === 'error') && (
-          <>
-            {/* Step 1: Export */}
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-5 h-5 rounded-full bg-sage-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</div>
-              <div className="flex-1">
-                <p className="text-xs font-semibold text-sage-800 mb-1">Export your Spotify playlist</p>
-                <a href="https://exportify.net" target="_blank" rel="noopener"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
-                  style={{ background: '#1DB954', color: 'white' }}>
-                  Open Exportify ↗
-                </a>
-                <p className="text-xs text-sage-400 mt-1.5">Log in with Spotify → click Export next to your playlist → save the CSV file</p>
-              </div>
-            </div>
-
-            {/* Step 2: Upload */}
-            <div className="flex items-start gap-3">
-              <div className="w-5 h-5 rounded-full bg-sage-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</div>
-              <div className="flex-1">
-                <p className="text-xs font-semibold text-sage-800 mb-2">Upload the CSV file</p>
-                <div
-                  onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
-                  onDragLeave={() => setIsDragging(false)}
-                  onDrop={onDrop}
-                  onClick={() => fileRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                    isDragging ? 'border-sage-400 bg-sage-50' : 'border-cream-300 hover:border-sage-300 hover:bg-cream-50'
-                  }`}>
-                  <svg className="w-6 h-6 mx-auto mb-2 text-sage-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-                  </svg>
-                  <p className="text-xs font-semibold text-sage-600">Drop CSV here or click to browse</p>
-                  <p className="text-xs text-sage-400 mt-0.5">Exportify .csv files only</p>
-                </div>
-                <input ref={fileRef} type="file" accept=".csv" onChange={onFileInput} className="hidden"/>
-              </div>
-            </div>
-
-            {error && (
-              <div className="flex items-start gap-2 p-3 rounded-xl bg-red-50 border border-red-100 mt-3">
-                <span className="text-red-400 text-sm shrink-0">⚠</span>
-                <p className="text-xs text-red-600">{error}</p>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Enriching — progress */}
-        {step === 'enriching' && (
-          <div className="py-4">
-            <div className="w-full bg-cream-200 rounded-full h-2 mb-3 overflow-hidden">
-              <div className="h-2 rounded-full transition-all duration-300 bg-sage-500"
-                style={{ width: `${progress}%` }}/>
-            </div>
-            <p className="text-sm font-medium text-sage-700 text-center">{progressLabel}</p>
-            <p className="text-xs text-sage-400 text-center mt-1">{progress}% complete</p>
-          </div>
-        )}
-
-        {/* Done — track checklist */}
-        {step === 'done' && (
-          <>
-            <div className="flex items-center justify-between mb-3">
+      {/* ── Library view ─────────────────────────────────────────────────── */}
+      {view === 'list' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="px-4 pt-4 pb-3 border-b border-cream-100">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-sage-900 truncate">{playlistName}</p>
-                <p className="text-xs text-sage-400">
-                  {withBpm.length} of {tracks.length} tracks matched
-                  {withoutBpm.length > 0 && ` · ${withoutBpm.length} no BPM found`}
-                </p>
+                <h3 className="text-sm font-semibold text-sage-900">My Spotify Playlists</h3>
+                <p className="text-xs text-sage-400 mt-0.5">Imported from Spotify via Exportify</p>
               </div>
-              <button onClick={reset} className="text-xs text-sage-300 hover:text-sage-500 transition-colors shrink-0 ml-2">← Back</button>
+              <button onClick={() => { setView('import'); setImportStep('idle'); setError('') }}
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sage-900 text-white hover:bg-sage-800 transition-colors">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 1v8M1 5h8"/></svg>
+                Import
+              </button>
             </div>
+          </div>
 
-            {withBpm.length > 0 && (
-              <div className="flex items-center justify-between mb-2">
-                <button onClick={toggleAll} className="text-xs font-medium text-sage-500 hover:text-sage-700 transition-colors">
-                  {selected.size === withBpm.length ? 'Deselect all' : 'Select all'}
+          {/* Playlist list */}
+          <div className="flex-1 overflow-y-auto">
+            {!isSignedIn ? (
+              <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8">
+                <div className="w-10 h-10 rounded-xl bg-cream-100 flex items-center justify-center mb-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </div>
+                <p className="text-sm font-medium text-sage-600 mb-1">Sign in to save playlists</p>
+                <p className="text-xs text-sage-400">Your imported playlists are saved to your account</p>
+              </div>
+            ) : loadingPlaylists ? (
+              <div className="space-y-2 p-4">
+                {[...Array(3)].map((_, i) => <div key={i} className="h-14 rounded-xl skeleton"/>)}
+              </div>
+            ) : savedPlaylists.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8">
+                <div className="w-10 h-10 rounded-xl bg-cream-100 flex items-center justify-center mb-3">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                </div>
+                <p className="text-sm font-medium text-sage-600 mb-1">No playlists yet</p>
+                <p className="text-xs text-sage-400 mb-4">Import your Spotify playlists to access them here</p>
+                <button onClick={() => { setView('import'); setImportStep('idle') }}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-white transition-colors"
+                  style={{ background: '#1DB954' }}>
+                  Import your first playlist
                 </button>
-                <span className="text-xs text-sage-400">{selected.size} selected</span>
+              </div>
+            ) : (
+              <div className="p-3 space-y-2">
+                {savedPlaylists.map(pl => (
+                  <div key={pl.id} className="rounded-xl border border-cream-200 overflow-hidden bg-white">
+                    {/* Playlist row */}
+                    <div className="flex items-center gap-3 px-3 py-2.5">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ background: 'rgba(29,185,84,0.1)' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                      </div>
+                      <button onClick={() => openPlaylist(pl.id)} className="flex-1 text-left min-w-0">
+                        <p className="text-sm font-semibold text-sage-900 truncate">{pl.name}</p>
+                        <p className="text-xs text-sage-400">{pl.track_count} tracks · {new Date(pl.created_at).toLocaleDateString()}</p>
+                      </button>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button onClick={() => openPlaylist(pl.id)}
+                          className="w-6 h-6 flex items-center justify-center text-sage-300 hover:text-sage-600 transition-colors">
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            {openPlaylistId === pl.id ? <path d="M2 7l3-4 3 4"/> : <path d="M2 3l3 4 3-4"/>}
+                          </svg>
+                        </button>
+                        <button onClick={() => deletePlaylist(pl.id)} disabled={deletingId === pl.id}
+                          className="w-6 h-6 flex items-center justify-center text-sage-200 hover:text-red-400 transition-colors">
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M1 1l8 8M9 1L1 9"/></svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Expanded track list */}
+                    {openPlaylistId === pl.id && (
+                      <div className="border-t border-cream-100">
+                        {/* Search within playlist */}
+                        <div className="px-3 py-2 border-b border-cream-50">
+                          <div className="relative">
+                            <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 text-sage-300 w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                            <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                              placeholder="Filter tracks..."
+                              className="w-full pl-7 pr-3 py-1.5 text-xs bg-cream-50 border border-cream-200 rounded-lg text-sage-700 placeholder-sage-300 focus:outline-none focus:border-sage-300"/>
+                          </div>
+                        </div>
+
+                        {loadingTracks ? (
+                          <div className="p-3 space-y-1.5">
+                            {[...Array(4)].map((_, i) => <div key={i} className="h-8 rounded-lg skeleton"/>)}
+                          </div>
+                        ) : (
+                          <div className="max-h-64 overflow-y-auto">
+                            {filteredTracks.length === 0 ? (
+                              <p className="text-xs text-sage-400 text-center py-4">No tracks found</p>
+                            ) : filteredTracks.map(track => {
+                              const isAdded = addedIds.has(track.id)
+                              const mins = Math.floor(track.duration / 60)
+                              const secs = String(track.duration % 60).padStart(2, '0')
+                              return (
+                                <div key={track.id}
+                                  className="flex items-center gap-2 px-3 py-2 border-b border-cream-50 last:border-0 hover:bg-cream-50 transition-colors group">
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-medium text-sage-900 truncate">{track.title}</p>
+                                    <p className="text-xs text-sage-400 truncate">{track.artist}</p>
+                                  </div>
+                                  <div className="flex items-center gap-1.5 shrink-0">
+                                    {track.bpm ? (
+                                      <span className="text-xs font-semibold text-sage-600 bg-sage-100 px-1.5 py-0.5 rounded-full">{track.bpm}</span>
+                                    ) : (
+                                      <span className="text-xs text-sage-300">—</span>
+                                    )}
+                                    {track.duration > 0 && (
+                                      <span className="text-xs text-sage-300 tabular-nums w-7">{mins}:{secs}</span>
+                                    )}
+                                    {isAdded ? (
+                                      <span className="text-xs text-sage-400 w-10 text-center">✓</span>
+                                    ) : (
+                                      <button onClick={() => onAdd({ ...track, name: track.title, genre: 'Unknown', source: 'spotify' })}
+                                        className="text-xs font-semibold px-2 py-1 bg-sage-500 hover:bg-sage-600 text-white rounded-lg transition-colors opacity-0 group-hover:opacity-100 w-10 text-center">
+                                        Add
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Import view ───────────────────────────────────────────────────── */}
+      {view === 'import' && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="px-4 pt-4 pb-3 border-b border-cream-100 flex items-center gap-2 shrink-0">
+            <button onClick={() => { setView('list'); setImportStep('idle'); setError('') }}
+              className="text-sage-400 hover:text-sage-600 transition-colors">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 3L5 8l5 5"/></svg>
+            </button>
+            <h3 className="text-sm font-semibold text-sage-900">Import Spotify Playlist</h3>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4">
+            {(importStep === 'idle' || importStep === 'error') && (
+              <>
+                {/* Step 1 */}
+                <div className="flex gap-3 mb-5">
+                  <div className="w-6 h-6 rounded-full bg-sage-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">1</div>
+                  <div>
+                    <p className="text-xs font-semibold text-sage-800 mb-1.5">Export from Spotify</p>
+                    <a href="https://exportify.net" target="_blank" rel="noopener"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white"
+                      style={{ background: '#1DB954' }}>
+                      Open Exportify ↗
+                    </a>
+                    <p className="text-xs text-sage-400 mt-2">Log in with Spotify → click Export next to your playlist → save the CSV</p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="flex gap-3">
+                  <div className="w-6 h-6 rounded-full bg-sage-500 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">2</div>
+                  <div className="flex-1">
+                    <p className="text-xs font-semibold text-sage-800 mb-2">Upload the CSV</p>
+                    <div
+                      onDragOver={e => { e.preventDefault(); setIsDragging(true) }}
+                      onDragLeave={() => setIsDragging(false)}
+                      onDrop={e => { e.preventDefault(); setIsDragging(false); const f = e.dataTransfer.files?.[0]; if (f) handleFile(f) }}
+                      onClick={() => fileRef.current?.click()}
+                      className={`border-2 border-dashed rounded-xl p-5 text-center cursor-pointer transition-all ${isDragging ? 'border-sage-400 bg-sage-50' : 'border-cream-300 hover:border-sage-300 hover:bg-cream-50'}`}>
+                      <svg className="w-6 h-6 mx-auto mb-2 text-sage-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+                      </svg>
+                      <p className="text-xs font-semibold text-sage-600">Drop CSV here or click to browse</p>
+                    </div>
+                    <input ref={fileRef} type="file" accept=".csv" onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f) }} className="hidden"/>
+                    {error && <p className="text-xs text-red-500 mt-2">{error}</p>}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {importStep === 'enriching' && (
+              <div className="py-8 text-center">
+                <div className="w-full bg-cream-200 rounded-full h-2 mb-3 overflow-hidden">
+                  <div className="h-2 rounded-full bg-sage-500 transition-all duration-300" style={{ width: `${progress}%` }}/>
+                </div>
+                <p className="text-sm font-medium text-sage-700">{progressLabel}</p>
+                <p className="text-xs text-sage-400 mt-1">{progress}% complete</p>
               </div>
             )}
 
-            <div className="space-y-1 max-h-60 overflow-y-auto mb-3">
-              {tracks.map(track => {
-                const isSelected = selected.has(track.id)
-                const hasBpm = !!track.bpm
-                const mins = Math.floor(track.duration / 60)
-                const secs = String(track.duration % 60).padStart(2, '0')
-                return (
-                  <div key={track.id}
-                    onClick={() => hasBpm && toggleTrack(track.id)}
-                    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all ${
-                      !hasBpm ? 'opacity-40 cursor-not-allowed' :
-                      isSelected ? 'bg-sage-50 border border-sage-200 cursor-pointer' :
-                      'bg-cream-50 border border-transparent cursor-pointer hover:bg-cream-100'
-                    }`}>
-                    <div className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border transition-all ${
-                      isSelected ? 'bg-sage-500 border-sage-500' : 'border-cream-300 bg-white'
-                    }`}>
-                      {isSelected && (
-                        <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                          <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                        </svg>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium text-sage-900 truncate">{track.title}</p>
-                      <p className="text-xs text-sage-400 truncate">{track.artist}</p>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {hasBpm
-                        ? <span className="text-xs font-semibold text-sage-600 bg-sage-100 px-1.5 py-0.5 rounded-full">{track.bpm} BPM</span>
-                        : <span className="text-xs text-sage-300">No BPM</span>
-                      }
-                      {track.duration > 0 && (
-                        <span className="text-xs text-sage-300 tabular-nums">{mins}:{secs}</span>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            {importStep === 'review' && (
+              <>
+                {/* Editable playlist name */}
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold text-sage-600 mb-1">Playlist Name</label>
+                  <input value={importName} onChange={e => setImportName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm bg-cream-50 border border-cream-200 rounded-xl text-sage-800 focus:outline-none focus:border-sage-300"/>
+                </div>
 
-            <button onClick={handleImport} disabled={selected.size === 0}
-              className="w-full py-2.5 text-sm font-semibold rounded-xl text-white transition-all disabled:opacity-40 bg-sage-500 hover:bg-sage-600">
-              Add {selected.size} song{selected.size !== 1 ? 's' : ''} to playlist
-            </button>
-          </>
-        )}
-      </div>
+                {/* Stats */}
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs text-sage-500">
+                    <span className="font-semibold text-sage-700">{selected.size}</span> of {importTracks.length} tracks selected
+                  </p>
+                  <button onClick={() => {
+                    const withBpm = importTracks.filter(t => t.bpm)
+                    setSelected(selected.size === withBpm.length ? new Set() : new Set(withBpm.map(t => t.id)))
+                  }} className="text-xs text-sage-400 hover:text-sage-600 transition-colors">
+                    {selected.size === importTracks.filter(t => t.bpm).length ? 'Deselect all' : 'Select all'}
+                  </button>
+                </div>
+
+                {/* Track list */}
+                <div className="space-y-1 max-h-48 overflow-y-auto mb-4">
+                  {importTracks.map(t => {
+                    const isSelected = selected.has(t.id)
+                    const hasBpm = !!t.bpm
+                    const mins = Math.floor(t.duration / 60)
+                    const secs = String(t.duration % 60).padStart(2, '0')
+                    return (
+                      <div key={t.id} onClick={() => hasBpm && setSelected(prev => { const n = new Set(prev); n.has(t.id) ? n.delete(t.id) : n.add(t.id); return n })}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${!hasBpm ? 'opacity-40 cursor-not-allowed' : isSelected ? 'bg-sage-50 border border-sage-200 cursor-pointer' : 'bg-cream-50 border border-transparent cursor-pointer hover:bg-cream-100'}`}>
+                        <div className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border ${isSelected ? 'bg-sage-500 border-sage-500' : 'border-cream-300 bg-white'}`}>
+                          {isSelected && <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></svg>}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-sage-900 truncate">{t.title}</p>
+                          <p className="text-xs text-sage-400 truncate">{t.artist}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {hasBpm ? <span className="text-xs font-semibold text-sage-600 bg-sage-100 px-1.5 py-0.5 rounded-full">{t.bpm}</span> : <span className="text-xs text-sage-300">No BPM</span>}
+                          {t.duration > 0 && <span className="text-xs text-sage-300 tabular-nums">{mins}:{secs}</span>}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <button onClick={savePlaylist} disabled={selected.size === 0}
+                  className="w-full py-2.5 text-sm font-semibold rounded-xl text-white transition-all disabled:opacity-40 bg-sage-500 hover:bg-sage-600">
+                  Save playlist ({selected.size} tracks)
+                </button>
+              </>
+            )}
+
+            {importStep === 'saving' && (
+              <div className="py-8 text-center">
+                <div className="w-6 h-6 border-2 border-sage-200 border-t-sage-500 rounded-full animate-spin mx-auto mb-3"/>
+                <p className="text-sm text-sage-600">Saving playlist...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

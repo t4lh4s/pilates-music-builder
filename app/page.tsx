@@ -4,9 +4,7 @@ import { useUser, UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/n
 import { Song, PlaylistSong } from '@/lib/types'
 import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'
-import PlaylistPanel from '@/components/PlaylistPanel'
-import SongSearch from '@/components/SongSearch'
-import SpotifyImport from '@/components/SpotifyImport'
+import RightPanel from '@/components/RightPanel'
 import ClassBuilder from '@/components/ClassBuilder'
 import LandingPage from '@/components/LandingPage'
 
@@ -79,16 +77,6 @@ export default function Home() {
     })
   }
 
-  function addBulkToPlaylist(songs: Song[]) {
-    setPlaylist(prev => {
-      const existingIds = new Set(prev.map(s => String(s.id)))
-      const newSongs = songs
-        .filter(s => !existingIds.has(String(s.id)))
-        .map(s => ({ ...s, playlistId: `${s.id}-${Date.now()}-${Math.random()}` }))
-      return [...prev, ...newSongs]
-    })
-  }
-
   function removeFromPlaylist(playlistId: string) {
     setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId))
   }
@@ -104,6 +92,7 @@ export default function Home() {
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}/>
 
       <div className="relative z-10">
+        {/* Header */}
         <header className="border-b border-cream-200/80 bg-white/70 backdrop-blur-md sticky top-0 z-20">
           <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center gap-4">
             <button onClick={() => setShowLanding(true)}
@@ -166,11 +155,13 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Content */}
         <div className="max-w-7xl mx-auto px-6 py-6">
           {mode === 'class' ? (
             <ClassBuilder/>
           ) : (
             <div className="flex gap-6">
+              {/* Filters */}
               <aside className="hidden lg:block w-56 shrink-0">
                 <div className="sticky top-20">
                   <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
@@ -180,6 +171,7 @@ export default function Home() {
                 </div>
               </aside>
 
+              {/* Song grid */}
               <main className="flex-1 min-w-0">
                 <div className="lg:hidden mb-4">
                   <details className="bg-white border border-cream-200 rounded-2xl">
@@ -219,26 +211,32 @@ export default function Home() {
                 )}
               </main>
 
-              <aside className="hidden lg:block w-72 shrink-0">
-                <div className="sticky top-20 space-y-4" style={{ maxHeight: 'calc(100vh - 6rem)', overflowY: 'auto' }}>
-                  <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
-                  <SpotifyImport onImport={addBulkToPlaylist} addedIds={playlistSongIds}/>
-                  <SongSearch onAdd={addToPlaylist} addedIds={playlistSongIds}/>
-                </div>
+              {/* Right panel — tabbed */}
+              <aside className="hidden lg:flex w-72 shrink-0 flex-col sticky top-20" style={{ height: 'calc(100vh - 5.5rem)' }}>
+                <RightPanel
+                  playlist={playlist}
+                  onReorder={setPlaylist}
+                  onRemove={removeFromPlaylist}
+                  onAdd={addToPlaylist}
+                  addedIds={playlistSongIds}/>
               </aside>
             </div>
           )}
         </div>
       </div>
 
+      {/* Mobile playlist drawer */}
       {showPlaylist && mode === 'browse' && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
-          <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl overflow-y-auto" style={{ maxHeight: '90vh' }}>
-            <div className="px-4 pb-6 pt-5 space-y-4">
-              <PlaylistPanel playlist={playlist} onReorder={setPlaylist} onRemove={removeFromPlaylist}/>
-              <SpotifyImport onImport={addBulkToPlaylist} addedIds={playlistSongIds}/>
-              <SongSearch onAdd={addToPlaylist} addedIds={playlistSongIds}/>
+          <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl" style={{ height: '85vh' }}>
+            <div className="p-4 h-full">
+              <RightPanel
+                playlist={playlist}
+                onReorder={setPlaylist}
+                onRemove={removeFromPlaylist}
+                onAdd={addToPlaylist}
+                addedIds={playlistSongIds}/>
             </div>
           </div>
         </div>

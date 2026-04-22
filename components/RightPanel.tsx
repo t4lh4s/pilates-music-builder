@@ -54,7 +54,7 @@ export default function RightPanel({ playlist, onReorder, onRemove, onAdd, added
         )}
         {tab === 'import' && (
           <div className="h-full overflow-y-auto">
-            <SpotifyImport onImport={songs => { songs.forEach(s => onAdd(s)); setTab('playlist') }} addedIds={addedIds}/>
+            <SpotifyImport onAdd={onAdd} addedIds={addedIds}/>
           </div>
         )}
         {tab === 'search' && (

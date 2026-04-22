@@ -8,6 +8,7 @@ import { Song, PlaylistSong, ClassBlock } from '@/lib/types'
 import { generateTemplate, BLOCK_COLORS } from '@/lib/classTemplates'
 import { Movement, MOVEMENTS, getMovementsForBlock, bpmRangeFromMovements, calcTargetBpm } from '@/lib/movements'
 import SongCard from '@/components/SongCard'
+import SpotifyPlaylistPicker from '@/components/SpotifyPlaylistPicker'
 
 const MAT_EQUIPMENT = [
   { id: 'mat', label: 'Mat', emoji: '🟩' },
@@ -514,7 +515,7 @@ function BlockCard({ block, index, isActive, onActivate, onRemoveSong, onUpdateB
           <div className="flex items-center gap-2 mt-2" onClick={e => e.stopPropagation()}>
             <span className="text-xs text-sage-400">Target:</span>
             <select
-              value={block.targetDuration || 600}
+              value={block.targetDuration}
               onChange={e => onUpdateBlock(block.id, { targetDuration: parseInt(e.target.value) })}
               className="text-xs bg-white/70 border border-white/60 rounded-lg px-1.5 py-0.5 text-sage-600 focus:outline-none focus:border-sage-300">
               {[2,3,4,5,6,7,8,9,10,12,15,20].map(m => (
@@ -687,6 +688,7 @@ export default function ClassBuilder() {
   const [savedId, setSavedId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [savedClasses, setSavedClasses] = useState<any[]>([])
+  const [songSource, setSongSource] = useState<'library' | 'spotify'>('library')
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
 
   const activeBlock = blocks.find(b => b.id === activeBlockId) ?? null
@@ -896,6 +898,7 @@ export default function ClassBuilder() {
               <BlockNotes blockId={activeBlock.id} value={blockNotes[activeBlock.id] ?? ''} onChange={updateNote}/>
             </div>
 
+            {/* Source tabs + controls */}
             <div className="flex items-center gap-3 mb-4 flex-wrap">
               <div>
                 <h3 className="font-display font-bold text-sage-900 text-lg">{activeBlock.emoji} {activeBlock.name}</h3>
@@ -905,22 +908,44 @@ export default function ClassBuilder() {
                 </p>
               </div>
               <div className="ml-auto flex items-center gap-2">
-                <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-700 focus:outline-none focus:border-sage-400">
-                  <option value="default">Sort: Default</option>
-                  <option value="bpm-asc">BPM: Low → High</option>
-                  <option value="bpm-desc">BPM: High → Low</option>
-                  <option value="duration-asc">Duration: Shortest</option>
-                  <option value="duration-desc">Duration: Longest</option>
-                </select>
-                <div className="relative">
-                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                  <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search songs..."
-                    className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-48"/>
+                <div className="inline-flex items-center bg-cream-100 rounded-xl p-1 gap-0.5 border border-cream-200">
+                  <button onClick={() => setSongSource('library')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${songSource === 'library' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
+                    Library
+                  </button>
+                  <button onClick={() => setSongSource('spotify')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${songSource === 'spotify' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                    My Playlists
+                  </button>
                 </div>
+                {songSource === 'library' && (
+                  <>
+                    <select value={sortBy} onChange={e => setSortBy(e.target.value)} className="px-3 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-700 focus:outline-none focus:border-sage-400">
+                      <option value="default">Sort: Default</option>
+                      <option value="bpm-asc">BPM: Low → High</option>
+                      <option value="bpm-desc">BPM: High → Low</option>
+                      <option value="duration-asc">Duration: Shortest</option>
+                      <option value="duration-desc">Duration: Longest</option>
+                    </select>
+                    <div className="relative">
+                      <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                      <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search songs..."
+                        className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-48"/>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
-            {loading ? (
+            {songSource === 'spotify' ? (
+              <SpotifyPlaylistPicker
+                activeBpmMin={activeBpmRange[0]}
+                activeBpmMax={activeBpmRange[1]}
+                addedIds={addedIds}
+                onAdd={addSongToBlock}
+              />
+            ) : loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">{[...Array(6)].map((_, i) => <div key={i} className="h-40 rounded-2xl bg-cream-100 animate-pulse"/>)}</div>
             ) : filteredSongs.length === 0 ? (
               <div className="text-center py-16"><div className="text-4xl mb-3">🔍</div><p className="text-sage-500">No songs found in {activeBpmRange[0]}–{activeBpmRange[1]} BPM range</p></div>

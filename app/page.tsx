@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useUser, UserButton, SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { Song, PlaylistSong } from '@/lib/types'
+import { Playlist } from '@/components/PlaylistPanel'
 import SongCard from '@/components/SongCard'
 import Filters from '@/components/Filters'
 import RightPanel from '@/components/RightPanel'
@@ -18,7 +19,10 @@ export default function Home() {
   const [mode, setMode] = useState<Mode>('browse')
   const [songs, setSongs] = useState<Song[]>([])
   const [allGenres, setAllGenres] = useState<string[]>([])
-  const [playlist, setPlaylist] = useState<PlaylistSong[]>([])
+  const [playlists, setPlaylists] = useState<Playlist[]>([
+    { id: 'default', name: 'My Playlist', songs: [] }
+  ])
+  const [activePlaylistId, setActivePlaylistId] = useState('default')
   const [selectedGenre, setSelectedGenre] = useState('All')
   const [bpmRange, setBpmRange] = useState<[number, number]>([60, 200])
   const [lengthRange, setLengthRange] = useState<[number, number]>([60, 600])

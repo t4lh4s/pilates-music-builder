@@ -838,8 +838,8 @@ export default function ClassBuilder() {
   if (!setup) return <SetupScreen onStart={handleStart} savedClasses={savedClasses} onLoad={handleLoad} onDelete={handleDelete}/>
 
   return (
-    <div className="flex gap-6">
-      <div className="w-80 shrink-0 space-y-3">
+    <div className="flex flex-col lg:flex-row gap-6">
+      <div className="w-full lg:w-80 lg:shrink-0 space-y-3">
         <div className="bg-cream-50 rounded-2xl border border-cream-200 px-4 py-3">
           <label className="block text-xs font-semibold text-sage-500 uppercase tracking-wider mb-1.5">Class Name</label>
           <input value={className} onChange={e => setClassName(e.target.value)}
@@ -907,7 +907,7 @@ export default function ClassBuilder() {
                   {!isCustomBlock(activeBlock.id) && activeMovements.length > 0 ? ` · based on ${activeMovements.length} movement${activeMovements.length > 1 ? 's' : ''}` : ''}
                 </p>
               </div>
-              <div className="ml-auto flex items-center gap-2">
+              <div className="ml-auto flex items-center gap-2 flex-wrap justify-end">
                 <div className="inline-flex items-center bg-cream-100 rounded-xl p-1 gap-0.5 border border-cream-200">
                   <button onClick={() => setSongSource('library')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${songSource === 'library' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
@@ -931,7 +931,7 @@ export default function ClassBuilder() {
                     <div className="relative">
                       <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                       <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search songs..."
-                        className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-48"/>
+                        className="pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400 w-full sm:w-48"/>
                     </div>
                   </>
                 )}

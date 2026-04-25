@@ -733,7 +733,6 @@ export default function ClassBuilder() {
     setBlockNotes({}); setEquipment(new Set()); setSavedId(null); setSaveStatus('idle')
   }
 
-  }
 
   function handleLoad(saved: any) {
     const d = saved.data

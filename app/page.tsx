@@ -19,11 +19,7 @@ export default function Home() {
   const [mode, setMode] = useState<Mode>('browse')
   const [songs, setSongs] = useState<Song[]>([])
   const [allGenres, setAllGenres] = useState<string[]>([])
-  const [playlists, setPlaylists] = useState<Playlist[]>([
-    { id: 'default', name: 'My Playlist', songs: [] }
-  ])
-  const [activePlaylistId, setActivePlaylistId] = useState('default')
-  const [selectedGenre, setSelectedGenre] = useState('All')
+    const [selectedGenre, setSelectedGenre] = useState('All')
   const [bpmRange, setBpmRange] = useState<[number, number]>([60, 200])
   const [lengthRange, setLengthRange] = useState<[number, number]>([60, 600])
   const [selectedTempo, setSelectedTempo] = useState('all')
@@ -75,18 +71,47 @@ export default function Home() {
 
   useEffect(() => { fetchSongs() }, [fetchSongs])
 
+  const activePlaylist = playlists.find(p => p.id === activePlaylistId) ?? playlists[0]
+  const playlistSongIds = new Set(activePlaylist?.songs.map(s => String(s.id)) ?? [])
+
   function addToPlaylist(song: Song) {
-    setPlaylist(prev => {
-      if (prev.some(s => String(s.id) === String(song.id))) return prev
-      return [...prev, { ...song, playlistId: `${song.id}-${Date.now()}` }]
+    setPlaylists(prev => prev.map(p =>
+      p.id === activePlaylistId
+        ? p.songs.some(s => String(s.id) === String(song.id))
+          ? p
+          : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
+        : p
+    ))
+  }
+
+  function removeFromPlaylist(playlistId: string, songId: string) {
+    setPlaylists(prev => prev.map(p =>
+      p.id === playlistId ? { ...p, songs: p.songs.filter(s => s.playlistId !== songId) } : p
+    ))
+  }
+
+  function createPlaylist(name: string) {
+    const id = `pl-${Date.now()}`
+    setPlaylists(prev => [...prev, { id, name, songs: [] }])
+    setActivePlaylistId(id)
+  }
+
+  function renamePlaylist(id: string, name: string) {
+    setPlaylists(prev => prev.map(p => p.id === id ? { ...p, name } : p))
+  }
+
+  function deletePlaylist(id: string) {
+    setPlaylists(prev => {
+      const next = prev.filter(p => p.id !== id)
+      if (next.length === 0) return [{ id: 'default', name: 'My Playlist', songs: [] }]
+      return next
     })
+    setActivePlaylistId(prev => prev === id ? (playlists.find(p => p.id !== id)?.id ?? 'default') : prev)
   }
 
-  function removeFromPlaylist(playlistId: string) {
-    setPlaylist(prev => prev.filter(s => s.playlistId !== playlistId))
+  function reorderPlaylist(id: string, songs: PlaylistSong[]) {
+    setPlaylists(prev => prev.map(p => p.id === id ? { ...p, songs } : p))
   }
-
-  const playlistSongIds = new Set(playlist.map(s => String(s.id)))
 
   if (showLanding) return <LandingPage onEnter={handleEnterApp}/>
 
@@ -225,8 +250,13 @@ export default function Home() {
               {/* Right panel — tabbed */}
               <aside className="hidden lg:flex w-72 shrink-0 flex-col sticky top-20" style={{ height: 'calc(100vh - 5.5rem)' }}>
                 <RightPanel
-                  playlist={playlist}
-                  onReorder={setPlaylist}
+                  playlists={playlists}
+                  activePlaylistId={activePlaylistId}
+                  onSetActive={setActivePlaylistId}
+                  onCreatePlaylist={createPlaylist}
+                  onRenamePlaylist={renamePlaylist}
+                  onDeletePlaylist={deletePlaylist}
+                  onReorder={reorderPlaylist}
                   onRemove={removeFromPlaylist}
                   onAdd={addToPlaylist}
                   addedIds={playlistSongIds}/>
@@ -243,8 +273,13 @@ export default function Home() {
           <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl" style={{ height: '85vh' }}>
             <div className="p-4 h-full">
               <RightPanel
-                playlist={playlist}
-                onReorder={setPlaylist}
+                playlists={playlists}
+                activePlaylistId={activePlaylistId}
+                onSetActive={setActivePlaylistId}
+                onCreatePlaylist={createPlaylist}
+                onRenamePlaylist={renamePlaylist}
+                onDeletePlaylist={deletePlaylist}
+                onReorder={reorderPlaylist}
                 onRemove={removeFromPlaylist}
                 onAdd={addToPlaylist}
                 addedIds={playlistSongIds}/>

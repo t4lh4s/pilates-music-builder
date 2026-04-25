@@ -434,7 +434,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 }
 
 // ─── Template Movement Picker ─────────────────────────────────────────────────
-function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
+function MovementPicker({ block, format, level, selectedMovements, onToggle, customMovements, onAddCustom }: {
   block: ClassBlock; format: 'mat' | 'reformer'; level: 'beginner' | 'intermediate' | 'advanced'
   selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
 }) {

@@ -651,10 +651,6 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, className, saved
             </div>
             <p className="text-sm font-semibold text-sage-600 mb-1">No blocks yet</p>
             <p className="text-xs text-sage-400 mb-4">Add blocks to build your class</p>
-            <button onClick={addBlock} className="flex items-center gap-2 px-4 py-2 bg-sage-500 hover:bg-sage-600 text-white text-sm font-semibold rounded-xl transition-colors">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
-              Add First Block
-            </button>
           </div>
         ) : (
           <>

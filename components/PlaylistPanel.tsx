@@ -245,9 +245,6 @@ export default function PlaylistPanel({
             <span className="text-xs font-semibold text-sage-700">{active.name}</span>
             <span className="text-xs text-sage-400">{active.songs.length} tracks</span>
             {active.songs.length > 0 && <span className="text-xs text-sage-400">· {totalMins}:{totalSecs}</span>}
-            {isSpotify && (
-              <span className="text-xs text-sage-300 italic">Imported · hover songs to copy</span>
-            )}
           </div>
           {active.songs.length > 0 && (
             <button onClick={copyPlaylist} className="text-xs text-sage-400 hover:text-sage-700 transition-colors">

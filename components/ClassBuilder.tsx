@@ -245,23 +245,38 @@ function BlockNameEditor({ name, emoji, onNameChange, onEmojiChange }: {
 }
 
 // ─── Custom Block BPM Picker ──────────────────────────────────────────────────
-function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange }: {
+function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange, customMovements, onAddCustom }: {
   block: ClassBlock
   format: 'mat' | 'reformer'
   level: 'beginner' | 'intermediate' | 'advanced'
   selectedMovements: Movement[]
   onToggle: (m: Movement) => void
   onBpmRangeChange: (min: number, max: number) => void
+  customMovements: Movement[]
+  onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
 }) {
   const [movSearch, setMovSearch] = useState('')
+  const [showCustomForm, setShowCustomForm] = useState(false)
+  const [customName, setCustomName] = useState('')
+  const [customBpm, setCustomBpm] = useState('80')
+  const [customDuration, setCustomDuration] = useState('60')
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
+
+  function submitCustomMovement() {
+    const name = customName.trim()
+    const bpm = parseInt(customBpm)
+    const duration = parseInt(customDuration)
+    if (!name || !bpm || !duration) return
+    onAddCustom(block.id, name, bpm, duration)
+    setCustomName(''); setCustomBpm('80'); setCustomDuration('60'); setShowCustomForm(false)
+  }
 
   const levelOrder = { beginner: 0, intermediate: 1, advanced: 2 }
   const userLevel = levelOrder[level]
 
   // All movements for this format/level
-  const allMovements = MOVEMENTS.filter(m =>
+  const allMovements = [...MOVEMENTS, ...customMovements].filter(m =>
     (m.format === format || m.format === 'both') &&
     levelOrder[m.level] <= userLevel
   )
@@ -330,7 +345,32 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
             <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
           )}
         </div>
-        <p className="text-xs text-sage-400 mb-3">Browse or search — selecting movements auto-updates BPM range</p>
+        <div className="flex items-center justify-between mb-3">
+          <p className="text-xs text-sage-400">Browse or search — selecting movements auto-updates BPM range</p>
+          <button onClick={() => setShowCustomForm(v => !v)} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1 shrink-0">
+            <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
+            {showCustomForm ? 'Cancel' : 'Add Custom'}
+          </button>
+        </div>
+        {showCustomForm && (
+          <div className="mb-3 p-3 bg-cream-50 border border-cream-200 rounded-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+              <input value={customName} onChange={e => setCustomName(e.target.value)}
+                placeholder="Movement name"
+                className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white"/>
+              <input value={customBpm} onChange={e => setCustomBpm(e.target.value)} type="number" min="40" max="200"
+                placeholder="BPM"
+                className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white"/>
+              <input value={customDuration} onChange={e => setCustomDuration(e.target.value)} type="number" min="15" max="600"
+                placeholder="Duration (sec)"
+                className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white"/>
+            </div>
+            <button onClick={submitCustomMovement} disabled={!customName.trim()}
+              className="text-xs font-semibold text-white bg-sage-500 hover:bg-sage-600 disabled:bg-sage-200 disabled:cursor-not-allowed px-3 py-1.5 rounded-lg transition-colors">
+              Add to block
+            </button>
+          </div>
+        )}
 
         {/* Search */}
         <div className="relative mb-4">
@@ -396,18 +436,55 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 // ─── Template Movement Picker ─────────────────────────────────────────────────
 function MovementPicker({ block, format, level, selectedMovements, onToggle }: {
   block: ClassBlock; format: 'mat' | 'reformer'; level: 'beginner' | 'intermediate' | 'advanced'
-  selectedMovements: Movement[]; onToggle: (m: Movement) => void
+  selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
 }) {
-  const available = getMovementsForBlock(format, block.id, level)
+  const standardMovements = getMovementsForBlock(format, block.id, level)
+  const blockCustomMovements = customMovements.filter(m => m.blocks.includes(block.id))
+  const available = [...standardMovements, ...blockCustomMovements]
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
-  if (available.length === 0) return null
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newBpm, setNewBpm] = useState('80')
+  const [newDuration, setNewDuration] = useState('60')
+
+  function submitCustom() {
+    const name = newName.trim()
+    const bpm = parseInt(newBpm)
+    const duration = parseInt(newDuration)
+    if (!name || !bpm || !duration) return
+    onAddCustom(block.id, name, bpm, duration)
+    setNewName(''); setNewBpm('80'); setNewDuration('60'); setShowAddForm(false)
+  }
   return (
     <div className="mb-5">
       <div className="flex items-center justify-between mb-3">
         <div><h4 className="text-sm font-semibold text-sage-700">Movements</h4><p className="text-xs text-sage-400">Select what you're teaching — songs will match</p></div>
+        <button onClick={() => setShowAddForm(v => !v)} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1">
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
+          {showAddForm ? 'Cancel' : 'Add Custom'}
+        </button>
         {targetBpm && <div className="text-right"><div className="text-xs text-sage-400">Target BPM</div><div className="text-lg font-bold text-sage-700">{targetBpm}</div></div>}
       </div>
+      {showAddForm && (
+        <div className="mb-3 p-3 bg-cream-50 border border-cream-200 rounded-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+            <input value={newName} onChange={e => setNewName(e.target.value)}
+              placeholder="Movement name"
+              className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white sm:col-span-1"/>
+            <input value={newBpm} onChange={e => setNewBpm(e.target.value)} type="number" min="40" max="200"
+              placeholder="BPM"
+              className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white"/>
+            <input value={newDuration} onChange={e => setNewDuration(e.target.value)} type="number" min="15" max="600"
+              placeholder="Duration (sec)"
+              className="text-sm px-3 py-1.5 border border-cream-300 rounded-lg focus:outline-none focus:border-sage-400 bg-white"/>
+          </div>
+          <button onClick={submitCustom} disabled={!newName.trim()}
+            className="text-xs font-semibold text-white bg-sage-500 hover:bg-sage-600 disabled:bg-sage-200 disabled:cursor-not-allowed px-3 py-1.5 rounded-lg transition-colors">
+            Add to block
+          </button>
+        </div>
+      )}
       <div className="flex flex-wrap gap-2">
         {available.map(m => {
           const selected = selectedIds.has(m.id)
@@ -609,10 +686,10 @@ function EquipmentChecklist({ format, selected, onToggle }: { format: 'mat' | 'r
 }
 
 // ─── Summary Panel ────────────────────────────────────────────────────────────
-function SummaryPanel({ blocks, blockMovements, targetDuration, className, savedId, saveStatus, onSave, onCopy, onExportPDF, onReset }: {
+function SummaryPanel({ blocks, blockMovements, targetDuration, className, savedId, saveStatus, onSave, onCopy, onExportPDF, onReset, onAddBlock }: {
   blocks: ClassBlock[]; blockMovements: Record<string, Movement[]>; targetDuration: number; className: string
   savedId: string | null; saveStatus: 'idle' | 'saving' | 'saved' | 'error'
-  onSave: () => void; onCopy: () => void; onExportPDF: () => void; onReset: () => void
+  onSave: () => void; onCopy: () => void; onExportPDF: () => void; onReset: () => void; onAddBlock: () => void
 }) {
   const totalSeconds = blocks.reduce((acc, b) => acc + b.songs.reduce((a, s) => a + (s.duration ?? 0), 0), 0)
   const totalMins = Math.floor(totalSeconds / 60), totalSecs = String(totalSeconds % 60).padStart(2, '00')
@@ -645,12 +722,12 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, className, saved
       </div>
       <div className="space-y-1.5">
         {blocks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-cream-100 flex items-center justify-center mb-3">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9caf9c" strokeWidth="1.5"><path d="M12 5v14M5 12h14"/></svg>
-            </div>
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <button onClick={onAddBlock} className="w-12 h-12 rounded-2xl bg-sage-500 hover:bg-sage-600 flex items-center justify-center mb-3 transition-colors">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
             <p className="text-sm font-semibold text-sage-600 mb-1">No blocks yet</p>
-            <p className="text-xs text-sage-400 mb-4">Add blocks to build your class</p>
+            <p className="text-xs text-sage-400">Tap the + above to add a block</p>
           </div>
         ) : (
           <>
@@ -690,6 +767,7 @@ export default function ClassBuilder() {
   const [blocks, setBlocks] = useState<ClassBlock[]>([])
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null)
   const [blockMovements, setBlockMovements] = useState<Record<string, Movement[]>>({})
+  const [customMovements, setCustomMovements] = useState<Movement[]>([])
   const [blockNotes, setBlockNotes] = useState<Record<string, string>>({})
   const [equipment, setEquipment] = useState<Set<string>>(new Set())
   const [songs, setSongs] = useState<Song[]>([])
@@ -801,6 +879,24 @@ export default function ClassBuilder() {
     setBlocks(prev => [...prev, newBlock])
     setActiveBlockId(newBlock.id)
   }
+  function addCustomMovement(blockId: string, name: string, bpm: number, duration: number) {
+    const cm: Movement = {
+      id: `cm-${Date.now()}`,
+      name,
+      bpm,
+      level: 'beginner',
+      format: setup?.format ?? 'mat',
+      blocks: [blockId],
+      duration,
+    }
+    setCustomMovements(prev => [...prev, cm])
+    // Auto-select it for the current block
+    setBlockMovements(prev => ({
+      ...prev,
+      [blockId]: [...(prev[blockId] ?? []), cm]
+    }))
+  }
+
 
   function toggleMovement(blockId: string, movement: Movement) {
     setBlockMovements(prev => {
@@ -856,7 +952,7 @@ export default function ClassBuilder() {
           <input value={className} onChange={e => setClassName(e.target.value)}
             className="w-full text-sm font-semibold text-sage-900 bg-transparent focus:outline-none placeholder-sage-300" placeholder="My Pilates Class"/>
         </div>
-        <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration} className={className} savedId={savedId} saveStatus={saveStatus} onSave={handleSave} onCopy={copyFullClass} onExportPDF={handleExportPDF}
+        <SummaryPanel blocks={blocks} blockMovements={blockMovements} targetDuration={setup.duration} className={className} savedId={savedId} saveStatus={saveStatus} onSave={handleSave} onCopy={copyFullClass} onExportPDF={handleExportPDF} onAddBlock={addBlock}
           onReset={() => { setSetup(null); setBlocks([]); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()); setSavedId(null) }}/>
         <EquipmentChecklist format={setup.format} selected={equipment} onToggle={toggleEquipment}/>
         <DndContext sensors={sensors} collisionDetection={closestCenter}
@@ -880,11 +976,6 @@ export default function ClassBuilder() {
             ))}
           </SortableContext>
         </DndContext>
-        <button onClick={addBlock}
-          className="w-full py-3 border-2 border-dashed border-cream-300 rounded-2xl text-sm font-medium text-sage-400 hover:border-sage-300 hover:text-sage-600 hover:bg-sage-50 transition-all flex items-center justify-center gap-2">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 1v12M1 7h12"/></svg>
-          Add Block
-        </button>
       </div>
 
       <div className="flex-1 min-w-0">
@@ -899,10 +990,12 @@ export default function ClassBuilder() {
                   selectedMovements={activeMovements}
                   onToggle={m => toggleMovement(activeBlock.id, m)}
                   onBpmRangeChange={(min, max) => updateBlock(activeBlock.id, { bpmMin: min, bpmMax: max })}
+                  customMovements={customMovements}
+                  onAddCustom={addCustomMovement}
                 />
               ) : (
                 <>
-                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)}/>
+                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)} customMovements={customMovements} onAddCustom={addCustomMovement}/>
                   {activeMovements.length === 0 && <p className="text-xs text-sage-400 italic mb-5">No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.</p>}
                 </>
               )}

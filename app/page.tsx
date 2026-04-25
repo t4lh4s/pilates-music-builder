@@ -194,7 +194,7 @@ export default function Home() {
             {/* Filters sidebar */}
             <aside className="hidden lg:block w-56 shrink-0">
               <Filters
-                allGenres={allGenres}
+                genres={allGenres}
                 selectedGenre={selectedGenre}
                 onGenreChange={setSelectedGenre}
                 bpmRange={bpmRange}

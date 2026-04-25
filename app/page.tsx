@@ -19,13 +19,17 @@ export default function Home() {
   const [mode, setMode] = useState<Mode>('browse')
   const [songs, setSongs] = useState<Song[]>([])
   const [allGenres, setAllGenres] = useState<string[]>([])
-    const [selectedGenre, setSelectedGenre] = useState('All')
+  const [selectedGenre, setSelectedGenre] = useState('All')
   const [bpmRange, setBpmRange] = useState<[number, number]>([60, 200])
   const [lengthRange, setLengthRange] = useState<[number, number]>([60, 600])
   const [selectedTempo, setSelectedTempo] = useState('all')
   const [search, setSearch] = useState('')
   const [showPlaylist, setShowPlaylist] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [playlists, setPlaylists] = useState<Playlist[]>([
+    { id: 'default', name: 'My Playlist', songs: [] }
+  ])
+  const [activePlaylistId, setActivePlaylistId] = useState('default')
 
   function handleEnterApp() {
     setShowLanding(false)
@@ -52,7 +56,7 @@ export default function Home() {
     let filtered = data
     if (selectedTempo !== 'all') {
       filtered = filtered.filter(s => {
-        if (selectedTempo === 'slow') return s.bpm <= 80
+        if (selectedTempo === 'slow') return s.bpm >= 60 && s.bpm <= 80
         if (selectedTempo === 'medium') return s.bpm > 80 && s.bpm <= 100
         if (selectedTempo === 'fast') return s.bpm > 100 && s.bpm <= 120
         if (selectedTempo === 'high') return s.bpm > 120
@@ -155,7 +159,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-3 ml-auto shrink-0">
               {mode === 'browse' && (
                 <div className="relative hidden md:block">
                   <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -168,106 +172,92 @@ export default function Home() {
               )}
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="px-3.5 py-2 text-xs font-semibold bg-sage-900 text-white rounded-xl hover:bg-sage-800 transition-colors">
+                  <button className="text-sm font-medium text-sage-600 hover:text-sage-900 px-3 py-1.5 rounded-lg hover:bg-cream-100 transition-all">
                     Sign in
                   </button>
                 </SignInButton>
               </SignedOut>
               <SignedIn>
-                <UserButton afterSignOutUrl="/" appearance={{ elements: { avatarBox: 'w-8 h-8' } }}/>
+                <UserButton afterSignOutUrl="/"/>
               </SignedIn>
-              {mode === 'browse' && (
-                <button onClick={() => setShowPlaylist(!showPlaylist)}
-                  className="lg:hidden relative flex items-center gap-1.5 px-3 py-2 bg-sage-900 text-white text-xs font-semibold rounded-xl">
-                  Playlist
-                  {playlist.length > 0 && (
-                    <span className="w-4 h-4 bg-terracotta-400 text-white text-xs rounded-full flex items-center justify-center font-bold">{playlist.length}</span>
-                  )}
-                </button>
-              )}
             </div>
           </div>
         </header>
 
-        {/* Content */}
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          {mode === 'bpm' ? (
-            <BpmTapper/>
-          ) : mode === 'class' ? (
-            <ClassBuilder/>
-          ) : (
-            <div className="flex gap-6">
-              {/* Filters */}
-              <aside className="hidden lg:block w-56 shrink-0">
-                <div className="sticky top-20">
-                  <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
-                    lengthRange={lengthRange} selectedTempo={selectedTempo}
-                    onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
-                    onLengthChange={setLengthRange} onTempoChange={setSelectedTempo}/>
-                </div>
-              </aside>
+        {/* Main content */}
+        {mode === 'class' ? (
+          <ClassBuilder/>
+        ) : mode === 'bpm' ? (
+          <BpmTapper/>
+        ) : (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex gap-6">
+            {/* Filters sidebar */}
+            <aside className="hidden lg:block w-56 shrink-0">
+              <Filters
+                allGenres={allGenres}
+                selectedGenre={selectedGenre}
+                onGenreChange={setSelectedGenre}
+                bpmRange={bpmRange}
+                onBpmChange={setBpmRange}
+                lengthRange={lengthRange}
+                onLengthChange={setLengthRange}
+                selectedTempo={selectedTempo}
+                onTempoChange={setSelectedTempo}
+              />
+            </aside>
 
-              {/* Song grid */}
-              <main className="flex-1 min-w-0">
-                <div className="lg:hidden mb-4">
-                  <details className="bg-white border border-cream-200 rounded-2xl">
-                    <summary className="px-5 py-3 text-sm font-semibold text-sage-700 cursor-pointer">Filters</summary>
-                    <div className="px-5 pb-4">
-                      <Filters genres={allGenres} selectedGenre={selectedGenre} bpmRange={bpmRange}
-                        lengthRange={lengthRange} selectedTempo={selectedTempo}
-                        onGenreChange={setSelectedGenre} onBpmChange={setBpmRange}
-                        onLengthChange={setLengthRange} onTempoChange={setSelectedTempo}/>
-                    </div>
-                  </details>
-                </div>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="font-semibold text-sage-900">{songs.length}</span>
-                  <span className="text-sm text-sage-400">songs in library</span>
-                </div>
-                {loading ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                    {[...Array(9)].map((_, i) => <div key={i} className="skeleton h-44 rounded-2xl"/>)}
-                  </div>
-                ) : songs.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="w-14 h-14 rounded-2xl bg-cream-100 flex items-center justify-center mb-4">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9fbf9f" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    </div>
-                    <p className="font-medium text-sage-600">No songs match your filters</p>
-                    <p className="text-sm text-sage-400 mt-1">Try adjusting the BPM range or genre</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                    {songs.map(song => (
-                      <SongCard key={song.id} song={song}
-                        isInPlaylist={playlistSongIds.has(String(song.id))}
-                        onAdd={addToPlaylist}/>
-                    ))}
-                  </div>
-                )}
-              </main>
+            {/* Song grid */}
+            <main className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+                <p className="text-sm text-sage-500">
+                  <span className="font-bold text-sage-800 text-base">{songs.length}</span> songs in library
+                </p>
+              </div>
 
-              {/* Right panel — tabbed */}
-              <aside className="hidden lg:flex w-72 shrink-0 flex-col sticky top-20" style={{ height: 'calc(100vh - 5.5rem)' }}>
-                <RightPanel
-                  playlists={playlists}
-                  activePlaylistId={activePlaylistId}
-                  onSetActive={setActivePlaylistId}
-                  onCreatePlaylist={createPlaylist}
-                  onRenamePlaylist={renamePlaylist}
-                  onDeletePlaylist={deletePlaylist}
-                  onReorder={reorderPlaylist}
-                  onRemove={removeFromPlaylist}
-                  onAdd={addToPlaylist}
-                  addedIds={playlistSongIds}/>
-              </aside>
-            </div>
-          )}
-        </div>
+              {loading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <div className="w-8 h-8 border-2 border-sage-200 border-t-sage-500 rounded-full animate-spin mb-3"/>
+                  <p className="text-sm text-sage-400">Loading songs…</p>
+                </div>
+              ) : songs.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-cream-100 flex items-center justify-center mb-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9fbf9f" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  </div>
+                  <p className="font-medium text-sage-600">No songs match your filters</p>
+                  <p className="text-sm text-sage-400 mt-1">Try adjusting the BPM range or genre</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {songs.map(song => (
+                    <SongCard key={song.id} song={song}
+                      isInPlaylist={playlistSongIds.has(String(song.id))}
+                      onAdd={addToPlaylist}/>
+                  ))}
+                </div>
+              )}
+            </main>
+
+            {/* Right panel — tabbed */}
+            <aside className="hidden lg:flex w-72 shrink-0 flex-col sticky top-20" style={{ height: 'calc(100vh - 5.5rem)' }}>
+              <RightPanel
+                playlists={playlists}
+                activePlaylistId={activePlaylistId}
+                onSetActive={setActivePlaylistId}
+                onCreatePlaylist={createPlaylist}
+                onRenamePlaylist={renamePlaylist}
+                onDeletePlaylist={deletePlaylist}
+                onReorder={reorderPlaylist}
+                onRemove={removeFromPlaylist}
+                onAdd={addToPlaylist}
+                addedIds={playlistSongIds}/>
+            </aside>
+          </div>
+        )}
       </div>
 
       {/* Mobile playlist drawer */}
-      {showPlaylist && mode === 'browse' && (
+      {showPlaylist && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
           <div className="relative mt-auto bg-white rounded-t-3xl shadow-xl" style={{ height: '85vh' }}>

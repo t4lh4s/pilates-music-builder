@@ -245,7 +245,7 @@ function BlockNameEditor({ name, emoji, onNameChange, onEmojiChange }: {
 }
 
 // ─── Custom Block BPM Picker ──────────────────────────────────────────────────
-function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange, customMovements, onAddCustom }: {
+function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange, customMovements, onAddCustom, onRemoveCustom }: {
   block: ClassBlock
   format: 'mat' | 'reformer'
   level: 'beginner' | 'intermediate' | 'advanced'
@@ -254,12 +254,13 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   onBpmRangeChange: (min: number, max: number) => void
   customMovements: Movement[]
   onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
+  onRemoveCustom: (id: string) => void
 }) {
   const [movSearch, setMovSearch] = useState('')
   const [showCustomForm, setShowCustomForm] = useState(false)
   const [customName, setCustomName] = useState('')
-  const [customBpm, setCustomBpm] = useState('80')
-  const [customDuration, setCustomDuration] = useState('60')
+  const [customBpm, setCustomBpm] = useState('')
+  const [customDuration, setCustomDuration] = useState('')
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
 
@@ -269,7 +270,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
     const duration = parseInt(customDuration)
     if (!name || !bpm || !duration) return
     onAddCustom(block.id, name, bpm, duration)
-    setCustomName(''); setCustomBpm('80'); setCustomDuration('60'); setShowCustomForm(false)
+    setCustomName(''); setCustomBpm(''); setCustomDuration(''); setShowCustomForm(false)
   }
 
   const levelOrder = { beginner: 0, intermediate: 1, advanced: 2 }
@@ -395,12 +396,22 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
               <div className="flex flex-wrap gap-2">
                 {displayed.map(m => {
                   const selected = selectedIds.has(m.id)
+                  const isCustom = m.id.startsWith('cm-')
                   return (
-                    <button key={m.id} onClick={() => onToggle(m)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
-                      {selected && <span>✓</span>}{m.name}
-                      <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
-                    </button>
+                    <div key={m.id} className="relative group/chip">
+                      <button onClick={() => onToggle(m)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'} ${isCustom ? 'pr-6' : ''}`}>
+                        {selected && <span>✓</span>}{m.name}
+                        <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                      </button>
+                      {isCustom && (
+                        <button onClick={(e) => { e.stopPropagation(); onRemoveCustom(m.id) }}
+                          title="Delete custom movement"
+                          className={`absolute right-1.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full flex items-center justify-center transition-all opacity-0 group-hover/chip:opacity-100 ${selected ? 'text-white hover:bg-sage-600' : 'text-sage-400 hover:bg-red-100 hover:text-red-500'}`}>
+                          <svg width="8" height="8" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+                        </button>
+                      )}
+                    </div>
                   )
                 })}
               </div>
@@ -434,9 +445,9 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 }
 
 // ─── Template Movement Picker ─────────────────────────────────────────────────
-function MovementPicker({ block, format, level, selectedMovements, onToggle, customMovements, onAddCustom }: {
+function MovementPicker({ block, format, level, selectedMovements, onToggle, customMovements, onAddCustom, onRemoveCustom }: {
   block: ClassBlock; format: 'mat' | 'reformer'; level: 'beginner' | 'intermediate' | 'advanced'
-  selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
+  selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void; onRemoveCustom: (id: string) => void
 }) {
   const standardMovements = getMovementsForBlock(format, block.id, level)
   const blockCustomMovements = customMovements.filter(m => m.blocks.includes(block.id))
@@ -445,8 +456,8 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
   const [showAddForm, setShowAddForm] = useState(false)
   const [newName, setNewName] = useState('')
-  const [newBpm, setNewBpm] = useState('80')
-  const [newDuration, setNewDuration] = useState('60')
+  const [newBpm, setNewBpm] = useState('')
+  const [newDuration, setNewDuration] = useState('')
 
   function submitCustom() {
     const name = newName.trim()
@@ -454,7 +465,7 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
     const duration = parseInt(newDuration)
     if (!name || !bpm || !duration) return
     onAddCustom(block.id, name, bpm, duration)
-    setNewName(''); setNewBpm('80'); setNewDuration('60'); setShowAddForm(false)
+    setNewName(''); setNewBpm(''); setNewDuration(''); setShowAddForm(false)
   }
   return (
     <div className="mb-5">
@@ -488,12 +499,22 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
       <div className="flex flex-wrap gap-2">
         {available.map(m => {
           const selected = selectedIds.has(m.id)
+          const isCustom = m.id.startsWith('cm-')
           return (
-            <button key={m.id} onClick={() => onToggle(m)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
-              {selected && <span>✓</span>}{m.name}
-              <span className={`font-mono text-xs ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
-            </button>
+            <div key={m.id} className="relative group/chip">
+              <button onClick={() => onToggle(m)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'} ${isCustom ? 'pr-6' : ''}`}>
+                {selected && <span>✓</span>}{m.name}
+                <span className={`font-mono text-xs ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+              </button>
+              {isCustom && (
+                <button onClick={(e) => { e.stopPropagation(); onRemoveCustom(m.id) }}
+                  title="Delete custom movement"
+                  className={`absolute right-1.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full flex items-center justify-center transition-all opacity-0 group-hover/chip:opacity-100 ${selected ? 'text-white hover:bg-sage-600' : 'text-sage-400 hover:bg-red-100 hover:text-red-500'}`}>
+                  <svg width="8" height="8" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+                </button>
+              )}
+            </div>
           )
         })}
       </div>
@@ -897,6 +918,18 @@ export default function ClassBuilder() {
     }))
   }
 
+  function removeCustomMovement(movementId: string) {
+    setCustomMovements(prev => prev.filter(m => m.id !== movementId))
+    // Also remove from any block that has it selected
+    setBlockMovements(prev => {
+      const updated: Record<string, Movement[]> = {}
+      for (const [blockId, movements] of Object.entries(prev)) {
+        updated[blockId] = movements.filter(m => m.id !== movementId)
+      }
+      return updated
+    })
+  }
+
 
   function toggleMovement(blockId: string, movement: Movement) {
     setBlockMovements(prev => {
@@ -992,10 +1025,11 @@ export default function ClassBuilder() {
                   onBpmRangeChange={(min, max) => updateBlock(activeBlock.id, { bpmMin: min, bpmMax: max })}
                   customMovements={customMovements}
                   onAddCustom={addCustomMovement}
+                  onRemoveCustom={removeCustomMovement}
                 />
               ) : (
                 <>
-                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)} customMovements={customMovements} onAddCustom={addCustomMovement}/>
+                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)} customMovements={customMovements} onAddCustom={addCustomMovement} onRemoveCustom={removeCustomMovement}/>
                   {activeMovements.length === 0 && <p className="text-xs text-sage-400 italic mb-5">No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.</p>}
                 </>
               )}

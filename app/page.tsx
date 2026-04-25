@@ -154,6 +154,16 @@ export default function Home() {
     setActivePlaylistId(prev => prev === id ? (playlists.find(p => p.id !== id)?.id ?? 'default') : prev)
   }
 
+  function copyToPlaylist(song: PlaylistSong, targetId: string) {
+    setPlaylists(prev => prev.map(p =>
+      p.id === targetId
+        ? p.songs.some(s => String(s.id) === String(song.id))
+          ? p
+          : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
+        : p
+    ))
+  }
+
   function reorderPlaylist(id: string, songs: PlaylistSong[]) {
     setPlaylists(prev => prev.map(p => p.id === id ? { ...p, songs } : p))
   }
@@ -289,6 +299,7 @@ export default function Home() {
                 onRenamePlaylist={renamePlaylist}
                 onDeletePlaylist={deletePlaylist}
                 onReorder={reorderPlaylist}
+                onCopyToPlaylist={copyToPlaylist}
                 onRemove={removeFromPlaylist}
                 onAdd={addToPlaylist}
                 addedIds={playlistSongIds}/>
@@ -311,6 +322,7 @@ export default function Home() {
                 onRenamePlaylist={renamePlaylist}
                 onDeletePlaylist={deletePlaylist}
                 onReorder={reorderPlaylist}
+                onCopyToPlaylist={copyToPlaylist}
                 onRemove={removeFromPlaylist}
                 onAdd={addToPlaylist}
                 addedIds={playlistSongIds}/>

@@ -43,6 +43,47 @@ export default function Home() {
     })
   }, [])
 
+  // Load Spotify playlists from Supabase and merge into playlists state
+  useEffect(() => {
+    if (!isSignedIn) return
+    async function loadSpotifyPlaylists() {
+      try {
+        const res = await fetch('/api/spotify-playlists')
+        const data = await res.json()
+        if (!Array.isArray(data) || data.length === 0) return
+
+        // For each Spotify playlist, fetch its tracks
+        const spotifyPlaylists: Playlist[] = await Promise.all(
+          data.map(async (sp: { id: string; name: string }) => {
+            try {
+              const tr = await fetch(`/api/spotify-playlists/tracks?id=${sp.id}`)
+              const td = await tr.json()
+              const songs: PlaylistSong[] = (td.tracks ?? []).map((t: any, i: number) => ({
+                ...t,
+                id: t.id ?? `sp-${sp.id}-${i}`,
+                title: t.title ?? t.name,
+                name: t.title ?? t.name,
+                playlistId: `sp-${sp.id}-${t.id ?? i}`,
+                bpm: t.bpm ?? 0,
+                duration: t.duration ?? 0,
+              }))
+              return { id: `spotify-${sp.id}`, name: `${sp.name} ♫`, songs, source: 'spotify' } as Playlist
+            } catch {
+              return { id: `spotify-${sp.id}`, name: `${sp.name} ♫`, songs: [], source: 'spotify' } as Playlist
+            }
+          })
+        )
+
+        setPlaylists(prev => {
+          // Remove any old spotify playlists, keep manual ones, add fresh spotify ones
+          const manual = prev.filter((p: any) => p.source !== 'spotify')
+          return [...manual, ...spotifyPlaylists]
+        })
+      } catch {}
+    }
+    loadSpotifyPlaylists()
+  }, [isSignedIn])
+
   const fetchSongs = useCallback(async () => {
     setLoading(true)
     const params = new URLSearchParams()

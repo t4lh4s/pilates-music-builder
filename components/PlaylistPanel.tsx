@@ -7,6 +7,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { PlaylistSong } from '@/lib/types'
 
 export interface Playlist {
+  source?: string
   id: string
   name: string
   songs: PlaylistSong[]

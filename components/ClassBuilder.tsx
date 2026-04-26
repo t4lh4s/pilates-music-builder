@@ -757,15 +757,14 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, className, saved
           </>
         )}
       </div>
-      <div className="space-y-2 mt-2">
+      <div className="space-y-2">
           <button onClick={onSave} disabled={saveStatus === 'saving'}
             className={`w-full py-2.5 font-semibold text-sm rounded-xl transition-colors ${saveStatus === 'saved' ? 'bg-green-500 text-white' : saveStatus === 'error' ? 'bg-red-400 text-white' : 'bg-sage-500 hover:bg-sage-600 text-white'}`}>
             {saveStatus === 'saving' ? '⏳ Saving...' : saveStatus === 'saved' ? '✓ Saved!' : saveStatus === 'error' ? '✗ Error — try again' : savedId ? '💾 Update Saved Class' : '💾 Save Class'}
           </button>
           <button onClick={onExportPDF} className="w-full py-2.5 bg-sage-700 hover:bg-sage-800 text-white font-semibold text-sm rounded-xl transition-colors">📄 Export as PDF</button>
           <button onClick={onCopy} className="w-full py-2.5 bg-white hover:bg-sage-50 border border-sage-200 text-sage-700 font-semibold text-sm rounded-xl transition-colors">📋 Copy Class Plan</button>
-        </div>
-      )}
+      </div>
     </div>
   )
 }

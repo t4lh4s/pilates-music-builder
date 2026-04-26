@@ -264,6 +264,14 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   const selectedIds = new Set(selectedMovements.map(m => m.id))
   const targetBpm = selectedMovements.length > 0 ? calcTargetBpm(selectedMovements) : null
 
+  function openCustomForm() {
+    setCustomName(movSearch.trim())
+    const mid = Math.round((block.bpmMin + block.bpmMax) / 2)
+    setCustomBpm(String(mid))
+    setCustomDuration('')
+    setShowCustomForm(true)
+  }
+
   function submitCustomMovement() {
     const name = customName.trim()
     const bpm = parseInt(customBpm)
@@ -341,15 +349,12 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
       {/* Movement browser */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <button onClick={() => setMovementsCollapsed(v => !v)} className="flex items-center gap-1.5 group">
-            <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" className={`text-sage-400 transition-transform ${movementsCollapsed ? '-rotate-90' : ''}`}><path d="M2 4l4 4 4-4"/></svg>
-          </button>
-          <div className="flex items-center gap-2">
-            {selectedMovements.length > 0 && <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>}
-          </div>
+          <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
+          {selectedMovements.length > 0 && (
+            <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
+          )}
         </div>
-        {!movementsCollapsed && <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-sage-400">Browse or search — selecting movements auto-updates BPM range</p>
           <button onClick={() => showCustomForm ? setShowCustomForm(false) : openCustomForm()} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1 shrink-0">
             <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
@@ -500,8 +505,8 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
             </button>
           )
         })}
+      </>}
       </div>
-      </div>}
     </div>
   )
 }

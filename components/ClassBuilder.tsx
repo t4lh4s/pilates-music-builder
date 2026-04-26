@@ -256,6 +256,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
 }) {
   const [movSearch, setMovSearch] = useState('')
+  const [movementsCollapsed, setMovementsCollapsed] = useState(false)
   const [showCustomForm, setShowCustomForm] = useState(false)
   const [customName, setCustomName] = useState('')
   const [customBpm, setCustomBpm] = useState('80')
@@ -321,14 +322,14 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
         <div className="flex items-center gap-3 mb-2">
           <span className="text-xs font-mono text-sage-600 w-8">{block.bpmMin}</span>
           <input type="range" min={60} max={block.bpmMax - 5} value={block.bpmMin}
-            onChange={e => onBpmRangeChange(parseInt(e.target.value), block.bpmMax)}
+            onChange={e => { const v = parseInt(e.target.value); onBpmRangeChange(v, Math.max(block.bpmMax, v + 10)); }}
             className="flex-1 accent-sage-500"/>
           <span className="text-xs text-sage-400">min</span>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs font-mono text-sage-600 w-8">{block.bpmMax}</span>
           <input type="range" min={block.bpmMin + 5} max={200} value={block.bpmMax}
-            onChange={e => onBpmRangeChange(block.bpmMin, parseInt(e.target.value))}
+            onChange={e => { const v = parseInt(e.target.value); onBpmRangeChange(Math.min(block.bpmMin, v - 10), v); }}
             className="flex-1 accent-sage-500"/>
           <span className="text-xs text-sage-400">max</span>
         </div>
@@ -340,14 +341,17 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
       {/* Movement browser */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
-          {selectedMovements.length > 0 && (
-            <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
-          )}
+          <button onClick={() => setMovementsCollapsed(v => !v)} className="flex items-center gap-1.5 group">
+            <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" className={`text-sage-400 transition-transform ${movementsCollapsed ? '-rotate-90' : ''}`}><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div className="flex items-center gap-2">
+            {selectedMovements.length > 0 && <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>}
+          </div>
         </div>
-        <div className="flex items-center justify-between mb-3">
+        {!movementsCollapsed && <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-sage-400">Browse or search — selecting movements auto-updates BPM range</p>
-          <button onClick={() => setShowCustomForm(v => !v)} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1 shrink-0">
+          <button onClick={() => showCustomForm ? setShowCustomForm(false) : openCustomForm()} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1 shrink-0">
             <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
             {showCustomForm ? 'Cancel' : 'Add Custom'}
           </button>
@@ -497,6 +501,7 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
           )
         })}
       </div>
+      </div>}
     </div>
   )
 }
@@ -750,8 +755,7 @@ function SummaryPanel({ blocks, blockMovements, targetDuration, className, saved
           </>
         )}
       </div>
-      {allSongs.length > 0 && (
-        <div className="space-y-2">
+      <div className="space-y-2 mt-2">
           <button onClick={onSave} disabled={saveStatus === 'saving'}
             className={`w-full py-2.5 font-semibold text-sm rounded-xl transition-colors ${saveStatus === 'saved' ? 'bg-green-500 text-white' : saveStatus === 'error' ? 'bg-red-400 text-white' : 'bg-sage-500 hover:bg-sage-600 text-white'}`}>
             {saveStatus === 'saving' ? '⏳ Saving...' : saveStatus === 'saved' ? '✓ Saved!' : saveStatus === 'error' ? '✗ Error — try again' : savedId ? '💾 Update Saved Class' : '💾 Save Class'}

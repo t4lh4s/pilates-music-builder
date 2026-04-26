@@ -77,7 +77,7 @@ export default function SongCard({ song, isInPlaylist, onAdd, playlists, activeP
 
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs font-bold text-sage-700 bg-sage-100 px-2 py-0.5 rounded-full tabular-nums">{song.bpm} BPM</span>
-        <span className="text-xs text-sage-400">{song.tempo}</span>
+
       </div>
 
       <div className="flex items-center gap-3 text-xs text-sage-400">

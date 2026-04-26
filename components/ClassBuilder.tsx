@@ -810,7 +810,38 @@ export default function ClassBuilder() {
     fetch(`/api/songs?${params}`).then(r => r.json()).then(data => { setSongs(data); setLoading(false) })
   }, [activeBlockId, blockMovements, blocks])
 
+  // Restore from sessionStorage on mount (preserves state across tab switches)
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('pmb_class_state')
+      if (!saved) return
+      const s = JSON.parse(saved)
+      if (s.setup) { setSetup(s.setup); }
+      if (s.blocks) setBlocks(s.blocks)
+      if (s.blockMovements) setBlockMovements(s.blockMovements)
+      if (s.blockNotes) setBlockNotes(s.blockNotes)
+      if (s.equipment) setEquipment(new Set(s.equipment))
+      if (s.className) setClassName(s.className)
+      if (s.savedId) setSavedId(s.savedId)
+      if (s.activeBlockId !== undefined) setActiveBlockId(s.activeBlockId)
+    } catch {}
+  }, [])
+
+  // Save to sessionStorage whenever state changes
+  useEffect(() => {
+    if (!setup) return // don't save empty state before setup
+    try {
+      sessionStorage.setItem('pmb_class_state', JSON.stringify({
+        setup, blocks, blockMovements, blockNotes,
+        equipment: Array.from(equipment),
+        className, savedId, activeBlockId
+      }))
+    } catch {}
+  }, [setup, blocks, blockMovements, blockNotes, equipment, className, savedId, activeBlockId])
+
+
   function handleStart(format: 'mat' | 'reformer', duration: number, level: 'beginner' | 'intermediate' | 'advanced') {
+    sessionStorage.removeItem('pmb_class_state')
     setBlocks([]); setSetup({ format, duration, level })
     setActiveBlockId(null); setBlockMovements({})
     setBlockNotes({}); setEquipment(new Set()); setSavedId(null); setSaveStatus('idle')

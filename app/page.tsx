@@ -46,7 +46,6 @@ export default function Home() {
     })
   }, [])
 
-  // Load Spotify playlists from Supabase and merge into playlists state
   useEffect(() => {
     if (!isSignedIn) return
     async function loadSpotifyPlaylists() {
@@ -54,7 +53,6 @@ export default function Home() {
         const res = await fetch('/api/spotify-playlists')
         const data = await res.json()
         if (!Array.isArray(data) || data.length === 0) return
-
         const spotifyPlaylists: Playlist[] = await Promise.all(
           data.map(async (sp: { id: string; name: string }) => {
             try {
@@ -75,7 +73,6 @@ export default function Home() {
             }
           })
         )
-
         setPlaylists(prev => {
           const manual = prev.filter((p: any) => p.source !== 'spotify')
           return [...manual, ...spotifyPlaylists]
@@ -120,9 +117,11 @@ export default function Home() {
   const activePlaylist = playlists.find(p => p.id === activePlaylistId) ?? playlists[0]
   const playlistSongIds = new Set(activePlaylist?.songs.map(s => String(s.id)) ?? [])
 
-  function addToPlaylist(song: Song) {
+  // Accepts optional targetPlaylistId — if provided, adds to that playlist; otherwise active
+  function addToPlaylist(song: Song, targetPlaylistId?: string) {
+    const destId = targetPlaylistId ?? activePlaylistId
     setPlaylists(prev => prev.map(p =>
-      p.id === activePlaylistId
+      p.id === destId
         ? p.songs.some(s => String(s.id) === String(song.id))
           ? p
           : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
@@ -292,7 +291,9 @@ export default function Home() {
                   {songs.map(song => (
                     <SongCard key={song.id} song={song}
                       isInPlaylist={playlistSongIds.has(String(song.id))}
-                      onAdd={addToPlaylist}/>
+                      onAdd={addToPlaylist}
+                      playlists={playlists}
+                      activePlaylistId={activePlaylistId}/>
                   ))}
                 </div>
               )}

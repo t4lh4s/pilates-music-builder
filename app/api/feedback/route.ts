@@ -9,7 +9,7 @@ const supabase = createClient(
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = auth()
+    const { userId } = await auth()
     const user = userId ? await currentUser() : null
     const body = await req.json()
     const { message, type, page } = body

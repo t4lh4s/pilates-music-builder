@@ -256,7 +256,6 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
 }) {
   const [movSearch, setMovSearch] = useState('')
-  const [movementsCollapsed, setMovementsCollapsed] = useState(false)
   const [showCustomForm, setShowCustomForm] = useState(false)
   const [customName, setCustomName] = useState('')
   const [customBpm, setCustomBpm] = useState('80')
@@ -266,8 +265,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 
   function openCustomForm() {
     setCustomName(movSearch.trim())
-    const mid = Math.round((block.bpmMin + block.bpmMax) / 2)
-    setCustomBpm(String(mid))
+    setCustomBpm(String(Math.round((block.bpmMin + block.bpmMax) / 2)))
     setCustomDuration('')
     setShowCustomForm(true)
   }
@@ -505,7 +503,6 @@ function MovementPicker({ block, format, level, selectedMovements, onToggle, cus
             </button>
           )
         })}
-      </>}
       </div>
     </div>
   )

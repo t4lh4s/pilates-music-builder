@@ -9,12 +9,15 @@ import RightPanel from '@/components/RightPanel'
 import ClassBuilder from '@/components/ClassBuilder'
 import BpmTapper from '@/components/BpmTapper'
 import LandingPage from '@/components/LandingPage'
+import HelpPage from '@/components/HelpPage'
+import FeedbackModal from '@/components/FeedbackModal'
 
-type Mode = 'browse' | 'class' | 'bpm'
+type Mode = 'browse' | 'class' | 'bpm' | 'help'
 
 export default function Home() {
   const { isSignedIn } = useUser()
   const [showLanding, setShowLanding] = useState(true)
+  const [showFeedback, setShowFeedback] = useState(false)
   const [appVisible, setAppVisible] = useState(false)
   const [mode, setMode] = useState<Mode>('browse')
   const [songs, setSongs] = useState<Song[]>([])
@@ -52,7 +55,6 @@ export default function Home() {
         const data = await res.json()
         if (!Array.isArray(data) || data.length === 0) return
 
-        // For each Spotify playlist, fetch its tracks
         const spotifyPlaylists: Playlist[] = await Promise.all(
           data.map(async (sp: { id: string; name: string }) => {
             try {
@@ -75,7 +77,6 @@ export default function Home() {
         )
 
         setPlaylists(prev => {
-          // Remove any old spotify playlists, keep manual ones, add fresh spotify ones
           const manual = prev.filter((p: any) => p.source !== 'spotify')
           return [...manual, ...spotifyPlaylists]
         })
@@ -154,6 +155,10 @@ export default function Home() {
     setActivePlaylistId(prev => prev === id ? (playlists.find(p => p.id !== id)?.id ?? 'default') : prev)
   }
 
+  function reorderPlaylist(id: string, songs: PlaylistSong[]) {
+    setPlaylists(prev => prev.map(p => p.id === id ? { ...p, songs } : p))
+  }
+
   function copyToPlaylist(song: PlaylistSong, targetId: string) {
     setPlaylists(prev => prev.map(p =>
       p.id === targetId
@@ -162,10 +167,6 @@ export default function Home() {
           : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
         : p
     ))
-  }
-
-  function reorderPlaylist(id: string, songs: PlaylistSong[]) {
-    setPlaylists(prev => prev.map(p => p.id === id ? { ...p, songs } : p))
   }
 
   if (showLanding) return <LandingPage onEnter={handleEnterApp}/>
@@ -177,7 +178,6 @@ export default function Home() {
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }}/>
 
       <div className="relative z-10">
-        {/* Header */}
         <header className="border-b border-cream-200/80 bg-white/70 backdrop-blur-md sticky top-0 z-20">
           <div className="max-w-7xl mx-auto px-6 py-3.5 flex items-center gap-4">
             <button onClick={() => setShowLanding(true)}
@@ -207,6 +207,10 @@ export default function Home() {
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${mode === 'bpm' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
                   BPM Counter
                 </button>
+                <button onClick={() => setMode('help')}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-all ${mode === 'help' ? 'bg-white text-sage-900 shadow-sm font-semibold' : 'text-sage-500 hover:text-sage-700'}`}>
+                  Help
+                </button>
               </div>
             </div>
 
@@ -221,6 +225,12 @@ export default function Home() {
                     className="pl-8 pr-4 py-2 text-sm bg-cream-50 border border-cream-200 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-300 focus:bg-white transition-all w-48"/>
                 </div>
               )}
+              <button onClick={() => setShowFeedback(true)}
+                title="Send feedback"
+                className="text-xs font-medium text-sage-500 hover:text-sage-900 px-2.5 py-1.5 rounded-lg hover:bg-cream-100 transition-all flex items-center gap-1.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span className="hidden sm:inline">Feedback</span>
+              </button>
               <SignedOut>
                 <SignInButton mode="modal">
                   <button className="text-sm font-medium text-sage-600 hover:text-sage-900 px-3 py-1.5 rounded-lg hover:bg-cream-100 transition-all">
@@ -235,14 +245,14 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Main content */}
         {mode === 'class' ? (
           <ClassBuilder/>
         ) : mode === 'bpm' ? (
           <BpmTapper/>
+        ) : mode === 'help' ? (
+          <HelpPage onOpenFeedback={() => setShowFeedback(true)}/>
         ) : (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex gap-6">
-            {/* Filters sidebar */}
             <aside className="hidden lg:block w-56 shrink-0">
               <Filters
                 genres={allGenres}
@@ -257,7 +267,6 @@ export default function Home() {
               />
             </aside>
 
-            {/* Song grid */}
             <main className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
                 <p className="text-sm text-sage-500">
@@ -289,7 +298,6 @@ export default function Home() {
               )}
             </main>
 
-            {/* Right panel — tabbed */}
             <aside className="hidden lg:flex w-72 shrink-0 flex-col sticky top-20" style={{ height: 'calc(100vh - 5.5rem)' }}>
               <RightPanel
                 playlists={playlists}
@@ -299,8 +307,8 @@ export default function Home() {
                 onRenamePlaylist={renamePlaylist}
                 onDeletePlaylist={deletePlaylist}
                 onReorder={reorderPlaylist}
-                onCopyToPlaylist={copyToPlaylist}
                 onRemove={removeFromPlaylist}
+                onCopyToPlaylist={copyToPlaylist}
                 onAdd={addToPlaylist}
                 addedIds={playlistSongIds}/>
             </aside>
@@ -308,7 +316,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Mobile playlist drawer */}
+      <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} page={mode}/>
+
       {showPlaylist && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setShowPlaylist(false)}/>
@@ -322,8 +331,8 @@ export default function Home() {
                 onRenamePlaylist={renamePlaylist}
                 onDeletePlaylist={deletePlaylist}
                 onReorder={reorderPlaylist}
-                onCopyToPlaylist={copyToPlaylist}
                 onRemove={removeFromPlaylist}
+                onCopyToPlaylist={copyToPlaylist}
                 onAdd={addToPlaylist}
                 addedIds={playlistSongIds}/>
             </div>

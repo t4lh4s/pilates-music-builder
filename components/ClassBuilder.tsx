@@ -816,7 +816,7 @@ export default function ClassBuilder() {
       const saved = sessionStorage.getItem('pmb_class_state')
       if (!saved) return
       const s = JSON.parse(saved)
-      if (s.setup) { setSetup(s.setup); }
+      if (s.setup && s.blocks && s.blocks.length > 0) { setSetup(s.setup); }
       if (s.blocks) setBlocks(s.blocks)
       if (s.blockMovements) setBlockMovements(s.blockMovements)
       if (s.blockNotes) setBlockNotes(s.blockNotes)

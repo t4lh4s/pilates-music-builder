@@ -1097,7 +1097,7 @@ export default function ClassBuilder() {
               <>
                 <p className="text-sm text-sage-500 mb-3"><span className="font-semibold text-sage-700">{filteredSongs.length}</span> songs found</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-                  {filteredSongs.map(song => <SongCard key={song.id} song={song} isInPlaylist={addedIds.has(song.id)} onAdd={addSongToBlock}/>)}
+                  {filteredSongs.map(song => <SongCard key={song.id} song={song} isInPlaylist={addedIds.has(song.id)} onAdd={addSongToBlock} addLabel={addedIds.has(song.id) ? '✓ Added' : '+ Add'}/>)}
                 </div>
               </>
             )}

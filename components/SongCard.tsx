@@ -9,9 +9,10 @@ interface Props {
   onAdd: (song: Song, targetPlaylistId?: string) => void
   playlists?: Playlist[]
   activePlaylistId?: string
+  addLabel?: string
 }
 
-export default function SongCard({ song, isInPlaylist, onAdd, playlists, activePlaylistId }: Props) {
+export default function SongCard({ song, isInPlaylist, onAdd, playlists, activePlaylistId, addLabel }: Props) {
   const [showPicker, setShowPicker] = useState(false)
 
   const dur = song.duration ?? 0
@@ -47,15 +48,22 @@ export default function SongCard({ song, isInPlaylist, onAdd, playlists, activeP
         <div className="flex flex-col items-end gap-1 shrink-0">
           <span className="text-xs text-sage-400 tabular-nums">{mins}:{secs}</span>
           <div className="relative">
-            <button
-              onClick={handleBookmarkClick}
-              title={hasMultiplePlaylists ? 'Add to playlist' : (isInPlaylist ? 'In playlist' : 'Add to playlist')}
-              className={`p-1.5 rounded-lg transition-all ${isInPlaylist ? 'text-sage-500 bg-sage-50' : 'text-sage-300 hover:text-sage-500 hover:bg-sage-50'}`}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill={isInPlaylist ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-              </svg>
-            </button>
+            {addLabel ? (
+              <button onClick={() => onAdd(song)}
+                className="text-xs font-semibold text-white bg-sage-500 hover:bg-sage-600 px-2.5 py-1 rounded-lg transition-colors">
+                {addLabel}
+              </button>
+            ) : (
+              <button
+                onClick={handleBookmarkClick}
+                title={hasMultiplePlaylists ? 'Add to playlist' : (isInPlaylist ? 'In playlist' : 'Add to playlist')}
+                className={`p-1.5 rounded-lg transition-all ${isInPlaylist ? 'text-sage-500 bg-sage-50' : 'text-sage-300 hover:text-sage-500 hover:bg-sage-50'}`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill={isInPlaylist ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+              </button>
+            )}
             {showPicker && hasMultiplePlaylists && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowPicker(false)}/>

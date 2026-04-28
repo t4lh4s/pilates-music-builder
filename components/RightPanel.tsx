@@ -61,7 +61,7 @@ export default function RightPanel({
             onCopyToPlaylist={onCopyToPlaylist}
           />
         )}
-        {tab === 'import' && <div className="h-full overflow-y-auto"><SpotifyImport onAdd={onAdd} addedIds={addedIds}/></div>}
+        {tab === 'import' && <div className="h-full overflow-y-auto"><SpotifyImport onAdd={onAdd} addedIds={addedIds} playlists={playlists} onCopyToPlaylist={onCopyToPlaylist}/></div>}
         {tab === 'search' && <div className="h-full overflow-y-auto"><SongSearch onAdd={onAdd} addedIds={addedIds}/></div>}
       </div>
     </div>

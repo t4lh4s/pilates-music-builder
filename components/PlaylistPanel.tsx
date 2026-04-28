@@ -202,7 +202,7 @@ export default function PlaylistPanel({
 
         {/* Playlist pills */}
         <div className="flex flex-wrap gap-1.5">
-          {playlists.map(p => (
+          {playlists.filter(p => p.source !== 'spotify').map(p => (
             <div key={p.id} className="flex items-center gap-0.5 group">
               {editingId === p.id ? (
                 <input autoFocus value={editName} onChange={e => setEditName(e.target.value)}

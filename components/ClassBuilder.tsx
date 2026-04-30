@@ -960,7 +960,31 @@ export default function ClassBuilder() {
       ...prev,
       [blockId]: [...(prev[blockId] ?? []), cm]
     }))
+    // Save to Supabase and replace temp id with real uuid
+    fetch('/api/custom-movements', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, bpm, duration, format: setup?.format ?? 'mat', blocks: [blockId] }),
+    }).then(r => r.ok ? r.json() : null).then((saved: any) => {
+      if (!saved?.id) return
+      const swap = (m: Movement) => m.id === cm.id ? { ...m, id: saved.id } : m
+      setCustomMovements(prev => prev.map(swap))
+      setBlockMovements(prev => Object.fromEntries(Object.entries(prev).map(([k, v]) => [k, (v as Movement[]).map(swap)])))
+    }).catch(() => {})
   }
+
+  function removeCustomMovement(movementId: string) {
+    if (!movementId.startsWith('cm-')) {
+      fetch('/api/custom-movements', {
+        method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: movementId }),
+      }).catch(() => {})
+    }
+    setCustomMovements(prev => prev.filter(m => m.id !== movementId))
+    setBlockMovements(prev => Object.fromEntries(
+      Object.entries(prev).map(([k, v]) => [k, (v as Movement[]).filter(m => m.id !== movementId)])
+    ))
+  }
+
 
 
   function toggleMovement(blockId: string, movement: Movement) {

@@ -404,7 +404,6 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
                 {displayed.map(m => {
                   const selected = selectedIds.has(m.id)
                   const isCustom = customMovements.some(cm => cm.id === m.id)
-                  if (m.name === 'Donkey Kicks') console.log('DEBUG Donkey Kicks:', m.id, 'customMovements ids:', customMovements.map(c => c.id), 'isCustom:', isCustom)
                   return (
                     <div key={m.id} className="relative group/chip inline-flex">
                       <button onClick={() => onToggle(m)}
@@ -433,12 +432,21 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
                 <div className="flex flex-wrap gap-2">
                   {groupMovements.map(m => {
                     const selected = selectedIds.has(m.id)
+                    const isCustom = customMovements.some(cm => cm.id === m.id)
                     return (
-                      <button key={m.id} onClick={() => onToggle(m)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
-                        {selected && <span>✓</span>}{m.name}
-                        <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
-                      </button>
+                      <div key={m.id} className="relative group/chip inline-flex">
+                        <button onClick={() => onToggle(m)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'} ${isCustom ? 'pr-6' : ''}`}>
+                          {selected && <span>✓</span>}{m.name}
+                          <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                        </button>
+                        {isCustom && (
+                          <button onClick={() => onRemoveCustom(m.id)}
+                            className={`absolute right-1.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full flex items-center justify-center ${selected ? 'text-white hover:bg-sage-600' : 'text-sage-400 hover:text-red-500'}`}>
+                            <svg width="8" height="8" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+                          </button>
+                        )}
+                      </div>
                     )
                   })}
                 </div>

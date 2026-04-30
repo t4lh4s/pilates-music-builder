@@ -146,7 +146,6 @@ export default function Home() {
           : p
       )
       const updatedPl = updated.find(p => p.id === destId)
-      console.log('DEBUG addToPlaylist destId:', destId, 'updatedPl:', updatedPl?.name, 'songs:', updatedPl?.songs?.length, 'willPatch:', !!(updatedPl && !destId.startsWith('pl-') && destId !== 'default'))
       if (updatedPl && !destId.startsWith('pl-') && destId !== 'default') {
         fetch('/api/manual-playlists', {
           method: 'PATCH',
@@ -226,13 +225,24 @@ export default function Home() {
   }
 
   function copyToPlaylist(song: PlaylistSong, targetId: string) {
-    setPlaylists(prev => prev.map(p =>
-      p.id === targetId
-        ? p.songs.some(s => String(s.id) === String(song.id))
-          ? p
-          : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
-        : p
-    ))
+    setPlaylists(prev => {
+      const updated = prev.map(p =>
+        p.id === targetId
+          ? p.songs.some(s => String(s.id) === String(song.id))
+            ? p
+            : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
+          : p
+      )
+      const updatedPl = updated.find(p => p.id === targetId)
+      if (updatedPl && !targetId.startsWith('pl-') && targetId !== 'default') {
+        fetch('/api/manual-playlists', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: targetId, name: updatedPl.name, songs: updatedPl.songs }),
+        }).catch(() => {})
+      }
+      return updated
+    })
   }
 
   if (showLanding) return <LandingPage onEnter={handleEnterApp}/>

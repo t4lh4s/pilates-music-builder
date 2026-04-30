@@ -65,6 +65,7 @@ export default function SpotifyImport({ onAdd, addedIds, playlists, onCopyToPlay
   const [editingNameId, setEditingNameId] = useState<string | null>(null)
   const [editingNameValue, setEditingNameValue] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState<'default' | 'bpm_asc' | 'bpm_desc' | 'dur_asc' | 'dur_desc'>('default')
 
   // Import state
   const [importStep, setImportStep] = useState<'idle' | 'enriching' | 'review' | 'saving' | 'error'>('idle')
@@ -228,12 +229,19 @@ export default function SpotifyImport({ onAdd, addedIds, playlists, onCopyToPlay
     }
   }
 
-  const filteredTracks = searchQuery.trim()
+  const sortFn = (a: any, b: any) => {
+    if (sortBy === 'bpm_asc') return (a.bpm ?? 0) - (b.bpm ?? 0)
+    if (sortBy === 'bpm_desc') return (b.bpm ?? 0) - (a.bpm ?? 0)
+    if (sortBy === 'dur_asc') return (a.duration ?? 0) - (b.duration ?? 0)
+    if (sortBy === 'dur_desc') return (b.duration ?? 0) - (a.duration ?? 0)
+    return 0
+  }
+  const filteredTracks = (searchQuery.trim()
     ? openTracks.filter(t =>
         t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         t.artist.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : openTracks
+    : openTracks).slice().sort(sortFn)
 
   return (
     <div className="h-full flex flex-col">
@@ -329,6 +337,14 @@ export default function SpotifyImport({ onAdd, addedIds, playlists, onCopyToPlay
                               placeholder="Filter tracks..."
                               className="w-full pl-7 pr-3 py-1.5 text-xs bg-cream-50 border border-cream-200 rounded-lg text-sage-700 placeholder-sage-300 focus:outline-none focus:border-sage-300"/>
                           </div>
+                          <select value={sortBy} onChange={e => setSortBy(e.target.value as any)}
+                            className="mt-1.5 w-full px-2 py-1.5 text-xs font-medium rounded-lg border border-cream-200 bg-cream-50 text-sage-700 focus:outline-none focus:border-sage-300 cursor-pointer">
+                            <option value="default">Sort: Default</option>
+                            <option value="bpm_asc">BPM: Low → High</option>
+                            <option value="bpm_desc">BPM: High → Low</option>
+                            <option value="dur_asc">Duration: Short first</option>
+                            <option value="dur_desc">Duration: Long first</option>
+                          </select>
                         </div>
                         {loadingTracks ? (
                           <div className="p-3 space-y-1.5">{[...Array(4)].map((_, i) => <div key={i} className="h-8 rounded-lg skeleton"/>)}</div>

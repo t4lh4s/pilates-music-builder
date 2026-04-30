@@ -1086,6 +1086,10 @@ export default function ClassBuilder() {
             ))}
           </SortableContext>
         </DndContext>
+        <button onClick={addBlock} className="w-full py-2 mt-1 border-2 border-dashed border-cream-300 rounded-xl text-xs font-semibold text-sage-500 hover:border-sage-400 hover:text-sage-700 hover:bg-sage-50 transition-all flex items-center justify-center gap-1.5">
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
+          Add block
+        </button>
       </div>
 
       <div className="flex-1 min-w-0">

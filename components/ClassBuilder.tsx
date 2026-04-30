@@ -933,7 +933,16 @@ export default function ClassBuilder() {
   }
 
   function deleteBlock(id: string) {
-    setBlocks(prev => { const next = prev.filter(b => b.id !== id); if (activeBlockId === id) setActiveBlockId(next[0]?.id ?? null); return next })
+    setBlocks(prev => {
+      const next = prev.filter(b => b.id !== id)
+      if (next.length === 0) {
+        setSetup(null); setActiveBlockId(null); setBlockMovements({}); setBlockNotes({}); setEquipment(new Set()); setSavedId(null)
+        sessionStorage.removeItem('pmb_class_state')
+        return []
+      }
+      if (activeBlockId === id) setActiveBlockId(next[0]?.id ?? null)
+      return next
+    })
     setBlockMovements(prev => { const next = { ...prev }; delete next[id]; return next })
     setBlockNotes(prev => { const next = { ...prev }; delete next[id]; return next })
   }
@@ -1080,7 +1089,7 @@ export default function ClassBuilder() {
                 onActivate={() => { setActiveBlockId(block.id); setSearch(''); setSortBy('default') }}
                 onRemoveSong={pid => removeSongFromBlock(block.id, pid)}
                 onUpdateBlock={updateBlock} onDeleteBlock={deleteBlock} onMoveBlock={moveBlock}
-                canDelete={blocks.length > 1} totalBlocks={blocks.length}
+                canDelete={true} totalBlocks={blocks.length}
                 selectedMovements={blockMovements[block.id] ?? []}
                 hasNotes={!!(blockNotes[block.id]?.trim())}/>
             ))}

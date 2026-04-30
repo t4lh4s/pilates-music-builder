@@ -451,9 +451,9 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 }
 
 // ─── Template Movement Picker ─────────────────────────────────────────────────
-function MovementPicker({ block, format, level, selectedMovements, onToggle, customMovements, onAddCustom }: {
+function MovementPicker({ block, format, level, selectedMovements, onToggle, customMovements, onAddCustom, onRemoveCustom }: {
   block: ClassBlock; format: 'mat' | 'reformer'; level: 'beginner' | 'intermediate' | 'advanced'
-  selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
+  selectedMovements: Movement[]; onToggle: (m: Movement) => void; customMovements: Movement[]; onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void; onRemoveCustom: (id: string) => void
 }) {
   const standardMovements = getMovementsForBlock(format, block.id, level)
   const blockCustomMovements = customMovements.filter(m => m.blocks.includes(block.id))
@@ -1097,7 +1097,7 @@ export default function ClassBuilder() {
                 />
               ) : (
                 <>
-                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)} customMovements={customMovements} onAddCustom={addCustomMovement}/>
+                  <MovementPicker block={activeBlock} format={setup.format} level={setup.level} selectedMovements={activeMovements} onToggle={m => toggleMovement(activeBlock.id, m)} customMovements={customMovements} onAddCustom={addCustomMovement} onRemoveCustom={removeCustomMovement}/>
                   {activeMovements.length === 0 && <p className="text-xs text-sage-400 italic mb-5">No movements selected — showing songs in the {activeBlock.bpmMin}–{activeBlock.bpmMax} BPM range. Select movements to refine.</p>}
                 </>
               )}

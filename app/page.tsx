@@ -48,6 +48,23 @@ export default function Home() {
 
   useEffect(() => {
     if (!isSignedIn) return
+    // Load manual playlists from Supabase
+    fetch('/api/manual-playlists')
+      .then(r => r.json())
+      .then(data => {
+        if (!Array.isArray(data) || data.length === 0) return
+        setPlaylists(prev => {
+          const spotify = prev.filter((p: any) => p.source === 'spotify')
+          const loaded = data.map((p: any) => ({ id: p.id, name: p.name, songs: p.songs ?? [] }))
+          return [...loaded, ...spotify]
+        })
+        setActivePlaylistId(data[0].id)
+      })
+      .catch(() => {})
+  }, [isSignedIn])
+
+  useEffect(() => {
+    if (!isSignedIn) return
     async function loadSpotifyPlaylists() {
       try {
         const res = await fetch('/api/spotify-playlists')
@@ -120,29 +137,68 @@ export default function Home() {
   // Accepts optional targetPlaylistId — if provided, adds to that playlist; otherwise active
   function addToPlaylist(song: Song, targetPlaylistId?: string) {
     const destId = targetPlaylistId ?? activePlaylistId
-    setPlaylists(prev => prev.map(p =>
-      p.id === destId
-        ? p.songs.some(s => String(s.id) === String(song.id))
-          ? p
-          : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
-        : p
-    ))
+    setPlaylists(prev => {
+      const updated = prev.map(p =>
+        p.id === destId
+          ? p.songs.some(s => String(s.id) === String(song.id))
+            ? p
+            : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
+          : p
+      )
+      const pl = updated.find(p => p.id === destId)
+      if (pl && !destId.startsWith('pl-') && destId !== 'default') {
+        fetch('/api/manual-playlists', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: destId, name: pl.name, songs: pl.songs }),
+        }).catch(() => {})
+      }
+      return updated
+    })
   }
 
   function removeFromPlaylist(playlistId: string, songId: string) {
-    setPlaylists(prev => prev.map(p =>
-      p.id === playlistId ? { ...p, songs: p.songs.filter(s => s.playlistId !== songId) } : p
-    ))
+    setPlaylists(prev => {
+      const updated = prev.map(p =>
+        p.id === playlistId ? { ...p, songs: p.songs.filter(s => s.playlistId !== songId) } : p
+      )
+      const pl = updated.find(p => p.id === playlistId)
+      if (pl && !playlistId.startsWith('pl-') && playlistId !== 'default') {
+        fetch('/api/manual-playlists', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: playlistId, name: pl.name, songs: pl.songs }),
+        }).catch(() => {})
+      }
+      return updated
+    })
   }
 
   function createPlaylist(name: string) {
-    const id = `pl-${Date.now()}`
-    setPlaylists(prev => [...prev, { id, name, songs: [] }])
-    setActivePlaylistId(id)
+    const tempId = `pl-${Date.now()}`
+    setPlaylists(prev => [...prev, { id: tempId, name, songs: [] }])
+    setActivePlaylistId(tempId)
+    fetch('/api/manual-playlists', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, songs: [] }),
+    }).then(r => r.json()).then(saved => {
+      if (saved?.id) {
+        setPlaylists(prev => prev.map(p => p.id === tempId ? { ...p, id: saved.id } : p))
+        setActivePlaylistId(saved.id)
+      }
+    }).catch(() => {})
   }
 
   function renamePlaylist(id: string, name: string) {
     setPlaylists(prev => prev.map(p => p.id === id ? { ...p, name } : p))
+    const pl = playlists.find(p => p.id === id)
+    if (!pl || id.startsWith('pl-') || id === 'default') return
+    fetch('/api/manual-playlists', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, name, songs: pl.songs }),
+    }).catch(() => {})
   }
 
   function deletePlaylist(id: string) {
@@ -152,10 +208,20 @@ export default function Home() {
       return next
     })
     setActivePlaylistId(prev => prev === id ? (playlists.find(p => p.id !== id)?.id ?? 'default') : prev)
+    if (!id.startsWith('pl-') && id !== 'default') {
+      fetch(`/api/manual-playlists?id=${id}`, { method: 'DELETE' }).catch(() => {})
+    }
   }
 
   function reorderPlaylist(id: string, songs: PlaylistSong[]) {
     setPlaylists(prev => prev.map(p => p.id === id ? { ...p, songs } : p))
+    const pl = playlists.find(p => p.id === id)
+    if (!pl || id.startsWith('pl-') || id === 'default') return
+    fetch('/api/manual-playlists', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, name: pl.name, songs }),
+    }).catch(() => {})
   }
 
   function copyToPlaylist(song: PlaylistSong, targetId: string) {

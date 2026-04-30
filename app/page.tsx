@@ -146,6 +146,7 @@ export default function Home() {
           : p
       )
       const updatedPl = updated.find(p => p.id === destId)
+      console.log('DEBUG addToPlaylist destId:', destId, 'updatedPl:', updatedPl?.name, 'songs:', updatedPl?.songs?.length, 'willPatch:', !!(updatedPl && !destId.startsWith('pl-') && destId !== 'default'))
       if (updatedPl && !destId.startsWith('pl-') && destId !== 'default') {
         fetch('/api/manual-playlists', {
           method: 'PATCH',

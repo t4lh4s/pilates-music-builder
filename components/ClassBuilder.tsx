@@ -404,6 +404,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
                 {displayed.map(m => {
                   const selected = selectedIds.has(m.id)
                   const isCustom = customMovements.some(cm => cm.id === m.id)
+                  if (m.name === 'Donkey Kicks') console.log('DEBUG Donkey Kicks:', m.id, 'customMovements ids:', customMovements.map(c => c.id), 'isCustom:', isCustom)
                   return (
                     <div key={m.id} className="relative group/chip inline-flex">
                       <button onClick={() => onToggle(m)}

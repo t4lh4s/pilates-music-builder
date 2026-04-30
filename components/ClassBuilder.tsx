@@ -245,7 +245,7 @@ function BlockNameEditor({ name, emoji, onNameChange, onEmojiChange }: {
 }
 
 // ─── Custom Block BPM Picker ──────────────────────────────────────────────────
-function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange, customMovements, onAddCustom }: {
+function CustomBlockControls({ block, format, level, selectedMovements, onToggle, onBpmRangeChange, customMovements, onAddCustom, onRemoveCustom }: {
   block: ClassBlock
   format: 'mat' | 'reformer'
   level: 'beginner' | 'intermediate' | 'advanced'
@@ -254,6 +254,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
   onBpmRangeChange: (min: number, max: number) => void
   customMovements: Movement[]
   onAddCustom: (blockId: string, name: string, bpm: number, duration: number) => void
+  onRemoveCustom: (id: string) => void
 }) {
   const [movSearch, setMovSearch] = useState('')
   const [showCustomForm, setShowCustomForm] = useState(false)
@@ -402,12 +403,21 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
               <div className="flex flex-wrap gap-2">
                 {displayed.map(m => {
                   const selected = selectedIds.has(m.id)
+                  const isCustom = customMovements.some(cm => cm.id === m.id)
                   return (
-                    <button key={m.id} onClick={() => onToggle(m)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'}`}>
-                      {selected && <span>✓</span>}{m.name}
-                      <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
-                    </button>
+                    <div key={m.id} className="relative group/chip inline-flex">
+                      <button onClick={() => onToggle(m)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${selected ? 'bg-sage-500 text-white border-sage-500 shadow-sm' : 'bg-white text-sage-600 border-cream-300 hover:border-sage-300 hover:bg-sage-50'} ${isCustom ? 'pr-6' : ''}`}>
+                        {selected && <span>✓</span>}{m.name}
+                        <span className={`font-mono ${selected ? 'text-sage-200' : 'text-sage-400'}`}>{m.bpm}</span>
+                      </button>
+                      {isCustom && (
+                        <button onClick={() => onRemoveCustom(m.id)}
+                          className={`absolute right-1.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full flex items-center justify-center ${selected ? 'text-white hover:bg-sage-600' : 'text-sage-400 hover:text-red-500'}`}>
+                          <svg width="8" height="8" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 2l10 10M12 2L2 12"/></svg>
+                        </button>
+                      )}
+                    </div>
                   )
                 })}
               </div>
@@ -777,6 +787,21 @@ export default function ClassBuilder() {
   const [activeBlockId, setActiveBlockId] = useState<string | null>(null)
   const [blockMovements, setBlockMovements] = useState<Record<string, Movement[]>>({})
   const [customMovements, setCustomMovements] = useState<Movement[]>([])
+
+  useEffect(() => {
+    if (!isSignedIn) return
+    fetch('/api/custom-movements')
+      .then(r => r.ok ? r.json() : [])
+      .then((data: any[]) => {
+        if (!Array.isArray(data)) return
+        setCustomMovements(data.map(m => ({
+          id: m.id, name: m.name, bpm: m.bpm,
+          level: 'beginner' as const,
+          format: (m.format ?? 'mat') as 'mat' | 'reformer',
+          blocks: m.blocks ?? [], duration: m.duration ?? 60,
+        })))
+      }).catch(() => {})
+  }, [isSignedIn])
   const [blockNotes, setBlockNotes] = useState<Record<string, string>>({})
   const [equipment, setEquipment] = useState<Set<string>>(new Set())
   const [songs, setSongs] = useState<Song[]>([])
@@ -1032,6 +1057,7 @@ export default function ClassBuilder() {
                   onBpmRangeChange={(min, max) => updateBlock(activeBlock.id, { bpmMin: min, bpmMax: max })}
                   customMovements={customMovements}
                   onAddCustom={addCustomMovement}
+                  onRemoveCustom={removeCustomMovement}
                 />
               ) : (
                 <>

@@ -145,12 +145,12 @@ export default function Home() {
             : { ...p, songs: [...p.songs, { ...song, playlistId: `${song.id}-${Date.now()}` }] }
           : p
       )
-      const pl = updated.find(p => p.id === destId)
-      if (pl && !destId.startsWith('pl-') && destId !== 'default') {
+      const updatedPl = updated.find(p => p.id === destId)
+      if (updatedPl && !destId.startsWith('pl-') && destId !== 'default') {
         fetch('/api/manual-playlists', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: destId, name: pl.name, songs: pl.songs }),
+          body: JSON.stringify({ id: destId, name: updatedPl.name, songs: updatedPl.songs }),
         }).catch(() => {})
       }
       return updated

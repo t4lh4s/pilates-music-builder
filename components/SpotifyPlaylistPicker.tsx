@@ -34,6 +34,7 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
   const [showAll, setShowAll] = useState(false)
   const [allTracks, setAllTracks] = useState<Track[]>([])
   const [loadingAll, setLoadingAll] = useState(false)
+  const [sortBy, setSortBy] = useState<'default' | 'bpm_asc' | 'bpm_desc' | 'dur_asc' | 'dur_desc'>('default')
 
   useEffect(() => {
     if (!isSignedIn) { setLoading(false); return }
@@ -126,7 +127,14 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
 
   const inRange = filtered.filter(t => t.bpm && t.bpm >= activeBpmMin && t.bpm <= activeBpmMax)
   const outOfRange = filtered.filter(t => !t.bpm || t.bpm < activeBpmMin || t.bpm > activeBpmMax)
-  const displayed = showAll ? filtered : inRange
+  const sortFn = (a: Track, b: Track) => {
+    if (sortBy === 'bpm_asc') return (a.bpm ?? 0) - (b.bpm ?? 0)
+    if (sortBy === 'bpm_desc') return (b.bpm ?? 0) - (a.bpm ?? 0)
+    if (sortBy === 'dur_asc') return a.duration - b.duration
+    if (sortBy === 'dur_desc') return b.duration - a.duration
+    return 0
+  }
+  const displayed = (showAll ? filtered : inRange).slice().sort(sortFn)
 
   return (
     <div>
@@ -185,6 +193,14 @@ export default function SpotifyPlaylistPicker({ activeBpmMin, activeBpmMax, adde
                     placeholder="Search playlist..."
                     className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-cream-300 rounded-xl text-sage-800 placeholder-sage-300 focus:outline-none focus:border-sage-400"/>
                 </div>
+                <select value={sortBy} onChange={e => setSortBy(e.target.value as any)}
+                  className="px-2 py-2 text-xs font-medium rounded-xl border border-cream-300 bg-white text-sage-700 focus:outline-none focus:border-sage-400 cursor-pointer">
+                  <option value="default">Sort</option>
+                  <option value="bpm_asc">BPM ↑</option>
+                  <option value="bpm_desc">BPM ↓</option>
+                  <option value="dur_asc">Short first</option>
+                  <option value="dur_desc">Long first</option>
+                </select>
                 <button onClick={() => setShowAll(!showAll)}
                   className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all whitespace-nowrap ${
                     showAll

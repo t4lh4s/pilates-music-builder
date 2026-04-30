@@ -368,29 +368,26 @@ export default function SpotifyImport({ onAdd, addedIds, playlists, onCopyToPlay
                                       : <span className="text-xs text-sage-300">—</span>
                                     }
                                     {track.duration > 0 && <span className="text-xs text-sage-300 tabular-nums w-7">{mins}:{secs}</span>}
-                                    {isAdded
-                                      ? <span className="text-xs text-sage-400 w-10 text-center">✓</span>
-                                      : <div className="relative">
-                                          <button onClick={() => setPickerTrackId(pickerTrackId === track.id ? null : track.id)}
-                                            className="text-xs font-semibold px-2 py-1 bg-sage-500 hover:bg-sage-600 text-white rounded-lg transition-colors opacity-0 group-hover:opacity-100 w-10 text-center">
-                                            Add
-                                          </button>
-                                          {pickerTrackId === track.id && playlists && onCopyToPlaylist && (
-                                            <>
-                                              <div className="fixed inset-0 z-40" onClick={() => setPickerTrackId(null)}/>
-                                              <div className="absolute right-0 bottom-8 z-50 bg-white border border-cream-200 rounded-xl shadow-lg py-1 min-w-44">
-                                                <p className="text-xs text-sage-400 px-3 py-1.5 font-semibold uppercase tracking-wide border-b border-cream-100">Add to playlist</p>
-                                                {playlists.filter(p => p.source !== 'spotify').map(p => (
-                                                  <button key={p.id} onClick={() => { onCopyToPlaylist({ ...track, name: track.title, genre: 'Unknown', source: 'spotify', playlistId: `${track.id}-${Date.now()}` }, p.id); setPickerTrackId(null); }}
-                                                    className="w-full text-left text-xs px-3 py-2 hover:bg-cream-50 transition-colors text-sage-700 truncate">
-                                                    {p.name}
-                                                  </button>
-                                                ))}
-                                              </div>
-                                            </>
-                                          )}
-                                        </div>
-                                    }
+                                    <div className="relative">
+                                      <button onClick={() => setPickerTrackId(pickerTrackId === track.id ? null : track.id)}
+                                        className="text-xs font-semibold px-2 py-1 bg-sage-500 hover:bg-sage-600 text-white rounded-lg transition-colors opacity-0 group-hover:opacity-100 w-10 text-center">
+                                        Add
+                                      </button>
+                                      {pickerTrackId === track.id && playlists && onCopyToPlaylist && (
+                                        <>
+                                          <div className="fixed inset-0 z-40" onClick={() => setPickerTrackId(null)}/>
+                                          <div className="absolute right-0 bottom-8 z-50 bg-white border border-cream-200 rounded-xl shadow-lg py-1 min-w-44">
+                                            <p className="text-xs text-sage-400 px-3 py-1.5 font-semibold uppercase tracking-wide border-b border-cream-100">Add to playlist</p>
+                                            {playlists.filter(p => p.source !== 'spotify').map(p => (
+                                              <button key={p.id} onClick={() => { onCopyToPlaylist({ ...track, name: track.title, genre: 'Unknown', source: 'spotify', playlistId: `${track.id}-${Date.now()}` }, p.id); setPickerTrackId(null); }}
+                                                className="w-full text-left text-xs px-3 py-2 hover:bg-cream-50 transition-colors text-sage-700 truncate">
+                                                {p.name}
+                                              </button>
+                                            ))}
+                                          </div>
+                                        </>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               )

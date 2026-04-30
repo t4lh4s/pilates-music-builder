@@ -133,6 +133,7 @@ export default function Home() {
 
   const activePlaylist = playlists.find(p => p.id === activePlaylistId) ?? playlists[0]
   const playlistSongIds = new Set(activePlaylist?.songs.map(s => String(s.id)) ?? [])
+  const allPlaylistSongIds = new Set(playlists.filter((p: any) => p.source !== 'spotify').flatMap(p => p.songs.map(s => String(s.id))))
 
   // Accepts optional targetPlaylistId — if provided, adds to that playlist; otherwise active
   function addToPlaylist(song: Song, targetPlaylistId?: string) {
@@ -388,7 +389,7 @@ export default function Home() {
                 onRemove={removeFromPlaylist}
                 onCopyToPlaylist={copyToPlaylist}
                 onAdd={addToPlaylist}
-                addedIds={playlistSongIds}/>
+                addedIds={allPlaylistSongIds}/>
             </aside>
           </div>
         )}
@@ -412,7 +413,7 @@ export default function Home() {
                 onRemove={removeFromPlaylist}
                 onCopyToPlaylist={copyToPlaylist}
                 onAdd={addToPlaylist}
-                addedIds={playlistSongIds}/>
+                addedIds={allPlaylistSongIds}/>
             </div>
           </div>
         </div>

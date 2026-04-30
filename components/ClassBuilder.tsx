@@ -794,12 +794,24 @@ export default function ClassBuilder() {
       .then(r => r.ok ? r.json() : [])
       .then((data: any[]) => {
         if (!Array.isArray(data)) return
-        setCustomMovements(data.map(m => ({
+        const loaded = data.map((m: any) => ({
           id: m.id, name: m.name, bpm: m.bpm,
           level: 'beginner' as const,
           format: (m.format ?? 'mat') as 'mat' | 'reformer',
           blocks: m.blocks ?? [], duration: m.duration ?? 60,
-        })))
+        }))
+        setCustomMovements(loaded)
+        // Remap cm- temp ids in blockMovements to real Supabase UUIDs by name match
+        setBlockMovements(prev => Object.fromEntries(
+          Object.entries(prev).map(([blockId, movements]) => [
+            blockId,
+            (movements as Movement[]).map(m => {
+              if (!m.id.startsWith('cm-')) return m
+              const found = loaded.find((cm: any) => cm.name === m.name)
+              return found ? { ...m, id: found.id } : m
+            })
+          ])
+        ))
       }).catch(() => {})
   }, [isSignedIn])
   const [blockNotes, setBlockNotes] = useState<Record<string, string>>({})

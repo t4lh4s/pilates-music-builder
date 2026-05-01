@@ -258,6 +258,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 }) {
   const [movSearch, setMovSearch] = useState('')
   const [showCustomForm, setShowCustomForm] = useState(false)
+  const [movCollapsed, setMovCollapsed] = useState(false)
   const [customName, setCustomName] = useState('')
   const [customBpm, setCustomBpm] = useState('80')
   const [customDuration, setCustomDuration] = useState('60')
@@ -347,20 +348,26 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
 
       {/* Movement browser */}
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-2 cursor-pointer" onClick={() => setMovCollapsed(prev => !prev)}>
           <h4 className="text-sm font-semibold text-sage-700">Movements</h4>
-          {selectedMovements.length > 0 && (
-            <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
-          )}
+          <div className="flex items-center gap-2">
+            {selectedMovements.length > 0 && (
+              <span className="text-xs text-sage-400">{selectedMovements.length} selected</span>
+            )}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"
+              className={`text-sage-400 transition-transform duration-200 ${movCollapsed ? '-rotate-90' : 'rotate-0'}`}>
+              <path d="M2 5l5 5 5-5"/>
+            </svg>
+          </div>
         </div>
-        <div className="flex items-center justify-between mb-3">
+        {!movCollapsed && <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-sage-400">Browse or search — selecting movements auto-updates BPM range</p>
           <button onClick={() => showCustomForm ? setShowCustomForm(false) : openCustomForm()} className="text-xs font-semibold text-sage-500 hover:text-sage-700 px-2 py-1 rounded-lg hover:bg-sage-50 transition-all flex items-center gap-1 shrink-0">
             <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 2v10M2 7h10"/></svg>
             {showCustomForm ? 'Cancel' : 'Add Custom'}
           </button>
-        </div>
-        {showCustomForm && (
+        </div>}
+        {!movCollapsed && showCustomForm && (
           <div className="mb-3 p-3 bg-cream-50 border border-cream-200 rounded-xl">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
               <input value={customName} onChange={e => setCustomName(e.target.value)}
@@ -380,8 +387,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
           </div>
         )}
 
-        {/* Search */}
-        <div className="relative mb-4">
+        {!movCollapsed && <div className="relative mb-4">
           <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-sage-300 w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input type="text" value={movSearch} onChange={e => setMovSearch(e.target.value)}
             placeholder="Filter movements..."
@@ -391,10 +397,9 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 1l10 10M11 1L1 11"/></svg>
             </button>
           )}
-        </div>
+        </div>}
 
-        {/* Movement list — scrollable */}
-        <div className="max-h-64 overflow-y-auto space-y-4 pr-1">
+        {!movCollapsed && <div className="max-h-64 overflow-y-auto space-y-4 pr-1">
           {movSearch.trim() ? (
             // Flat list when searching
             displayed.length === 0 ? (
@@ -453,7 +458,7 @@ function CustomBlockControls({ block, format, level, selectedMovements, onToggle
               </div>
             ))
           )}
-        </div>
+        </div>}
       </div>
     </div>
   )

@@ -223,7 +223,7 @@ export default function PlaylistPanel({
                 </button>
               )}
               {/* Rename + delete — only for manual playlists when active */}
-              {p.source !== 'spotify' && playlists.filter(x => x.source !== 'spotify').length > 1 && p.id === activeId && (
+              {p.source !== 'spotify' && p.id === activeId && (
                 <div className="flex items-center gap-0.5">
                   <button onClick={() => startRename(p)} className="opacity-0 group-hover:opacity-100 text-sage-300 hover:text-sage-600 transition-all p-0.5" title="Rename">
                     <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 2l2 2-7 7H3v-2l7-7z"/></svg>

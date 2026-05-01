@@ -376,7 +376,7 @@ export default function SpotifyImport({ onAdd, addedIds, playlists, onCopyToPlay
                                       {pickerTrackId === track.id && playlists && onCopyToPlaylist && (
                                         <>
                                           <div className="fixed inset-0 z-40" onClick={() => setPickerTrackId(null)}/>
-                                          <div className="absolute right-0 bottom-8 z-50 bg-white border border-cream-200 rounded-xl shadow-lg py-1 min-w-44">
+                                          <div className="absolute right-0 top-8 z-50 bg-white border border-cream-200 rounded-xl shadow-lg py-1 min-w-44">
                                             <p className="text-xs text-sage-400 px-3 py-1.5 font-semibold uppercase tracking-wide border-b border-cream-100">Add to playlist</p>
                                             {playlists.filter(p => p.source !== 'spotify').map(p => (
                                               <button key={p.id} onClick={() => { onCopyToPlaylist({ ...track, name: track.title, genre: 'Unknown', source: 'spotify', playlistId: `${track.id}-${Date.now()}` }, p.id); setPickerTrackId(null); }}
